@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -648,8 +648,7 @@ void MainWindow::on_btnHelpAVRC_CT_clicked()
     onClear();
     Log("AVRC Controller help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0, 208xx-A1");
-    Log("Apps : demo.watch, demo.stb");
+    Log("Apps : watch");
     Log("Peer device - iPhone or Android phone");
     Log("");
     Log("Discover the phone from the 'BR/EDR Discovery' control and pair the phone");

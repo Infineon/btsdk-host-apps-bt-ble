@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -346,7 +346,6 @@ void MainWindow::on_btnHelpBSG_clicked()
     onClear();
     Log("Serial over GATT help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 20735-B1, 43012-C0");
     Log("Apps : hci_serial_gatt_serivce");
     Log("Peer device : Windows 10, Android or iPhone running Serial GATT cient found under ");
     Log("              'hci_serial_gatt_serivce/peerapps'");

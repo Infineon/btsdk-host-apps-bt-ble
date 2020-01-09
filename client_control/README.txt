@@ -155,7 +155,7 @@ Note:  Local apps listed may not be included in all versions of WICED SDK.
 
 AV Source (A2DP Source):
 +++++++++++++++++++++++
-Setup: Local apps - 20706-A2, 20719-B1, 20721, 208xx-A1 - 'watch'.
+Setup: Local apps - 'watch'.
 Peer device - headset, speaker, car-kit
 - Connect
   Connect to the selected BR/EDR device to create an A2DP connection. The peer
@@ -167,7 +167,7 @@ Peer device - headset, speaker, car-kit
 
 AVRC TG (AVRCP Target):
 +++++++++++++++++++++++
-Setup: Local apps - 20706-A2, 20719-B1,20721,208xx-A1 - 'watch', 'hci_audio_remote_control'.
+Setup: Local apps - 'watch'
 Peer device - headset, speaker, car-kit
 - Connect
   Connect to the selected BR/EDR device to create an AVRCP connection. The peer
@@ -202,7 +202,7 @@ Not implemented in the current release
 
 AVRC CT (AVRCP Controller):
 ++++++++++++++++++++++++++
-Setup: Local apps - 20706-A2, 20719-B1,20721, 208xx-A1 - 'watch', 'hci_audio_remote_control'.
+Setup: Local apps - 'watch'
 Peer device - iPhone or Android phone
 Discover the phone from the "BR/EDR Discovery" control and pair the phone
 - Connect
@@ -249,7 +249,7 @@ Peer device - phone or device supporting the Audio Gateway profile
 
 Serial Port Profile:
 +++++++++++++++++++
-Setup: Local apps - 20706-A2, 208xx, 20721 'spp'
+Setup: Local apps - 'spp'
 Peer device - any device supporting the SPP server role
 - Connect
   Connect to an SPP server
@@ -263,7 +263,7 @@ Peer device - any device supporting the SPP server role
 
 HID Host:
 +++++++++
-Setup: Local apps - 20706-A2, 20719-B1,20721 - 'hci_hid_host' for BR-EDR or
+Setup: Local apps - 'hci_hid_host' for BR-EDR or
        'hci_ble_hid_host' for BLE HOGP
 Peer device - BT keyboard or mouse
 - Connect
@@ -278,7 +278,7 @@ Peer device - BT keyboard or mouse
 
 HID Device:
 ++++++++++
-Setup: Local apps - 20706-A2, 20719-B1,20721,208xx-A1 - 'hci_hid_device' for BR-EDR or
+Setup: Local apps - 'hci_hid_device' for BR-EDR or
        'hci_ble_hid_dev', BLE remote control/mouse/keyboard for BLE HOGP
 Peer device - Windows PC or any HID host
 - Enter Pairing Mode
@@ -293,7 +293,7 @@ Peer device - Windows PC or any HID host
 
 GATT:
 +++++
-Setup: Local apps - 20706-A2, 20719-B1,20721,208xx-A1 - 'watch'
+Setup: Local apps - 'watch'
 Peer device - BLE device or iPhone Light Blue app, Android BLE app, etc.
 GATT controls are provided for advertisements, discovering services, connecting
 to a GATT server, reading/writing values of handles, and discovering
@@ -325,7 +325,6 @@ For UI description, see "Serial Port Profile" above.
 
 Phonebook Client
 ++++++++++++++++
-WICED Platforms : 20706-A2, 20719-B1,20721,20721,43012-C0
 Apps : pbap_client
 Peer device - phone supporting PBAP server (any recent iPhone or Android phone)
 - From the phone, initiate device discovery and find the pbap_client application
@@ -338,7 +337,6 @@ updated to get more records if desired.
 
 OPP Server
 ++++++++++
-WICED Platforms : 20706-A2, 20719-B1,20721, 43012-C0
 Apps : opp_server
 Peer device : PC, Android phone, etc supporting OPP Client profile.
 

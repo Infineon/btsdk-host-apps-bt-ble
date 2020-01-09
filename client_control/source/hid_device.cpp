@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -38,6 +38,7 @@
 #include "app_include.h"
 #include "usb_kb_usage.h"
 #include "hci_control_api.h"
+#include "rpc.pb.h"
 
 extern "C"
 {
@@ -48,6 +49,7 @@ extern "C"
 void MainWindow::InitBLEHIDD()
 {
     m_pairing_mode = 0;
+    m_host_type = 0;
     m_host_valid = false;
     m_b_is_hidd = false;
     ui->cbBLEHIDInterupt->clear();
@@ -291,7 +293,7 @@ void MainWindow::setHIDD_buttonColor(QPushButton * button, const QColor &color)
 
 void MainWindow::setHIDD_HostAddr(unsigned char * ad)
 {
-    m_host_valid = (bool) ad;
+    m_host_valid = (ad!=nullptr);
     if (m_host_valid)
     {
         for (int i=0;i<6;i++)
@@ -305,9 +307,10 @@ void MainWindow::setHIDD_linkChange(unsigned char * ad, bool linkUp)
     m_connected = linkUp;
     if (linkUp)
     {
-        m_host_valid = (bool) ad;
-        if (m_host_valid)
+        if (ad!=nullptr)
         {
+            m_host_valid = true;
+
             for (int i=0;i<6;i++)
                 m_host_ad[i]= *ad++;
         }
@@ -349,7 +352,7 @@ void MainWindow::UpdateHIDD_ui_host()
         if (m_host_valid)
         {
             char strBda[100];
-            sprintf(strBda, "Host: %02X:%02X:%02X:%02X:%02X:%02X", m_host_ad[0],m_host_ad[1],m_host_ad[2],m_host_ad[3],m_host_ad[4],m_host_ad[5]);
+            sprintf(strBda, "%s Host: %02x:%02x:%02x:%02x:%02x:%02x",m_host_type?"":m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT",m_host_ad[0],m_host_ad[1],m_host_ad[2],m_host_ad[3],m_host_ad[4],m_host_ad[5]);
             ui->btnBLEHIDHost->setText(strBda);
         }
         else
@@ -432,7 +435,7 @@ void MainWindow::on_cbBLEHIDCapLock_clicked()
 void MainWindow::on_btnBLEHIDDVirtualUnplug_clicked()
 {
     Log("Sending HIDD Virtual Unplug Command");
-    setHIDD_HostAddr(NULL);
+    setHIDD_HostAddr(nullptr);
     app_host_hidd_virtual_unplug();
 }
 
@@ -467,11 +470,41 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             break;
 
         case HCI_CONTROL_HIDD_EVENT_OPENED:
-            setHIDD_HostAddr(p_data);
-            if (p_data)
-                Log("HID connection opened with %02X:%02X:%02X:%02X:%02X:%02X",p_data[5],p_data[4],p_data[3],p_data[2],p_data[1],p_data[0]);
+            setHIDD_linkChange(nullptr, TRUE);
+            if (len)
+                Log("HID link up: %02x:%02x:%02x:%02x:%02x:%02x",p_data[0],p_data[1],p_data[2],p_data[3],p_data[4],p_data[5]);
             else
-                Log("HID connection opened");
+                Log("HID link up");
+            break;
+
+        case HCI_CONTROL_HIDD_EVENT_STATE_CHANGE:
+            Log("%s Device state changed to %d",p_data[1]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT", p_data[2]);
+            if (p_data[1]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR)
+            {
+                unsigned char new_pairing_mode = p_data[2]==2;   // discoverable mode
+                if (m_pairing_mode != new_pairing_mode)
+                {
+                    m_pairing_mode = new_pairing_mode;
+                    UpdateHIDD_ui_pairing();
+                }
+            }
+            break;
+
+        case HCI_CONTROL_HIDD_EVENT_HOST_ADDR:
+            Log("Paired Host count = %d, %s", p_data[0] & 0x7f, p_data[0] & 0x80 ? "connected":"disconnected");
+            if (p_data[0])
+            {
+                p_data[8] = p_data[1] ? RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE : RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR;
+                Log("%s Host: %02x:%02x:%02x:%02x:%02x:%02x",p_data[8]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT",p_data[2],p_data[3],p_data[4],p_data[5],p_data[6],p_data[7]);
+                SetDevicePaired(&p_data[2], 7);
+                setHIDD_HostAddr(&p_data[2]);
+                setHIDD_linkChange(&p_data[2], p_data[0] & 0x80 ? TRUE : FALSE);
+            }
+            else
+            {
+                setHIDD_HostAddr(nullptr);
+                setHIDD_linkChange(nullptr, FALSE);
+            }
             break;
 
         case HCI_CONTROL_LE_EVENT_ADVERTISEMENT_STATE:
@@ -492,7 +525,8 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             break;
 
         case HCI_CONTROL_HIDD_EVENT_CLOSED:
-            Log("HID Connection down reason: %d ", p_data[0]);
+            setHIDD_linkChange(nullptr, FALSE);
+            Log("HID Link down reason: %d ", p_data[0]);
             break;
     }
 }
@@ -501,16 +535,14 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
 void MainWindow::on_btnHelpHIDD_clicked()
 {
     onClear();
-    Log("HID Device help topic:");
+    Log("V1.0 HID Device help topic:");
     Log("");
 
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 20735-B1, 208xx-A1");
-    Log("Apps : use app under demo/hid on 20735-B1. Use hci_hid_host for BR-EDR or ");
-    Log("       'hci_ble_hid_host' for BLE HOGP on 20706-A2 and 20719-B1, 20721");
+    Log("Apps : use app such as ble_remote, ble_keyboard, ble_mouse.");
     Log("Peer device : Windows PC or any HID host");
     Log("");
 
-    Log("Note: For 20735-B1 and 208xx-A1 apps, see flag TESTING_USING_HCI in the app makefile");
+    Log("Note: See flag TESTING_USING_HCI in the app makefile");
     Log("");
 
     Log("- Enter/Exit Pairing Mode");

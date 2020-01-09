@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -147,8 +147,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Log(" ");
     Log("Notes:");
     Log("1. To re-download the embedded application, first close the serial port.");
-    Log("2. Default buad rate for most WICED boards is 3M. For CYBT-213043-EVAL board, use baud rate of 115200.");
-    Log(" ");
+    Log("2. Default baud rate for most WICED boards is 3M. For CYBT-213043-EVAL and CYBT-213043-MESH boards,");
+    Log("   use baud rate of 115200.");
+    Log("3. FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719");
+    Log("   and CYW20721 chips. Please use ModusToolbox 2.x or command line for download.");
 
     ScrollToTop();
 

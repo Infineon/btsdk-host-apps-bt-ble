@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -486,8 +486,7 @@ void MainWindow::on_btnHelpPBC_clicked()
     onClear();
     Log("Phonebook Client help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0");
-    Log("Apps : demo.hci_pbap_client");
+    Log("Apps : hci_pbap_client");
     Log("Peer device - phone supporting PBAP server (any recent iPhone or Android phone)");
     Log("");
     Log("- From the phone, initiate device discovery and find the pbap_client application");

@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -80,9 +80,10 @@ bool wiced_hci_hidd_connect();
 bool wiced_hci_hidd_disconnect();
 bool wiced_hci_hidd_send_report(wiced_hci_bt_hidd_report_t * data);
 bool wiced_hci_hidd_pairing_mode(wiced_hci_bt_hidd_paring_mode_data_t * data);
+bool wiced_hci_hidd_get_host_info();
 bool wiced_hci_bt_hidd_send_key(wiced_hci_bt_hidd_send_key_data_t *data);
 bool wiced_hci_bt_hidd_cap_lock(wiced_hci_bt_hidd_cap_lock_data_t *data);
-bool wiced_hic_bt_hidd_virtual_unplug();
+bool wiced_hci_bt_hidd_virtual_unplug();
 
 
 #endif // WICED_HCI_H

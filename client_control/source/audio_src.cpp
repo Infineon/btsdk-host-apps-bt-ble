@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -704,8 +704,7 @@ void MainWindow::on_btnHelpAVSRC_clicked()
     onClear();
     Log("Audio Source help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0, 208xx-A1");
-    Log("Apps : demo.watch");
+    Log("Apps : watch");
     Log("");
 
     Log("Peer device - headset, speaker, car-kit, etc. containing Audio Sink service.");

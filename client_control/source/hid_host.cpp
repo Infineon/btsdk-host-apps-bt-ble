@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -849,7 +849,6 @@ void MainWindow::on_btnHelpHIDH_clicked()
     onClear();
     Log("HID Host help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0");
     Log("Apps : hci_hid_host for BR-EDR or 'hci_ble_hid_host' for BLE HOGP");
     Log("Peer device - BT/BLE keyboard or mouse");
     Log("");

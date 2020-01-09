@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -360,6 +360,7 @@ public:
     BYTE keyRpt_buf[KEYRPT_BUF_SIZE];
     bool m_host_valid;
     bool m_connected;
+    BYTE m_host_type;
 
     // HID Host
     void HidhVirtualUnplug(uint16_t handle);

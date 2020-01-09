@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -551,8 +551,7 @@ void MainWindow::on_btnHelpGATT_DB_clicked()
     onClear();
     Log("GATT DB help topic:");
     Log("");
-    Log(" * WICED Platforms : 20706-A2, 20719-B1, 20721, 20735-B1, 43012-C0");
-    Log(" * Apps : snip.ble.gatt_db");
+    Log(" * Apps : gatt_db");
     Log("");
     Log(" * Download snip.ble.gatt_db application on your WICED device.");
     Log(" * Click on 'Init Database' button to initialize GATT database.");

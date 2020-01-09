@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -542,8 +542,6 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         UpdateGattButtons(device);
         break;
 
-
-
     case HCI_CONTROL_LE_EVENT_DISCONNECTED:
         sprintf (trace, "Connection down:connection handle:%04x reason:0x%x",
             p_data[0] + (p_data[1] << 8), p_data[2]);
@@ -553,7 +551,6 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         ui->btnCTANCSPositive->setText("");
         ui->btnCTANCSNegative->setText("");
         setHIDD_linkChange(nullptr, FALSE);
-
         break;
 
     case HCI_CONTROL_ANCS_EVENT_NOTIFICATION:
@@ -735,7 +732,6 @@ void MainWindow::on_btnHelpGATT_clicked()
     onClear();
     Log("GATT help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 208xx-A1");
     Log("Apps : watch");
     Log("Peer device - BLE device or iPhone Light Blue app, Android BLE app, etc.");
     Log("");

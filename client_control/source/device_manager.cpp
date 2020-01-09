@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -223,7 +223,7 @@ void MainWindow::InitDm()
 
     char strBda[100];
     srand (static_cast<unsigned int>(time(nullptr)));
-    sprintf(strBda, "%02X:%02X:%02X:%02X:%02X:%02X", 0x2, 0x0, 0x7, rand() % 255, rand() % 255, rand() % 255);
+    sprintf(strBda, "%02x:%02x:%02x:%02x:%02x:%02x", 0x2, 0x0, 0x7, rand() % 255, rand() % 255, rand() % 255);
     ui->edLocalBDA->setText(m_settings.value("LocalBDA",strBda).toString());
 }
 
@@ -281,6 +281,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             Log("HID Device");
             UpdateHIDD_ui_pairing();
             UpdateHIDD_ui_host();
+            app_host_hidd_get_host_info();
             break;
         case HCI_CONTROL_GROUP_AVRC_TARGET:
             ui->tabAVRCTG->setEnabled(bEnable);
@@ -432,7 +433,7 @@ void MainWindow::ReadDevicesFromSettings(const char *group, QComboBox *cbDevices
                 dev_name = dev_name_id.right(dev_name_id.size()-3);
         }
 
-        sscanf(device_keys[i].toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X",
+        sscanf(device_keys[i].toStdString().c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
                &bda0, &bda1, &bda2, &bda3, &bda4, &bda5);
         BYTE bda[6];
         bda[0] = static_cast<BYTE>(bda0);
@@ -525,7 +526,7 @@ void MainWindow::setDevBda(BYTE* bda)
     if (!m_CommPort->isOpen())
         return;
 
-    Log("setDevBda: addr = %02X:%02X:%02X:%02X:%02X:%02X", bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
+    Log("setDevBda: addr = %02x:%02x:%02x:%02x:%02x:%02x", bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
     app_host_dm_set_device_addr(bda);
 }
 
@@ -647,7 +648,7 @@ void MainWindow::onUnbond(QComboBox* cb)
 
     m_settings.beginGroup((cb != ui->cbBLEDeviceList) ? "devices" : "devicesLE");
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
         pDev->m_address[0], pDev->m_address[1], pDev->m_address[2], pDev->m_address[3], pDev->m_address[4], pDev->m_address[5]);
     m_settings.remove(strBda);
     m_settings.endGroup();
@@ -851,26 +852,24 @@ void MainWindow::SelectDevice(QComboBox* cb, BYTE * bda)
 void MainWindow::SetDevicePaired(BYTE * info, int len)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    info[0], info[1], info[2], info[3], info[4], info[5]);
-
     bool bLeDevice = false;
     int i;
 
     if (len>=7 && (info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE || info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR))
     {
         // We have the BT type
-        bLeDevice = info[6] == RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE;
+        m_host_type = info[6];
+        bLeDevice = m_host_type == RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE;
         QComboBox * cboxPtr = bLeDevice ? ui->cbBLEDeviceList : ui->cbDeviceList;
         i =  cboxPtr->findText(strBda,Qt::MatchStartsWith);
 
         // we have paired with a unknown device; add it to the paired list
         if (i == -1)
         {
-            uint8_t bda[6];
-            for (i=0;i<6;i++) bda[i] = info[5-i];
-            Log("Paired with new peer device %02X:%02X:%02X:%02X:%02X:%02X", bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
-            AddDeviceToList(bda, cboxPtr, nullptr, true);
+            Log("Paired with new %s device %02x:%02x:%02x:%02x:%02x:%02x", bLeDevice?"LE":"BR/EDR", info[0], info[1], info[2], info[3], info[4], info[5]);
+            AddDeviceToList(info, cboxPtr, nullptr, true);
             if (bLeDevice)
                 ui->btnBLEUnbond->setEnabled(true);
             else
@@ -880,6 +879,7 @@ void MainWindow::SetDevicePaired(BYTE * info, int len)
     }
     else
     {
+        m_host_type = 0; // We don't know host type
         i = ui->cbDeviceList->findText(strBda,Qt::MatchStartsWith);
         if (i == -1)
         {
@@ -945,7 +945,7 @@ void MainWindow::VirtualUnplug(CBtDevice *pDev)
 void MainWindow::HidHostDeviceAdd(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     Log("Adding HID Device in HIDH database");
@@ -961,7 +961,7 @@ void MainWindow::HidHostDeviceAdd(BYTE * bda)
 void MainWindow::HidHostDeviceRemove(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     Log("Removing HID Device from HIDH database");
@@ -977,7 +977,7 @@ void MainWindow::HidHostDeviceRemove(BYTE * bda)
 void MainWindow::BattCDeviceAdd(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     m_settings.sync();
@@ -991,7 +991,7 @@ void MainWindow::BattCDeviceAdd(BYTE * bda)
 void MainWindow::BattCDeviceRemove(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     m_settings.sync();
@@ -1005,7 +1005,7 @@ void MainWindow::BattCDeviceRemove(BYTE * bda)
 void MainWindow::FindMeLocatorDeviceAdd(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     m_settings.sync();
@@ -1019,7 +1019,7 @@ void MainWindow::FindMeLocatorDeviceAdd(BYTE * bda)
 void MainWindow::FindMeLocatorDeviceRemove(BYTE * bda)
 {
     QString strBda;
-    strBda.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+    strBda.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                    bda[0], bda[1], bda[2], bda[3], bda[4], bda[5]);
 
     m_settings.sync();
@@ -1150,7 +1150,7 @@ void MainWindow::SendHidHostAdd(void)
     // For every HID Device
     for (int i = 0; i < hid_device_list.size(); i++)
     {
-        sscanf(hid_device_list[i].toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X",
+        sscanf(hid_device_list[i].toStdString().c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
                &bda[0], &bda[1], &bda[2], &bda[3], &bda[4], &bda[5]);
         app_host_dm_hidh_add(bda);
 
@@ -1177,7 +1177,7 @@ void MainWindow::SendBattCAdd(void)
     // For every HID Device
     for (int i = 0; i < battc_device_list.size(); i++)
     {
-        sscanf(battc_device_list[i].toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X",
+        sscanf(battc_device_list[i].toStdString().c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
                &bda[0], &bda[1], &bda[2], &bda[3], &bda[4], &bda[5]);
         app_host_dm_add_battery_client(bda);
     }
@@ -1200,7 +1200,7 @@ void MainWindow::SendFindMeLocatorAdd(void)
     // For every FindMe Target Device
     for (int i = 0; i < findmel_device_list.size(); i++)
     {
-        sscanf(findmel_device_list[i].toStdString().c_str(), "%02X:%02X:%02X:%02X:%02X:%02X",
+        sscanf(findmel_device_list[i].toStdString().c_str(), "%02x:%02x:%02x:%02x:%02x:%02x",
                &bda[0], &bda[1], &bda[2], &bda[3], &bda[4], &bda[5]);
         app_host_dm_add_findme_locator(bda);
     }
@@ -1446,7 +1446,7 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
                 m_settings.beginGroup("devicesLE");
 
             QString dev_key;
-            dev_key.sprintf("%02X:%02X:%02X:%02X:%02X:%02X",
+            dev_key.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
                 pDev->m_address[0], pDev->m_address[1], pDev->m_address[2],
                 pDev->m_address[3], pDev->m_address[4], pDev->m_address[5] );
             QString name_id;
@@ -1535,10 +1535,13 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
 
         if (success && (len >= 7))
         {
-            Log("BDA %02x:%02x:%02x:%02x:%02x:%02x", p_data[6], p_data[5], p_data[4], p_data[3], p_data[2], p_data[1]);
+            uint8_t bda[6];
+            for (int i=0;i<6;i++) bda[i] = p_data[6-i];
 
             // mark paired only if it is success
-            SetDevicePaired(&p_data[1], static_cast<int>(--len));
+            SetDevicePaired(bda, static_cast<int>(--len));
+            setHIDD_HostAddr(bda);
+            setHIDD_linkChange(bda, TRUE);
         }
         break;
     }
@@ -1661,6 +1664,9 @@ void MainWindow::onFindPatchFile()
 // Start download of .hcd file
 void MainWindow::onDownload()
 {
+    Log("Note: FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719");
+    Log("and CYW20721 chips. Please use ModusToolbox 2.x or command line for download.");
+
     if (ui->edPatchFile->text().length() == 0 || ui->edLocalBDA->text().length() == 0)
     {
         Log("Specify valid configuration file and Address");

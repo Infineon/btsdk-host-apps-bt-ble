@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -607,7 +607,6 @@ void MainWindow::on_btnHelpANP_clicked()
     onClear();
     Log("Alert Notification Profile help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 20735-B1, 208xx-A1");
     Log("Apps : anc (Client), ans (Service)");
     Log("");
     Log("The ans or anc app should be compiled after enabling flag TEST_HCI_CONTROL in the app makefile.mk ");

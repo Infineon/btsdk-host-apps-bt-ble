@@ -11,4 +11,4 @@ The following apps use ClientControl:
 
 Any embedded app that configures traces over WICED HCI would also need to use ClientControl app to view traces in BTSpy utility.
 
-Supported OS - Windows, Linux and Android. 
+Supported OS - Windows, Linux and Android.

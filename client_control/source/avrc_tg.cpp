@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -917,8 +917,7 @@ void MainWindow::on_btnHelpAVRC_TG_clicked()
     onClear();
     Log("AVRC Target help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0, 208xx-A1");
-    Log("Apps : demo.watch, demo.stb, demo.audio.hci_audio_remote_control");
+    Log("Apps : watch");
     Log("Peer device - headset, speaker, car-kit");
     Log("");
     Log("- Connect");

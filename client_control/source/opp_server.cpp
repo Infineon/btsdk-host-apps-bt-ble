@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -280,8 +280,7 @@ void MainWindow::on_btnHelpOPPS_clicked()
     onClear();
     Log("OPP Server help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0");
-    Log("Apps : demo.hci_opp_server");
+    Log("Apps : hci_opp_server");
     Log("Peer device : PC, Android phone, etc supporting OPP Client profile.");
     Log("");
     Log("From peer device, find the 'OPP server' device, pair and send file.");

@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -47,6 +47,7 @@ bool app_host_hidd_send_report(uint8_t channel, uint8_t report_id, uint8_t *repo
 bool app_host_hidd_send_key(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key, char * buffer, uint8_t btn_up);
 bool app_host_hidd_cap_lock(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key);
 bool app_host_hidd_virtual_unplug();
+bool app_host_hidd_get_host_info();
 
 
 #endif

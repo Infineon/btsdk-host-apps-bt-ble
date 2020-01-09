@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -590,7 +590,6 @@ void MainWindow::on_btnHelpHF_clicked()
     onClear();
     Log("Hands-free device help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 20719-B1, 20721, 43012-C0");
     Log("Apps : hci_handsfree");
     Log("Peer device - phone or device supporting the Audio Gateway profile");
     Log("");
