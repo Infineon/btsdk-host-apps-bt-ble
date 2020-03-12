@@ -1821,11 +1821,13 @@ bool MainWindow::SetupCommPort()
         Log("Opened %s at speed: %u flow %s", serialPortName.toStdString().c_str(), serialPortBaudRate,
                 ui->btnFlowCntrl->isChecked() ? "on":"off");
 
+#if 0
         if(comm_port.contains("WICED Peripheral"))
         {
             m_bPeripheralUart = true;
             Log("Opened WICED Peripheral UART port. Only trace function is available.");
         }
+#endif
 
         // on opening the port, set a 2 sec timer
         QTimer::singleShot(2000, this, SLOT(startUpTimer()));

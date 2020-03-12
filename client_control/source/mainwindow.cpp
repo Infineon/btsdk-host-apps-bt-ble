@@ -83,7 +83,6 @@ MainWindow::MainWindow(QWidget *parent) :
     app_host_init();
     ui->setupUi(this);
 
-    setFixedSize(this->size());
     qApp->setStyleSheet("QGroupBox {  border: 1px solid gray;}");
 
     g_pMainWindow = this;
