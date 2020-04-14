@@ -113,6 +113,12 @@ void MainWindow::btnBLEHIDSendKeyDown(BYTE c, QPushButton * button)
         btnBLEHIDSendKey();
 }
 
+void MainWindow::btnBLEHIDSendMedia(BYTE c, bool pressed, QPushButton * button)
+{
+    setHIDD_buttonColor(button, pressed ? Qt::blue : Qt::white);
+    app_host_hidd_key(c, pressed);
+}
+
 bool MainWindow::btnBLEHIDSendKeyRelease(BYTE c, QPushButton * button)
 {
     for (int i=KEYRPT_CODE;i<KEYRPT_SIZE;i++)
@@ -190,6 +196,36 @@ void MainWindow::on_btnBLEHIDSendKey_3_pressed()
 void MainWindow::on_btnBLEHIDSendKey_3_released()
 {
     btnBLEHIDSendKeyUp(USB_USAGE_3, ui->btnBLEHIDSendKey_3);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_audio_pressed()
+{
+    btnBLEHIDSendMedia(KEY_AUDIO, true, ui->btnBLEHIDSendKey_audio);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_audio_released()
+{
+    btnBLEHIDSendMedia(KEY_AUDIO, false, ui->btnBLEHIDSendKey_audio);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_ir_pressed()
+{
+    btnBLEHIDSendMedia(KEY_IR, true, ui->btnBLEHIDSendKey_ir);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_ir_released()
+{
+    btnBLEHIDSendMedia(KEY_IR, false, ui->btnBLEHIDSendKey_ir);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_motion_pressed()
+{
+    btnBLEHIDSendMedia(KEY_MOTION, true, ui->btnBLEHIDSendKey_motion);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_motion_released()
+{
+    btnBLEHIDSendMedia(KEY_MOTION, false, ui->btnBLEHIDSendKey_motion);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_a_pressed()
@@ -333,6 +369,9 @@ void MainWindow::UpdateHIDD_ui_host()
         ui->btnBLEHIDSendKey_1->setEnabled(m_host_valid);
         ui->btnBLEHIDSendKey_2->setEnabled(m_host_valid);
         ui->btnBLEHIDSendKey_3->setEnabled(m_host_valid);
+        ui->btnBLEHIDSendKey_audio->setEnabled(m_host_valid);
+        ui->btnBLEHIDSendKey_ir->setEnabled(m_host_valid);
+        ui->btnBLEHIDSendKey_motion->setEnabled(m_host_valid);
         ui->btnBLEHIDSendKey_a->setEnabled(m_host_valid);
         ui->btnBLEHIDSendKey_b->setEnabled(m_host_valid);
         ui->btnBLEHIDSendKey_c->setEnabled(m_host_valid);
@@ -535,7 +574,7 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
 void MainWindow::on_btnHelpHIDD_clicked()
 {
     onClear();
-    Log("V1.0 HID Device help topic:");
+    Log("V1.1 HID Device help topic:");
     Log("");
 
     Log("Apps : use app such as ble_remote, ble_keyboard, ble_mouse.");

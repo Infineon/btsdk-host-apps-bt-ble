@@ -61,7 +61,6 @@
 #include <QTextStream>
 #include <QFile>
 #include <QMutex>
-#include "btle_homekit2_lightbulb.h"
 #include "wiced_types.h"
 
 #endif

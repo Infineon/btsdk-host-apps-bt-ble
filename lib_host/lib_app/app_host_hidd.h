@@ -39,6 +39,13 @@
 #include "wiced_hci_hidd.h"
 #include "hci_control_api.h"
 
+enum {
+    KEY_IR      = 0xf0,
+    KEY_AUDIO   = 0xf1,
+    KEY_MOTION  = 0xf2,
+    KEY_CONNECT = 0xf3,
+};
+
 // HID Device
 bool app_host_hidd_connect();
 bool app_host_hidd_disconnect();
@@ -48,6 +55,7 @@ bool app_host_hidd_send_key(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key,
 bool app_host_hidd_cap_lock(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key);
 bool app_host_hidd_virtual_unplug();
 bool app_host_hidd_get_host_info();
+bool app_host_hidd_key(uint8_t key, uint8_t keyDown);   // key should be USB HID Usage Keyboard (page 0x07) keys. 0xf0-0xff is customzied.
 
 
 #endif

@@ -65,6 +65,10 @@ bool app_host_hidd_pairing_mode(uint8_t m_pairing_mode_active)
 	return wiced_hci_hidd_pairing_mode(&data);
 }
 
+bool app_host_hidd_key(uint8_t key, uint8_t keyDown)
+{
+	return wiced_hci_hidd_key(key, keyDown);
+}
 
 bool app_host_hidd_send_key(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key, char * buffer, uint8_t btn_up)
 {

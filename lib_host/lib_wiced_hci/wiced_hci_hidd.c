@@ -65,6 +65,14 @@ bool wiced_hci_hidd_pairing_mode(wiced_hci_bt_hidd_paring_mode_data_t * data)
     return wiced_hci_send_command(HCI_CONTROL_HIDD_COMMAND_ACCEPT_PAIRING, cmd, 1);
 }
 
+bool wiced_hci_hidd_key(uint8_t key, uint8_t keyDown)
+{
+    uint8_t    cmd[2];
+	cmd[0] = key;
+    cmd[1] = keyDown;
+    return wiced_hci_send_command(HCI_CONTROL_HIDD_COMMAND_KEY, cmd, 2);
+}
+
 bool wiced_hci_bt_hidd_send_key(wiced_hci_bt_hidd_send_key_data_t * data)
 {
     char buff[100];

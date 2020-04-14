@@ -84,6 +84,7 @@ bool wiced_hci_hidd_get_host_info();
 bool wiced_hci_bt_hidd_send_key(wiced_hci_bt_hidd_send_key_data_t *data);
 bool wiced_hci_bt_hidd_cap_lock(wiced_hci_bt_hidd_cap_lock_data_t *data);
 bool wiced_hci_bt_hidd_virtual_unplug();
+bool wiced_hci_hidd_key(uint8_t key, uint8_t keyDown);
 
 
 #endif // WICED_HCI_H

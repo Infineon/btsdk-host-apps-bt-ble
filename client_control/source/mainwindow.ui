@@ -41,7 +41,7 @@
          <x>0</x>
          <y>0</y>
          <width>1061</width>
-         <height>719</height>
+         <height>721</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayoutScrollArea" stretch="0,0,0,0">
@@ -165,7 +165,7 @@
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
                <widget class="QPushButton" name="btnStartDisc">
                 <property name="text">
@@ -181,7 +181,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="cbDeviceList"/>
+               <widget class="QComboBox" name="cbDeviceList">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnUnbond">
@@ -198,7 +205,7 @@
              <property name="title">
               <string>BLE Discovery</string>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
                <widget class="QPushButton" name="btnBLEStartDisc">
                 <property name="text">
@@ -214,7 +221,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="cbBLEDeviceList"/>
+               <widget class="QComboBox" name="cbBLEDeviceList">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnBLEUnbond">
@@ -413,7 +427,7 @@
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>9</number>
           </property>
           <property name="usesScrollButtons">
            <bool>true</bool>
@@ -2336,9 +2350,9 @@
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>170</y>
-              <width>400</width>
-              <height>25</height>
+              <y>194</y>
+              <width>671</width>
+              <height>31</height>
              </rect>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_29">
@@ -2426,8 +2440,8 @@
              <rect>
               <x>8</x>
               <y>44</y>
-              <width>241</width>
-              <height>121</height>
+              <width>321</width>
+              <height>141</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -2471,74 +2485,6 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_38">
                <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_esc">
-                 <property name="toolTip">
-                  <string>Button ESC</string>
-                 </property>
-                 <property name="text">
-                  <string>ESC</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_up">
-                 <property name="toolTip">
-                  <string>Button UP</string>
-                 </property>
-                 <property name="text">
-                  <string>Up</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_enter">
-                 <property name="toolTip">
-                  <string>Button Enter key</string>
-                 </property>
-                 <property name="text">
-                  <string>Enter</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_40">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
-                 <property name="toolTip">
-                  <string>Button Left</string>
-                 </property>
-                 <property name="text">
-                  <string>Left</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_down">
-                 <property name="toolTip">
-                  <string>Button Down</string>
-                 </property>
-                 <property name="text">
-                  <string>Down</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
-                 <property name="toolTip">
-                  <string>Button Right</string>
-                 </property>
-                 <property name="text">
-                  <string>Right</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_41">
-               <item>
                 <widget class="QPushButton" name="btnBLEHIDSendKey_a">
                  <property name="toolTip">
                   <string>Button &quot;a&quot;</string>
@@ -2570,15 +2516,117 @@
                </item>
               </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_esc">
+                 <property name="toolTip">
+                  <string>Button ESC</string>
+                 </property>
+                 <property name="text">
+                  <string>ESC</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_up">
+                 <property name="toolTip">
+                  <string>Button UP</string>
+                 </property>
+                 <property name="text">
+                  <string>Up</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_audio">
+                 <property name="toolTip">
+                  <string>Audio button</string>
+                 </property>
+                 <property name="text">
+                  <string>Audio</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
+                 <property name="toolTip">
+                  <string>Button Right</string>
+                 </property>
+                 <property name="text">
+                  <string>Right</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_enter">
+                 <property name="toolTip">
+                  <string>Button Enter key</string>
+                 </property>
+                 <property name="text">
+                  <string>Enter</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
+                 <property name="toolTip">
+                  <string>Button Left</string>
+                 </property>
+                 <property name="text">
+                  <string>Left</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_41">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_motion">
+                 <property name="toolTip">
+                  <string>Motion Button</string>
+                 </property>
+                 <property name="text">
+                  <string>Motion</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_down">
+                 <property name="toolTip">
+                  <string>Button Down</string>
+                 </property>
+                 <property name="text">
+                  <string>Down</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_ir">
+                 <property name="toolTip">
+                  <string>IR button</string>
+                 </property>
+                 <property name="text">
+                  <string>IR</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="layoutWidget7">
             <property name="geometry">
              <rect>
-              <x>260</x>
+              <x>342</x>
               <y>110</y>
-              <width>73</width>
-              <height>61</height>
+              <width>51</width>
+              <height>81</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2750,7 +2798,7 @@
            <widget class="QCheckBox" name="cbBLEHIDHold">
             <property name="geometry">
              <rect>
-              <x>260</x>
+              <x>340</x>
               <y>50</y>
               <width>71</width>
               <height>20</height>
@@ -5588,7 +5636,7 @@
      <x>0</x>
      <y>0</y>
      <width>1061</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

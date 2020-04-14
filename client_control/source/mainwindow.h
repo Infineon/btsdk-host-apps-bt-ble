@@ -349,6 +349,7 @@ public:
     bool btnBLEHIDSendKeyRelease(BYTE c, QPushButton * button);
     void btnBLEHIDSendKeyDown(BYTE c, QPushButton * button);
     void btnBLEHIDSendKeyUp(BYTE c, QPushButton * button);
+    void btnBLEHIDSendMedia(BYTE c, bool pressed, QPushButton * button);
     void setHIDD_buttonColor(QPushButton * button, const QColor &color);
     void UpdateHIDD_ui_host();
     void UpdateHIDD_ui_pairing();
@@ -933,6 +934,12 @@ private slots:
     void on_btnBLEHIDSendKey_2_released();
     void on_btnBLEHIDSendKey_3_pressed();
     void on_btnBLEHIDSendKey_3_released();
+    void on_btnBLEHIDSendKey_audio_pressed();
+    void on_btnBLEHIDSendKey_audio_released();
+    void on_btnBLEHIDSendKey_ir_pressed();
+    void on_btnBLEHIDSendKey_ir_released();
+    void on_btnBLEHIDSendKey_motion_pressed();
+    void on_btnBLEHIDSendKey_motion_released();
     void on_btnBLEHIDSendKey_a_pressed();
     void on_btnBLEHIDSendKey_a_released();
     void on_btnBLEHIDSendKey_b_pressed();
