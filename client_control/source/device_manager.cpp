@@ -810,8 +810,6 @@ CBtDevice *MainWindow::FindInList(BYTE * addr, QComboBox * pCb)
 // Find a paired device in list of devices using connection type
 CBtDevice *MainWindow::FindInList(UINT16 conn_type, UINT16 handle, QComboBox * pCb)
 {
-    UNUSED(handle);
-
     CBtDevice *device = nullptr;
     for (int i = 0; i < pCb->count(); i++)
     {
@@ -820,7 +818,15 @@ CBtDevice *MainWindow::FindInList(UINT16 conn_type, UINT16 handle, QComboBox * p
             continue;
 
         if(device->m_conn_type & conn_type)
-            return device;
+         {
+            if(device->m_conn_type & WICED_CONNECTION_TYPE_SPP)
+            {
+                if(handle == device->m_spp_handle)
+                    return device;
+            }
+            else
+                return device;
+         }
     }
     return nullptr;
 }

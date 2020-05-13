@@ -574,29 +574,22 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
 void MainWindow::on_btnHelpHIDD_clicked()
 {
     onClear();
-    Log("V1.1 HID Device help topic:");
+    Log("V1.2 HID Device:");
     Log("");
 
-    Log("Apps : use app such as ble_remote, ble_keyboard, ble_mouse.");
+    Log("Apps : use HID apps such as remote, keyboard, mouse.");
     Log("Peer device : Windows PC or any HID host");
     Log("");
 
-    Log("Note: See flag TESTING_USING_HCI in the app makefile");
+    Log("Note: The TESTING_USING_HCI compile flag in the app must be set to support Client Control");
     Log("");
 
-    Log("- Enter/Exit Pairing Mode");
-    Log("  Sets the local device to pair-able mode or exit pair-able mode");
-    Log("- Connect/Disconnect");
-    Log("  Connect/Disconnect with a HID host");
-    Log("- Send");
-    Log("  Sends the specified HID report");
-    Log("  Shift Lock, etc.");
-    Log("- Send Report");
-    Log("  Send report for Interrupt or Control channel.");
-    Log("- Debug");
-    Log("  Select device firmware debug output routing. Use WICED to route to Btspy and PUART to route to BR:115200 COM port.");
-    Log("- Key buttons");
-    Log("  Send key HID report");
+    Log("- V1.0");
+    Log("   Initial version MTB ClientControl HIDD");
+    Log("- V1.1");
+    Log("   Added media, such as audio, buttons");
+    Log("- V1.2");
+    Log("   Reversed Left and Right botton location");
     ScrollToTop();
 
 }

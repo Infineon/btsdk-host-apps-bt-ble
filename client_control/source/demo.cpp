@@ -185,7 +185,6 @@ void MainWindow::on_btnHelpDemo_clicked()
     onClear();
     Log("Demo help topic:");
     Log("");
-    Log("WICED Platforms : 43012-C0");
     Log("Apps : ble_wifi_introducer");
     Log("");
     Log("The BLE WiFi Introducer app shows an example interfacing the BLE and WiFi components on a combo chip.");

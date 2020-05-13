@@ -453,16 +453,21 @@ void MainWindow::onHandleMceConnected(unsigned char *p_data, unsigned int len)
                 MceResizeMessageWindows(true);
         }
 
-        // Enable notification
+        m_mce_notif_registered = FALSE;
+
+        // Set telecom folder
         UINT8 buf[20];
 
         p = buf;
         p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
 
-        UINT8 notif_status = 1;
-        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NOTIF_STATUS, &notif_status, 1);
+        UINT8 nav_flag = 2; // Down one level
+        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NAV_FLAG, &nav_flag, 1);
 
-        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_NOTIF_REG, buf, p - buf);
+        m_mce_set_folder = "telecom";
+        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)"telecom", m_mce_set_folder.size());
+
+        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
     }
     else
         Log("MAP Client failed to connect");
@@ -705,7 +710,23 @@ void MainWindow::onHandleMceMessageList(unsigned char *p_data, unsigned int len)
                 if (count == MCE_MAX_LIST_COUNT)
                     MceSendGetMessageListing(pDev->m_mce_handle, m_mce_list_offset + MCE_MAX_LIST_COUNT, MCE_MAX_LIST_COUNT);
                 else
+                {
                     Log("MAP Client %d messages listed", m_mce_list_offset + count);
+
+                    if (!m_mce_notif_registered)
+                    {
+                        // Enable notification
+                        UINT8 buf[20];
+
+                        p = buf;
+                        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
+
+                        UINT8 notif_status = 1;
+                        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NOTIF_STATUS, &notif_status, 1);
+
+                        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_NOTIF_REG, buf, p - buf);
+                    }
+                }
             }
         }
     }
@@ -951,22 +972,8 @@ void MainWindow::onHandleMceNotifReg(unsigned char *p_data, unsigned int len)
 
     Log("MAP Client notification registration status %d", p[2]);
 
-    // Wait for MSE to connect MN server before going to the next step
-    QThread::sleep(1);
-
-    // Set telecom folder
-    UINT8 buf[20];
-
-    p = buf;
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
-
-    UINT8 nav_flag = 2; // Down one level
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NAV_FLAG, &nav_flag, 1);
-
-    m_mce_set_folder = "telecom";
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)"telecom", m_mce_set_folder.size());
-
-    SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
+    if (p[2] == 0)
+        m_mce_notif_registered = TRUE;
 }
 
 QString MceGetEventAttribute(QString notif, QString attr)

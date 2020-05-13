@@ -2553,12 +2553,12 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
+                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
                  <property name="toolTip">
-                  <string>Button Right</string>
+                  <string>Button Left</string>
                  </property>
                  <property name="text">
-                  <string>Right</string>
+                  <string>Left</string>
                  </property>
                 </widget>
                </item>
@@ -2573,12 +2573,12 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
+                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
                  <property name="toolTip">
-                  <string>Button Left</string>
+                  <string>Button Right</string>
                  </property>
                  <property name="text">
-                  <string>Left</string>
+                  <string>Right</string>
                  </property>
                 </widget>
                </item>
@@ -2798,9 +2798,9 @@
            <widget class="QCheckBox" name="cbBLEHIDHold">
             <property name="geometry">
              <rect>
-              <x>340</x>
+              <x>343</x>
               <y>50</y>
-              <width>71</width>
+              <width>70</width>
               <height>20</height>
              </rect>
             </property>
@@ -2820,165 +2820,6 @@
             <string>GATT</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_24">
-            <item row="3" column="0">
-             <widget class="QPushButton" name="btnBLEStartStopAdvert">
-              <property name="text">
-               <string>Start Adverts</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2" colspan="3">
-             <widget class="QLabel" name="lblBLEScanState">
-              <property name="text">
-               <string>Scan: None</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="5">
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Value:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Handle Start:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>Handle End:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="QLabel" name="lblBLEAdvertisementState">
-              <property name="text">
-               <string>Advertisement: None</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="5">
-             <widget class="QLabel" name="label_11">
-              <property name="text">
-               <string>Handle:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5">
-             <widget class="QLineEdit" name="edtBLEHandle">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="6">
-             <widget class="QPushButton" name="btnBLEWrite">
-              <property name="text">
-               <string>Write</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="btnBLEConnect">
-              <property name="text">
-               <string>Connect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="btnBLECancelConnect">
-              <property name="text">
-               <string>Cancel Connect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="btnBLEDiscoverServices">
-              <property name="text">
-               <string>Discover Services</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QPushButton" name="btnBLEDisconnect">
-              <property name="text">
-               <string>Disconnect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="5">
-             <widget class="QLineEdit" name="edtBLEHandleValue">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLineEdit" name="edtBLEHandleStart">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="6">
-             <widget class="QPushButton" name="btnBLEValueNotify">
-              <property name="text">
-               <string>Value Notify</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="6">
-             <widget class="QPushButton" name="btnBLEValueIndicate">
-              <property name="text">
-               <string>Value Indicate</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QLineEdit" name="edtBLEHandleEnd">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="6">
-             <widget class="QPushButton" name="btnBLERead">
-              <property name="text">
-               <string>Read</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2" colspan="2">
-             <widget class="QPushButton" name="btnBLEDiscoverDescriptors">
-              <property name="text">
-               <string>Discover Descriptors</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="6">
-             <widget class="QPushButton" name="btnBLEWriteNoRsp">
-              <property name="text">
-               <string>Write No Rsp</string>
-              </property>
-             </widget>
-            </item>
             <item row="8" column="0">
              <spacer name="verticalSpacer_16">
               <property name="orientation">
@@ -2992,10 +2833,82 @@
               </property>
              </spacer>
             </item>
-            <item row="6" column="2" colspan="2">
-             <widget class="QPushButton" name="btnBLEDiscoverChars">
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btnBLEDiscoverServices">
               <property name="text">
-               <string>Discover Characteristics</string>
+               <string>Discover Services</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="7">
+             <spacer name="horizontalSpacer_25">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="btnBLEStartStopAdvert">
+              <property name="text">
+               <string>Start Adverts</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2" colspan="2">
+             <widget class="QPushButton" name="btnBLEDiscoverDescriptors">
+              <property name="text">
+               <string>Discover Descriptors</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" colspan="3">
+             <widget class="QLabel" name="lblBLEScanState">
+              <property name="text">
+               <string>Scan: None</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <widget class="QLineEdit" name="edtBLEHandle">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="6">
+             <widget class="QPushButton" name="btnBLEValueIndicate">
+              <property name="text">
+               <string>Value Indicate</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QPushButton" name="btnBLEConnect">
+              <property name="text">
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <widget class="QPushButton" name="btnBLERead">
+              <property name="text">
+               <string>Read</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="6">
+             <widget class="QPushButton" name="btnBLEWrite">
+              <property name="text">
+               <string>Write</string>
               </property>
              </widget>
             </item>
@@ -3036,18 +2949,105 @@
               </item>
              </layout>
             </item>
-            <item row="2" column="7">
-             <spacer name="horizontalSpacer_25">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+            <item row="3" column="2">
+             <widget class="QPushButton" name="btnBLEDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
+             </widget>
+            </item>
+            <item row="6" column="6">
+             <widget class="QPushButton" name="btnBLEValueNotify">
+              <property name="text">
+               <string>Value Notify</string>
               </property>
-             </spacer>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="QLabel" name="lblBLEAdvertisementState">
+              <property name="text">
+               <string>Advertisement: None</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLineEdit" name="edtBLEHandleStart">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="edtBLEHandleEnd">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="5">
+             <widget class="QLineEdit" name="edtBLEHandleValue">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Handle Start:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Handle End:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2" colspan="2">
+             <widget class="QPushButton" name="btnBLEDiscoverChars">
+              <property name="text">
+               <string>Discover Characteristics</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="6">
+             <widget class="QPushButton" name="btnBLEWriteNoRsp">
+              <property name="text">
+               <string>Write No Rsp</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="5">
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Value:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="btnBLECancelConnect">
+              <property name="text">
+               <string>Cancel Connect</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

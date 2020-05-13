@@ -215,9 +215,7 @@ void MainWindow::on_btnHelpAG_clicked()
 {
     onClear();
     Log("Audio Gateway help topic:");
-    Log("");
-    Log("WICED Platforms : 20706-A2");
-    Log("Apps : demo.audio.hci_audio_gateway");
+    Log("Apps : audio_gateway");
     Log("");
 
     Log("Peer device - headset, speaker, car-kit supporting hands-free profile");

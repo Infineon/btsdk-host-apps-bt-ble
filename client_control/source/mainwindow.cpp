@@ -148,8 +148,8 @@ MainWindow::MainWindow(QWidget *parent) :
     Log("1. To re-download the embedded application, first close the serial port.");
     Log("2. Default baud rate for most WICED boards is 3M. For CYBT-213043-EVAL and CYBT-213043-MESH boards,");
     Log("   use baud rate of 115200.");
-    Log("3. FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719");
-    Log("   and CYW20721 chips. Please use ModusToolbox 2.x or command line for download.");
+    Log("3. FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719,");
+    Log("   CYW20721 and CYW20735 chips. Please use ModusToolbox 2.x or command line for download.");
 
     ScrollToTop();
 

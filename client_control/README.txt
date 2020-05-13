@@ -130,7 +130,7 @@ Device Manager:
 - Unbond
   Un-pair the selected device. Paired devices will show 'link' icon.
 - Patch file download
-  *** NOTE *** 20719/20721/208xx devices do not support the DIRECT_LOAD option.
+  *** NOTE *** 20719/20721/208xx/20735 devices do not support the DIRECT_LOAD option.
   *** NOTE *** CYW9M2BASE-43012BT board *ONLY* supports the DIRECT_LOAD option.
   Normally the embedded application is downloaded to the board through WICED
   SDK (using a make target with the 'download' command).  If desired, the

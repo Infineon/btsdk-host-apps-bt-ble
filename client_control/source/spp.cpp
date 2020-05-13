@@ -39,6 +39,8 @@
 #include "app_include.h"
 
 #define WICED_BT_RFCOMM_SUCCESS 0
+#define MAX_TX_RETRY_ATTEMPTS   1
+#define TX_RETRY_TIMEOUT        2 // in seconds
 
 extern MainWindow *g_pMainWindow;
 
@@ -323,6 +325,7 @@ CBtDevice* MainWindow::GetConnectedSPPDevice()
 // Send data from a file using a thread
 DWORD MainWindow::SendFileThreadSPP()
 {
+    int retry_tx_attempts = 0;
     FILE *fp = NULL;
     char buf[1030] = { 0 };
     QString strfile = ui->lineEditSPPSendFile->text();
@@ -349,28 +352,48 @@ DWORD MainWindow::SendFileThreadSPP()
     int read_bytes;
     QMutex mutex;
 
-    while ((read_bytes = fread(buf, 1, HCI_CONTROL_SPP_MAX_TX_BUFFER, fp)) != 0)
+    read_bytes = fread(buf, 1, HCI_CONTROL_SPP_MAX_TX_BUFFER, fp);
+
+    while (read_bytes != 0)
     {
         mutex.lock();
 
         app_host_spp_send(pDev->m_address, (LPBYTE)buf, read_bytes);
         m_spp_bytes_sent += read_bytes;
 
-        if(spp_tx_wait.wait(&mutex, 5000) == false)
-        {
-            Log("Wait failed");
-            //break;
-        }
-
+        // wait for spp tx complete event
+        spp_tx_wait.wait(&mutex);
 
         if ((m_spp_tx_complete_result != WICED_BT_RFCOMM_SUCCESS) ||
             (!ui->cbSPPSendFile->isChecked()))
         {
+            Log("Got NAK");
+            retry_tx_attempts++;
+        }
+        else
+        {
+            retry_tx_attempts = 0;
+        }
+
+        mutex.unlock();
+
+        if(retry_tx_attempts > MAX_TX_RETRY_ATTEMPTS)
+        {
+            Log("Send failed, please retry");
             m_spp_total_to_send = 0;
             mutex.unlock();
             break;
         }
-        mutex.unlock();
+        else if((retry_tx_attempts !=0) && (retry_tx_attempts <= MAX_TX_RETRY_ATTEMPTS))
+        {
+            Log("Retrying last packet in %d seconds", TX_RETRY_TIMEOUT);
+            m_thread_spp->sleep(TX_RETRY_TIMEOUT);
+        }
+        else
+        {
+            read_bytes = fread(buf, 1, HCI_CONTROL_SPP_MAX_TX_BUFFER, fp);
+            retry_tx_attempts = 0;
+        }
     }
     fclose(fp);
 
@@ -399,7 +422,7 @@ void MainWindow::on_btnHelpSPP_clicked()
     onClear();
     Log("Serial Port Profile help topic:");
     Log("");
-    Log("Apps : hci_iap2_spp (MFI licensees only)");
+    Log("Apps : spp_multi_port");
     Log("Peer device - PC, Phone, etc. supporting SPP profile");
     Log("");
     Log("- Connect");

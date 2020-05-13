@@ -217,7 +217,6 @@ void MainWindow::on_btnHelpBATTC_clicked()
     onClear();
     Log("Battery Client help topic:");
     Log("");
-    Log("WICED Platforms : 20706-A2, 43012-C0");
     Log("Apps : hci_ble_hid_host");
     Log("");
     Log("Connect to a BLE remote control or mouse that supports Battery service read battery level");

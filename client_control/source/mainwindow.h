@@ -596,6 +596,7 @@ public:
     int m_mce_msg_type;
     QString m_mce_push_message;
     UINT16 m_mce_list_offset;
+    bool m_mce_notif_registered;
 
 signals:
    void HandleWicedEvent(unsigned int opcode, unsigned int len, unsigned char *p_data);
