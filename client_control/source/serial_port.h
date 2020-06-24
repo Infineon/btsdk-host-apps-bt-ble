@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -80,7 +80,7 @@ WicedSerialPortHostmode ();
 
 
     virtual qint64 read(char *data, qint64 maxlen);
-    virtual qint64 write(const char *data, qint64 len);
+    virtual qint64 write(char *data, qint64 len);
 
     virtual bool open(const char *str_port_name, qint32 baudRate, bool bFlowControl);
     virtual void close();

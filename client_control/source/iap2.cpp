@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -39,10 +39,18 @@
 #include "app_include.h"
 
 #define WICED_BT_RFCOMM_SUCCESS 0
-#define HCI_IAP2_MAX_TX_BUFFER                  (1000 - 12)  /* 12 bytes of the iAP2 overhead */
+//#define HCI_IAP2_MAX_TX_BUFFER                  (1000 - 12)  /* 12 bytes of the iAP2 overhead */
+#define HCI_IAP2_MAX_TX_BUFFER                  (700 - 12)  /* 12 bytes of the iAP2 overhead */
 
 extern MainWindow *g_pMainWindow;
 
+#define DEBUG_SENDING_FILE
+#ifdef DEBUG_SENDING_FILE
+    DWORD   m_cnt_packetsent;
+    DWORD   m_cnt_completed;
+    DWORD   m_cnt_ack;
+    DWORD   m_cnt_Nack;
+#endif
 
 // Initialize app
 void MainWindow::InitiAP2()
@@ -51,8 +59,13 @@ void MainWindow::InitiAP2()
 
     m_iap2_bytes_sent = 0;
     m_iap2_total_to_send = 0;
-
     m_iap2_tx_complete_result = 0;
+
+    // todo - design the usages of buttons
+    ui->btniAPConnect->setVisible(false);
+    ui->btniAPSDisconnect->setVisible(false);
+    ui->btniAP2GenSign->setVisible(false);
+    ui->btniAP2ReadCert->setVisible(false);
 
     g_pMainWindow = this;
 }
@@ -90,27 +103,26 @@ void MainWindow::on_btniAPConnect_clicked()
     SendWicedCommand(HCI_CONTROL_IAP2_COMMAND_CONNECT, cmd, 6);
 }
 
-
 // Disconnect iAP2 connection with peer
 void MainWindow::on_btniAPSDisconnect_clicked()
 {
     BYTE   cmd[60];
     int    commandBytes = 0;
-    UINT16 nHandle = 0;
+    UINT16 session_id = 0;
     CBtDevice * pDev = GetConnectediAP2Device();
-    if (pDev == NULL)
+    if (pDev != NULL)
     {
-        nHandle = pDev->m_iap2_handle;
+        session_id = pDev->m_iap2_handle;
         return;
     }
 
-    cmd[commandBytes++] = nHandle & 0xff;
-    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+    cmd[commandBytes++] = session_id & 0xff;
+    cmd[commandBytes++] = (session_id >> 8) & 0xff;
 
     pDev->m_iap2_handle = NULL_HANDLE;
     pDev->m_conn_type &= ~CONNECTION_TYPE_IAP2;
 
-    Log("Sending iap2 Disconnect Command, Handle: 0x%04x", nHandle);
+    Log("Sending iap2 Disconnect Command, session_id:%d", session_id);
     SendWicedCommand(HCI_CONTROL_IAP2_COMMAND_DISCONNECT , cmd, commandBytes);
 }
 
@@ -118,18 +130,23 @@ void MainWindow::on_btniAPSDisconnect_clicked()
 void MainWindow::on_btniAPSend_clicked()
 {
     char buf[1030] = { 0 };
-    UINT16 nHandle;
+    UINT16 session_id;
     CBtDevice * pDev = GetConnectediAP2Device();
     if (pDev == NULL)
         return;
 
-    nHandle = pDev->m_iap2_handle;
+    session_id = pDev->m_iap2_handle;
+    buf[0] = session_id & 0xff;
+    buf[1] = (session_id >> 8) & 0xff;
 
-    buf[0] = nHandle & 0xff;
-    buf[1] = (nHandle >> 8) & 0xff;
+#ifdef DEBUG_SENDING_FILE
+    m_cnt_packetsent = 0;
+    m_cnt_completed = 0;
+    m_cnt_ack = 0;
+    m_cnt_Nack = 0;
+#endif
 
-
-    if (!ui->cbiAPPSendFile->isChecked())
+    if (!ui->cbiAP2SendFile->isChecked())
     {
         QString str = ui->lineEditiAPSend->text();
         strncpy(&buf[2], str.toStdString().c_str(), sizeof(buf) - 2);
@@ -156,7 +173,7 @@ void MainWindow::on_btniAPSend_clicked()
 }
 
 // Open a file to send data
-void MainWindow::on_btnSPPBrowseSend_2_clicked()
+void MainWindow::on_btniAP2BrowseSend_clicked()
 {
     QString file = QFileDialog::getOpenFileName(this, tr("Open File"),"","");
 
@@ -174,7 +191,7 @@ void MainWindow::on_btniAPBrowseReceive_clicked()
 }
 
 // send data from file instead of text box
-void MainWindow::on_cbiAPPSendFile_clicked()
+void MainWindow::on_cbiAP2SendFile_clicked()
 {
 
 }
@@ -222,17 +239,15 @@ void MainWindow::onHandleWicedEventiAP2(unsigned int opcode, unsigned char *p_da
     }
 }
 
-
 // Handle WICED HCI events for iAP2
 void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
 {
     char   trace[1024];
     CBtDevice *device;
     BYTE bda[6];
-    UINT16  handle;
+    UINT16  session_id;
     static int ea_total = 0;
     static BYTE last_byte_received = 0xff;
-
 
     switch (identifier)
     {
@@ -240,33 +255,39 @@ void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         for (int i = 0; i < 6; i++)
             bda[5 - i] = p_data[i];
 
-        handle = p_data[6] + (p_data[7] << 8);
+        session_id = p_data[6] + (p_data[7] << 8);
 
-        sprintf(trace, "iAP2 connected %02x:%02x:%02x:%02x:%02x:%02x handle %04x",
-            bda[0], bda[1], bda[2], bda[3], bda[4], bda[5], handle);
+        sprintf(trace, "iAP2 connected %02x:%02x:%02x:%02x:%02x:%02x session_id:%d",
+            bda[0], bda[1], bda[2], bda[3], bda[4], bda[5], session_id);
         Log(trace);
 
-        // find device in the list with received address and save the connection handle
+        // find device in the list with received address and save the connection session_id
         if ((device = FindInList(bda,ui->cbDeviceList)) == NULL)
             device = AddDeviceToList(bda, ui->cbDeviceList, NULL);
 
-        device->m_iap2_handle = handle;
+        device->m_iap2_handle = session_id;
         device->m_conn_type |= CONNECTION_TYPE_IAP2;
 
         SelectDevice(ui->cbDeviceList, bda);
+
+        // enable Send button
+        ui->btniAPSend->setDisabled(false);
         break;
+
     case HCI_CONTROL_IAP2_EVENT_SERVICE_NOT_FOUND:
         Log("iAP2 Service not found");
         break;
+
     case HCI_CONTROL_IAP2_EVENT_CONNECTION_FAILED:
         Log("iAP2 Connection Failed");
         break;
+
     case HCI_CONTROL_IAP2_EVENT_DISCONNECTED:
     {
-        handle = p_data[0] | (p_data[1] << 8);
-        Log("iAP2 disconnected,  %04x", handle);
-        CBtDevice * pDev = FindInList(CONNECTION_TYPE_IAP2, handle, ui->cbDeviceList);
-        if (pDev && (pDev->m_iap2_handle == handle))
+        session_id = p_data[0] | (p_data[1] << 8);
+        Log("iAP2 disconnected, session_id:%d", session_id);
+        CBtDevice * pDev = FindInList(CONNECTION_TYPE_IAP2, session_id, ui->cbDeviceList);
+        if (pDev && (pDev->m_iap2_handle == session_id))
         {
             pDev->m_iap2_handle = NULL_HANDLE;
             pDev->m_conn_type &= ~CONNECTION_TYPE_IAP2;
@@ -275,40 +296,48 @@ void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         break;
 
     case HCI_CONTROL_IAP2_EVENT_TX_COMPLETE:
-        handle = p_data[0] | (p_data[1] << 8);
+        session_id = p_data[0] | (p_data[1] << 8);
         m_iap2_tx_complete_result = p_data[2];
 
-        if (!ui->cbiAPPSendFile->isChecked())
+#ifdef DEBUG_SENDING_FILE
+        m_cnt_completed++;
+        if (m_iap2_tx_complete_result)
+            m_cnt_Nack++;
+        else
+            m_cnt_ack++;
+#endif
+
+        if (!ui->cbiAP2SendFile->isChecked())
         {
-            sprintf(trace, "iAP2 tx complete handle:%d result:%d", handle, m_iap2_tx_complete_result);
+            sprintf(trace, "iAP2 tx complete session_id:%d result:%d", session_id, m_iap2_tx_complete_result);
             Log(trace);
         }
         else
         {
-            qDebug(trace, "iAP2 tx complete handle:%d result:%d %d of %d",
-                handle, m_iap2_tx_complete_result, m_iap2_bytes_sent, m_iap2_total_to_send);
+            // sending File
+            // qDebug(trace, "iAP2 tx complete session_id:%s result:%d %d of %d",
+            //    session_id, m_iap2_tx_complete_result, m_iap2_bytes_sent, m_iap2_total_to_send);
         }
         iap2_tx_wait.wakeAll();
-
         break;
 
     case HCI_CONTROL_IAP2_EVENT_RX_DATA:
-        handle = (p_data[0] << 8) + p_data[1];
+        session_id = (p_data[0] << 8) + p_data[1];
         ea_total += (len - 2);
         if (len > 32)
         {
             if (p_data[2] != (BYTE)(last_byte_received + 1))
-                sprintf(trace, "----IAP2 rx complete session id:%u len:%u total:%d %02x - %02x",
-                handle, (uint32_t) len - 2, ea_total, p_data[2], p_data[len - 1]);
+                sprintf(trace, "----IAP2 rx complete session_id:%d len:%d total:%d %02x - %02x",
+                session_id, (uint32_t) len - 2, ea_total, p_data[2], p_data[len - 1]);
             else
-                sprintf(trace, "IAP2 rx complete session id:%u len:%u total:%d %02x - %02x",
-                handle, (uint32_t)len - 2, ea_total, p_data[2], p_data[len - 1]);
+                sprintf(trace, "IAP2 rx complete session_id:%d len:%d total:%d %02x - %02x",
+                session_id, (uint32_t)len - 2, ea_total, p_data[2], p_data[len - 1]);
             last_byte_received = p_data[len - 1];
         }
         else
         {
-            sprintf(trace, "IAP2 rx complete session id:%u len:%u total:%u ",
-                handle, (uint32_t)len - 2, ea_total);
+            sprintf(trace, "IAP2 rx complete session_id:%d len:%d total:%d ",
+                session_id, (uint32_t)len - 2, ea_total);
             for (DWORD i = 0; i < len - 2; i++)
                 sprintf(&trace[strlen(trace)], "%02x ", p_data[2 + i]);
         }
@@ -325,7 +354,7 @@ void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
             for (DWORD i = 0; (i < len - 2) && (i < 100); i++)
                 sprintf(&trace[strlen(trace)], "%02x ", p_data[2 + i]);
 
-            ui->lineEditSPPreceive_2->setText(trace);
+            ui->lineEditiAP2Receive->setText(trace);
         }
         break;
 
@@ -361,6 +390,7 @@ void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
             Log(trace);
         }
         break;
+
     case HCI_CONTROL_IAP2_EVENT_AUTH_CHIP_SIGNATURE:
         sprintf(trace, "Rcvd Chip Signature len:%d", (uint32_t)len);
         Log(trace);
@@ -374,9 +404,7 @@ void MainWindow::HandleiAP2PEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         }
         break;
     }
-
 }
-
 
 // Get connected device from BREDR combo box for iAP2 connection
 CBtDevice* MainWindow::GetConnectediAP2Device()
@@ -419,8 +447,11 @@ void MainWindow::on_btniAPRead_clicked()
 }
 
 // Send data from a file using a thread
+#define MAX_TX_RETRY_ATTEMPTS 1 // 1: no retry, just exit.
+#define TX_RETRY_TIMEOUT      2 // in seconds
 DWORD MainWindow::SendFileThreadiAP2()
 {
+    int retry_tx_attempts = 0;
     FILE *fp = NULL;
     char buf[1030] = { 0 };
     QString strfile = ui->lineEditiAP2SendFile->text();
@@ -432,15 +463,15 @@ DWORD MainWindow::SendFileThreadiAP2()
         return 0;
     }
 
-    UINT16 nHandle;
+    UINT16 session_id;
     CBtDevice * pDev = GetConnectediAP2Device();
     if (pDev == NULL)
         return 0;
 
-    nHandle = pDev->m_iap2_handle;
+    session_id = pDev->m_iap2_handle;
 
-    buf[0] = nHandle & 0xff;
-    buf[1] = (nHandle >> 8) & 0xff;
+    buf[0] = session_id & 0xff;
+    buf[1] = (session_id >> 8) & 0xff;
 
     fseek(fp, 0, SEEK_END);
     m_iap2_total_to_send = ftell(fp);
@@ -450,29 +481,34 @@ DWORD MainWindow::SendFileThreadiAP2()
     int read_bytes;
     QMutex mutex;
 
-    while ((read_bytes = fread(&buf[2], 1, HCI_IAP2_MAX_TX_BUFFER, fp)) != 0)
+    read_bytes = fread(&buf[2], 1, HCI_IAP2_MAX_TX_BUFFER, fp);
+    while (read_bytes != 0)
     {
         mutex.lock();
 
-        SendWicedCommand(HCI_CONTROL_IAP2_COMMAND_DATA,
-                         (LPBYTE)buf, 2 + read_bytes);
+        SendWicedCommand(HCI_CONTROL_IAP2_COMMAND_DATA, (LPBYTE)buf, 2 + read_bytes);
         m_iap2_bytes_sent += read_bytes;
 
-        if(iap2_tx_wait.wait(&mutex, 5000) == false)
-        {
-            Log("Wait failed");
-            //break;
-        }
+#ifdef DEBUG_SENDING_FILE
+        m_cnt_packetsent++;
+        Log("read_bytes:%d bytes_sent:%d, packets_sent:%d, session_id:%d", read_bytes, m_iap2_bytes_sent, m_cnt_packetsent, session_id);
+#endif
+        // wait for iap tx complete event
+        iap2_tx_wait.wait(&mutex);
 
-
-        if ((m_iap2_tx_complete_result != WICED_BT_RFCOMM_SUCCESS) ||
-            (!ui->cbiAPPSendFile->isChecked()))
+        if ((m_iap2_tx_complete_result != WICED_BT_RFCOMM_SUCCESS) || (!ui->cbiAP2SendFile->isChecked()))
         {
-            m_iap2_total_to_send = 0;
+            Log("got Nak, result:%d", m_iap2_tx_complete_result);
+            Log("Sending failed. Please retry");
+
             mutex.unlock();
             break;
         }
+
         mutex.unlock();
+
+        Log("got Ack, sending next packet");
+        read_bytes = fread(&buf[2], 1, HCI_IAP2_MAX_TX_BUFFER, fp);
     }
     fclose(fp);
 
@@ -480,11 +516,14 @@ DWORD MainWindow::SendFileThreadiAP2()
 }
 
 void MainWindow::on_cbiAP2ThreadComplete()
-{\
+{
     Log("on_cbiAP2ThreadComplete");
     ui->btniAPSend->setDisabled(false);
-}
 
+#ifdef DEBUG_SENDING_FILE
+    Log("packet sent:%d, completed:%d, ACK:%d, NAK:%d\n", m_cnt_packetsent, m_cnt_completed, m_cnt_ack, m_cnt_Nack);
+#endif
+}
 
 // iAP2 thread
 void Worker::process_iap2()
@@ -500,12 +539,13 @@ void MainWindow::on_btnHelpIAP2_clicked()
     Log("");
     Log("Apps : hci_iap2_spp (MFI licensees only)");
     Log("Peer device - iOS device");
+#if 0 // todo - design the usages of buttons
     Log("");
-
     Log("- Connect");
     Log("  Connect to an IAP2 server");
     Log("- Disconnect");
     Log("  Disconnect from an IAP2 server");
+#endif
     Log("- Send");
     Log("  Send characters typed in the edit control, or a file, to the peer device");
     Log("- Receive");

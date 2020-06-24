@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -152,9 +152,12 @@ void MainWindow::on_cbMceFolderList_currentIndexChanged(const QString &text)
     SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
 }
 
-void MainWindow::on_listMceMessages_itemClicked(QListWidgetItem *item)
+void MainWindow::on_listMceMessages_currentItemChanged(QListWidgetItem *item, QListWidgetItem *previous)
 {
     Log("MAP Client get message");
+
+    if (NULL == item)
+        return;
 
     CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
     if (NULL == pDev)
@@ -411,9 +414,9 @@ void MainWindow::MceResizeMessageWindows(bool larger)
 {
     int top_change;
     if (larger)
-        top_change = -30;
+        top_change = -26;
     else
-        top_change = 30;
+        top_change = 26;
 
     QRect rect = ui->edtMceMessage->geometry();
     rect.adjust(0, top_change, 0, 0);
@@ -444,12 +447,12 @@ void MainWindow::onHandleMceConnected(unsigned char *p_data, unsigned int len)
         // Resize edit window to cover/show subject
         if (m_mce_msg_type & 1)     // is Email
         {
-            if (ui->edtMceMessage->height() > 110)
+            if (ui->edtMceMessage->height() > 120)
                 MceResizeMessageWindows(false);
         }
         else
         {
-            if (ui->edtMceMessage->height() < 110)
+            if (ui->edtMceMessage->height() < 120)
                 MceResizeMessageWindows(true);
         }
 
@@ -946,18 +949,7 @@ void MainWindow::onHandleMceMessageStatusSet(unsigned char *p_data, unsigned int
     p = MapFindTlv(p_data, len, HCI_CONTROL_MCE_PARAM_STATUS);
     status = p[2];
     if (status == 0)
-    {
         Log("MAP Client message status set");
-
-        UINT8 buf[10];
-
-        // Refresh message listing (after message deleted/undeleted)
-        p = buf;
-        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
-
-        m_mce_rcvd_text.clear();
-        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_LIST_MESSAGES, buf, p - buf);
-    }
     else
         Log("MAP Client failed to set message status");
 }
@@ -1053,7 +1045,7 @@ QString MceNotifToString(QString notif)
     }
     else
     {
-        st = QString("Notification type ") + type + QString("  received");
+        st = QString("Notification type ") + type + QString(" received");
     }
 
     return st;
@@ -1093,11 +1085,18 @@ void MainWindow::onHandleMceNotif(unsigned char *p_data, unsigned int len)
                 QString type = MceGetEventAttribute(m_mce_rcvd_text, "type");
                 if (type == "NewMessage" && ui->cbMceFolderList->currentText() == "inbox")
                 {
-                    UINT8 buf[10];
-
-                    p = buf;
-                    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
-                    SendWicedCommand(HCI_CONTROL_MCE_COMMAND_LIST_MESSAGES, buf, p - buf);
+                    QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
+                    ui->listMceMessages->insertItem(0, handle);
+                }
+                else if (type == "MessageDeleted" || type == "MessageShift")
+                {
+                    QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
+                    QList<QListWidgetItem *> widgetItems = ui->listMceMessages->findItems(handle, 0);
+                    if (widgetItems.count() > 0)
+                    {
+                        ui->listMceMessages->takeItem(ui->listMceMessages->row(widgetItems.first()));
+                        ui->listMceMessages->removeItemWidget(widgetItems.first());
+                    }
                 }
 
                 m_mce_rcvd_text.clear();

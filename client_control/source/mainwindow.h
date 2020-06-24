@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -496,8 +496,8 @@ public:
     DWORD   m_iap2_bytes_sent;
     DWORD   m_iap2_total_to_send;
     BYTE    m_iap2_tx_complete_result;
-    FILE   *m_iap2_receive_file;
-    DWORD m_hiap2TxCompleteEvent;
+    FILE    *m_iap2_receive_file;
+    DWORD   m_hiap2TxCompleteEvent;
     QWaitCondition iap2_tx_wait;
 
     // audio sink
@@ -820,8 +820,8 @@ public slots:
     void on_btniAPConnect_clicked();
     void on_btniAPSDisconnect_clicked();
     void on_btniAPSend_clicked();
-    void on_cbiAPPSendFile_clicked();
-    void on_btnSPPBrowseSend_2_clicked();
+    void on_cbiAP2SendFile_clicked();
+    void on_btniAP2BrowseSend_clicked();
     void on_cbiAPReceiveFile_clicked();
     void on_btniAPBrowseReceive_clicked();
     void on_btniAPRead_clicked();
@@ -911,7 +911,7 @@ public slots:
     void on_btnMceConnect_clicked();
     void on_btnMceDisconnect_clicked();
     void on_cbMceFolderList_currentIndexChanged(const QString &text);
-    void on_listMceMessages_itemClicked(QListWidgetItem *item);
+    void on_listMceMessages_currentItemChanged(QListWidgetItem* item, QListWidgetItem* previous);
     void on_btnMceDelete_clicked();
     void on_btnMceReply_clicked();
     void on_btnMceSend_clicked();

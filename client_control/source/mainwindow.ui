@@ -3707,7 +3707,7 @@
              <widget class="QLineEdit" name="lineEditiAP2SendFile"/>
             </item>
             <item row="2" column="6">
-             <widget class="QPushButton" name="btnSPPBrowseSend_2">
+             <widget class="QPushButton" name="btniAP2BrowseSend">
               <property name="text">
                <string>Browse...</string>
               </property>
@@ -3749,13 +3749,13 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="lineEditSPPreceive_2"/>
+             <widget class="QLineEdit" name="lineEditiAP2Receive"/>
             </item>
             <item row="3" column="4" colspan="2">
              <widget class="QLineEdit" name="lineEditiAPReceiveFile"/>
             </item>
             <item row="2" column="2">
-             <widget class="QCheckBox" name="cbiAPPSendFile">
+             <widget class="QCheckBox" name="cbiAP2SendFile">
               <property name="text">
                <string>Send from file</string>
               </property>
@@ -3922,13 +3922,13 @@
             </item>
            </layout>
            <zorder>groupBox_9</zorder>
-           <zorder>lineEditSPPreceive_2</zorder>
+           <zorder>lineEditiAP2Receive</zorder>
            <zorder>lineEditiAPSend</zorder>
            <zorder>btniAPBrowseReceive</zorder>
-           <zorder>btnSPPBrowseSend_2</zorder>
+           <zorder>btniAP2BrowseSend</zorder>
            <zorder>lineEditiAPReceiveFile</zorder>
            <zorder>Receive_2</zorder>
-           <zorder>cbiAPPSendFile</zorder>
+           <zorder>cbiAP2SendFile</zorder>
            <zorder>lineEditiAP2SendFile</zorder>
            <zorder>cbiAPReceiveFile</zorder>
            <zorder>btniAPSend</zorder>
@@ -5857,13 +5857,13 @@
   <tabstop>btnHelpIAP2</tabstop>
   <tabstop>btniAPSend</tabstop>
   <tabstop>lineEditiAPSend</tabstop>
-  <tabstop>cbiAPPSendFile</tabstop>
-  <tabstop>lineEditSPPreceive_2</tabstop>
+  <tabstop>cbiAP2SendFile</tabstop>
+  <tabstop>lineEditiAP2Receive</tabstop>
   <tabstop>cbiAPReceiveFile</tabstop>
   <tabstop>btniAPConnect</tabstop>
   <tabstop>btniAPSDisconnect</tabstop>
   <tabstop>lineEditiAP2SendFile</tabstop>
-  <tabstop>btnSPPBrowseSend_2</tabstop>
+  <tabstop>btniAP2BrowseSend</tabstop>
   <tabstop>btniAP2ReadCert</tabstop>
   <tabstop>lineEditiAPReceiveFile</tabstop>
   <tabstop>btniAPBrowseReceive</tabstop>

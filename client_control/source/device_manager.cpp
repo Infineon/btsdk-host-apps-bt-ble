@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -377,6 +377,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             break;
         case HCI_CONTROL_GROUP_MCE:
             ui->tabMAPClient->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabMAPClient);
             Log("MAP Client");
             break;
         }
@@ -2063,7 +2064,7 @@ void Worker::read_serial_port_thread()
             }
             else if ((HCI_CONTROL_IAP2_EVENT_RX_DATA == channel_id) && (m_pParent->m_iap2_receive_file))
             {
-                m_pParent->HandleSPPEvents(HCI_CONTROL_IAP2_EVENT_RX_DATA, &au8Hdr[5], len);
+                m_pParent->HandleiAP2PEvents(HCI_CONTROL_IAP2_EVENT_RX_DATA, &au8Hdr[5], len);
             }
             else
             {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, Cypress Semiconductor Corporation or a subsidiary of
+ * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
  * Cypress Semiconductor Corporation. All Rights Reserved.
  *
  * This software, including source code, documentation and related
@@ -224,7 +224,7 @@ void WicedSerialPortHostmode::handleReadyRead()
 
 }
 
-qint64 WicedSerialPortHostmode::write(const char *data, qint64 len)
+qint64 WicedSerialPortHostmode::write(char *data, qint64 len)
 {
     if (m_ClientSocket == INVALID_SOCKET)
     {
