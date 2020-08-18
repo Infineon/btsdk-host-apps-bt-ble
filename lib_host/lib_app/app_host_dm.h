@@ -57,6 +57,7 @@ extern bool app_host_dm_add_findme_locator(int bda[BD_ADDR_LEN]);
 extern bool app_host_dm_get_version_info();
 extern bool app_host_dm_set_app_traces(bool enable, uint8_t route);
 extern bool app_host_dm_user_confirm(uint8_t * bda, bool accept);
+extern bool app_host_dm_unbond_device(uint8_t * bda);
 
 // device management API
 void app_host_remove_device(uint8_t bda[6]);

@@ -39,6 +39,25 @@
 // Global singleton app
 wiced_host_app_t g_app;
 
+// init device profile handles
+void app_host_init_device_handles(wiced_hci_bt_device_t *p_dev)
+{
+    p_dev->m_audio_handle = WICED_NULL_HANDLE;
+    p_dev->m_hf_handle = WICED_NULL_HANDLE;
+    p_dev->m_ag_handle = WICED_NULL_HANDLE;
+    p_dev->m_spp_handle = WICED_NULL_HANDLE;
+    p_dev->m_hidh_handle = WICED_NULL_HANDLE;
+    p_dev->m_iap2_handle = WICED_NULL_HANDLE;
+    p_dev->m_avrc_handle = WICED_NULL_HANDLE;
+    p_dev->m_le_handle = WICED_NULL_HANDLE;
+    p_dev->m_bsg_handle = WICED_NULL_HANDLE;
+    p_dev->m_pbc_handle = WICED_NULL_HANDLE;
+    p_dev->m_avk_handle = WICED_NULL_HANDLE;
+    p_dev->m_battc_handle = WICED_NULL_HANDLE;
+    p_dev->m_findmel_handle = WICED_NULL_HANDLE;
+    p_dev->m_ops_handle = WICED_NULL_HANDLE;
+}
+
 // add device to list
 wiced_hci_bt_device_t*  app_host_add_device(uint8_t bda[6])
 {
@@ -63,6 +82,7 @@ wiced_hci_bt_device_t*  app_host_add_device(uint8_t bda[6])
     {
         p_dev_list = (wiced_hci_bt_device_t *)malloc(sizeof(wiced_hci_bt_device_t));
         memset(p_dev_list, 0, sizeof(wiced_hci_bt_device_t));
+        app_host_init_device_handles(p_dev_list);
         memcpy((p_dev_list->m_address), bda, BDA_LEN);
 
         if(p_dev_previous)

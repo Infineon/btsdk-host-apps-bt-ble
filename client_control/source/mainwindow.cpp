@@ -149,7 +149,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Log("2. Default baud rate for most WICED boards is 3M. For CYBT-213043-EVAL and CYBT-213043-MESH boards,");
     Log("   use baud rate of 115200.");
     Log("3. FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719,");
-    Log("   CYW20721 and CYW20735 chips. Please use ModusToolbox 2.x or command line for download.");
+    Log("   CYW20721, CYW20735 and CYW20835 chips. Please use ModusToolbox 2.x or command line for download.");
 
     ScrollToTop();
 

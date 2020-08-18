@@ -68,7 +68,7 @@ bool app_host_spp_disconnect(uint8_t bda[6])
 
 
     app_host_log("Sending SPP Disconnect Command, Handle: 0x%04x", data.handle);
-    p_dev->m_ag_handle = WICED_NULL_HANDLE;
+    p_dev->m_spp_handle = WICED_NULL_HANDLE;
     p_dev->m_conn_type &= ~WICED_CONNECTION_TYPE_SPP;
     return wiced_hci_spp_disconnect(&data);
 }

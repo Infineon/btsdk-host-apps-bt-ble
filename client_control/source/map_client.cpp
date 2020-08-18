@@ -184,12 +184,16 @@ void MainWindow::on_btnMceDelete_clicked()
     if (NULL == pDev)
         return;
 
+    m_mce_delete_item = ui->listMceMessages->currentItem();
+    if (NULL == m_mce_delete_item)
+        return;
+
     UINT8 buf[40];
     UINT8 *p = buf;
 
     p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
 
-    QByteArray array = ui->listMceMessages->currentItem()->text().toLocal8Bit();
+    QByteArray array = m_mce_delete_item->text().toLocal8Bit();
     char *msg_handle = array.data();
     p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_MSG_HANDLE, (UINT8 *)msg_handle, strlen(msg_handle));
 
@@ -857,7 +861,10 @@ void MainWindow::onHandleMceMessage(unsigned char *p_data, unsigned int len)
 
                 Log("MAP Client message %d bytes", m_mce_rcvd_text.size());
 
-                start = m_mce_rcvd_text.indexOf("\nBEGIN:VCARD", 0);
+                if (m_mce_cur_folder == "sent" || m_mce_cur_folder == "outbox")
+                    start = m_mce_rcvd_text.lastIndexOf("\nBEGIN:VCARD");
+                else
+                    start = m_mce_rcvd_text.indexOf("\nBEGIN:VCARD", 0);
                 if (start > 0)
                 {
                     start = m_mce_rcvd_text.indexOf("\n", start + 1) + 1;
@@ -949,9 +956,19 @@ void MainWindow::onHandleMceMessageStatusSet(unsigned char *p_data, unsigned int
     p = MapFindTlv(p_data, len, HCI_CONTROL_MCE_PARAM_STATUS);
     status = p[2];
     if (status == 0)
+    {
         Log("MAP Client message status set");
+
+        if (m_mce_delete_item)
+        {
+            ui->listMceMessages->takeItem(ui->listMceMessages->row(m_mce_delete_item));
+            ui->listMceMessages->removeItemWidget(m_mce_delete_item);
+        }
+    }
     else
         Log("MAP Client failed to set message status");
+
+    m_mce_delete_item = NULL;
 }
 
 void MainWindow::onHandleMceNotifReg(unsigned char *p_data, unsigned int len)

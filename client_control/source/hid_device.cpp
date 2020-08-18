@@ -393,9 +393,18 @@ void MainWindow::UpdateHIDD_ui_host()
             char strBda[100];
             sprintf(strBda, "%s Host: %02x:%02x:%02x:%02x:%02x:%02x",m_host_type?"":m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT",m_host_ad[0],m_host_ad[1],m_host_ad[2],m_host_ad[3],m_host_ad[4],m_host_ad[5]);
             ui->btnBLEHIDHost->setText(strBda);
+
+            if(m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE)
+                ui->btnBLEUnbond->setEnabled(true);
+            else
+                ui->btnUnbond->setEnabled(true);
         }
         else
         {
+            ui->cbDeviceList->clear();
+            ui->cbBLEDeviceList->clear();
+            ui->btnUnbond->setEnabled(false);
+            ui->btnBLEUnbond->setEnabled(false);
             ui->btnBLEHIDHost->setText("Host: unpaired");
         }
     }
@@ -509,11 +518,21 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             break;
 
         case HCI_CONTROL_HIDD_EVENT_OPENED:
-            setHIDD_linkChange(nullptr, TRUE);
             if (len)
+            {
+                unsigned char data[7];
+                memcpy(data,p_data,6);
+                data[6]=RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR;
+                SetDevicePaired(data, 7);
+                setHIDD_HostAddr(data);
+                setHIDD_linkChange(data, TRUE);
                 Log("HID link up: %02x:%02x:%02x:%02x:%02x:%02x",p_data[0],p_data[1],p_data[2],p_data[3],p_data[4],p_data[5]);
+            }
             else
+            {
+                setHIDD_linkChange(nullptr, TRUE);
                 Log("HID link up");
+            }
             break;
 
         case HCI_CONTROL_HIDD_EVENT_STATE_CHANGE:
@@ -574,7 +593,7 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
 void MainWindow::on_btnHelpHIDD_clicked()
 {
     onClear();
-    Log("V1.2 HID Device:");
+    Log("V1.5 HID Device:");
     Log("");
 
     Log("Apps : use HID apps such as remote, keyboard, mouse.");
@@ -590,6 +609,12 @@ void MainWindow::on_btnHelpHIDD_clicked()
     Log("   Added media, such as audio, buttons");
     Log("- V1.2");
     Log("   Reversed Left and Right botton location");
+    Log("- V1.3");
+    Log("   Update Unbond button status upon successful pairing");
+    Log("- V1.4");
+    Log("   Remove discovery list upon virtual cable unplug");
+    Log("- V1.5");
+    Log("   Update BR/EDR discovery list upon successful pairing");
     ScrollToTop();
 
 }

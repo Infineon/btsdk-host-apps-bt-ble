@@ -183,3 +183,17 @@ bool wiced_hci_dm_user_confirm(wiced_hci_dm_user_confirm_data_t * data)
 
     return wiced_hci_send_command(HCI_CONTROL_COMMAND_USER_CONFIRMATION, command, 7);
 }
+
+bool wiced_hci_dm_unbond_device(wiced_hci_dm_bda_data_t * data)
+{
+    uint8_t cmd_param[6];
+
+    cmd_param[0] = data->bda[5];
+    cmd_param[1] = data->bda[4];
+    cmd_param[2] = data->bda[3];
+    cmd_param[3] = data->bda[2];
+    cmd_param[4] = data->bda[1];
+    cmd_param[5] = data->bda[0];
+
+    return wiced_hci_send_command(HCI_CONTROL_COMMAND_UNBOND_DEVICE, cmd_param, BD_ADDR_LEN);
+}

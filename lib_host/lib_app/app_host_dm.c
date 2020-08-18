@@ -148,3 +148,15 @@ bool app_host_dm_user_confirm(uint8_t * bda, bool accept)
     data.confirm = accept;
     return wiced_hci_dm_user_confirm(&data);
 }
+
+bool app_host_dm_unbond_device(uint8_t bda[BD_ADDR_LEN])
+{
+    wiced_hci_dm_bda_data_t data;
+    data.bda[0] = bda[0];
+    data.bda[1] = bda[1];
+    data.bda[2] = bda[2];
+    data.bda[3] = bda[3];
+    data.bda[4] = bda[4];
+    data.bda[5] = bda[5];
+    return wiced_hci_dm_unbond_device(&data);
+}

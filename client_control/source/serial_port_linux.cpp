@@ -116,7 +116,7 @@ qint64 WicedSerialPort::write(char *data, qint64 len)
         written = p_qt_serial_port->write(data, len);
         p_qt_serial_port->flush();
     }
-    qDebug("write returns %d",static_cast<int>(written));
+    //qDebug("write returns %d",static_cast<int>(written));
     return written;
 }
 

@@ -260,6 +260,8 @@ public:
     DWORD ReadCommPort(BYTE *lpBytes, DWORD dwLen, QSerialPort * m_CommPort);
     void ReadDevicesFromSettings(const char *group, QComboBox *cbDevices, QPushButton *btnUnbond);
 
+    void DisableBluetoothClassic();
+
     // command line
     QString str_cmd_port;
     QString str_cmd_baud;
@@ -597,6 +599,7 @@ public:
     QString m_mce_push_message;
     UINT16 m_mce_list_offset;
     bool m_mce_notif_registered;
+    QListWidgetItem *m_mce_delete_item;
 
 signals:
    void HandleWicedEvent(unsigned int opcode, unsigned int len, unsigned char *p_data);

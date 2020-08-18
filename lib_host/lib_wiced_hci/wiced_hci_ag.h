@@ -43,11 +43,10 @@
 
 // Audio Gateway
 
-typedef wiced_hci_bt_bda_t wiced_hci_bt_ag_connect_data_t ;
+typedef wiced_hci_bt_bda_t wiced_hci_bt_ag_connect_data_t;
 typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_disconnect_data_t;
-typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_open_data_t ;
-typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_open_data_t ;
-typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_close_data_t ;
+typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_open_data_t;
+typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_close_data_t;
 
 bool wiced_hci_ag_connect(wiced_hci_bt_ag_connect_data_t *p_data);
 bool wiced_hci_ag_disconnect(wiced_hci_bt_ag_disconnect_data_t *p_data);

@@ -1655,6 +1655,9 @@ void MainWindow::HandleDeviceEventsMisc(DWORD opcode, LPBYTE tx_buf, DWORD len)
             EnableTabs(tx_buf[index], true);
         }
 
+        if(m_chip == 20835)
+            DisableBluetoothClassic();
+
         break;
     }
 }
@@ -2414,4 +2417,12 @@ void MainWindow::Startup()
 void msleep(unsigned int to)
 {
     QThread::msleep(to);
+}
+
+void MainWindow::DisableBluetoothClassic()
+{
+    ui->btnStartDisc->setEnabled(false);
+    ui->btnStopDisc->setEnabled(false);
+    ui->btnUnbond->setEnabled(false);
+    ui->cbDeviceList->setEnabled(false);
 }

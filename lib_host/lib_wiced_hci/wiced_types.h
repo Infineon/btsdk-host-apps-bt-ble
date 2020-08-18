@@ -53,14 +53,17 @@ typedef unsigned int   uint32_t;
 #define UINT8_TO_STREAM(p, u8)   {*(p)++ = (uint8_t)(u8);}
 #define UINT16_TO_STREAM(p, u16) {*(p)++ = (uint8_t)(u16); *(p)++ = (uint8_t)((u16) >> 8);}
 #define UINT32_TO_STREAM(p, u32) {*(p)++ = (uint8_t)(u32); *(p)++ = (uint8_t)((u32) >> 8); *(p)++ = (uint8_t)((u32) >> 16); *(p)++ = (uint8_t)((u32) >> 24);}
+#ifndef BDADDR_TO_STREAM
 #define BDADDR_TO_STREAM(p, a)   {register int _i; for (_i = 0; _i < BDA_LEN;  _i++) *(p)++ = (uint8_t) a[BD_ADDR_LEN - 1 - _i];}
+#endif
 
 /* Macros to read data from Stream (Little Endian) */
 #define STREAM_TO_UINT8(u8, p)   {u8 = (uint8_t)(*(p)); (p) += 1;}
 #define STREAM_TO_UINT16(u16, p) {u16 = ((uint16_t)(*(p)) + (((uint16_t)(*((p) + 1))) << 8)); (p) += 2;}
 #define STREAM_TO_UINT32(u32, p) {u32 = (((uint32_t)(*(p))) + ((((uint32_t)(*((p) + 1)))) << 8) + ((((uint32_t)(*((p) + 2)))) << 16) + ((((uint32_t)(*((p) + 3)))) << 24)); (p) += 4;}
+#ifndef STREAM_TO_BDADDR
 #define STREAM_TO_BDADDR(a, p)   {register int _i; register uint8_t *pbda = (uint8_t *)a + BD_ADDR_LEN - 1; for (_i = 0; _i < BD_ADDR_LEN; _i++) *pbda-- = *p++;}
-
+#endif
 
 #define UNUSED(x) (void)(x)
 

@@ -137,6 +137,6 @@ bool wiced_hci_dm_add_battery_client(wiced_hci_dm_bda_data_t * data);
 bool wiced_hci_dm_add_findme_locator(wiced_hci_dm_bda_data_t * data);
 bool wiced_hci_dm_get_version_info();
 bool wiced_hci_dm_set_app_traces(wiced_hci_dm_set_app_traces_data_t * data);
-bool wiced_hci_dm_user_confirm(wiced_hci_dm_user_confirm_data_t * data);
+bool wiced_hci_dm_unbond_device(wiced_hci_dm_bda_data_t * data);
 
 #endif
