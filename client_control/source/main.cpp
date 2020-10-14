@@ -74,6 +74,10 @@ int main(int argc, char *argv[])
         {
             w.str_cmd_baud = args.at(i+1);
         }
+        if(str == "-i")
+        {
+            w.iSpyInstance = args.at(i+1).toInt();
+        }
 
     }
 

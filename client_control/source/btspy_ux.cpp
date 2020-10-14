@@ -52,7 +52,7 @@ typedef unsigned short USHORT;
 static int log_sock = INVALID_SOCKET;
 static int wiced_trace_to_spy_trace[] = { 0, 4, 3, 6, 7 };
 
-void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index)
+void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index, int iSpyInstance)
 {
     struct sockaddr_in socket_addr;
     BYTE buf[1100];
@@ -85,7 +85,7 @@ void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_inde
     memset(&socket_addr, 0, sizeof(socket_addr));
     socket_addr.sin_family = AF_INET;
     socket_addr.sin_addr.s_addr = ntohl(0x7f000001);
-    socket_addr.sin_port = 9876;
+    socket_addr.sin_port = 9876 + iSpyInstance;
 
     if ((char)type == -1)
     {

@@ -220,7 +220,7 @@ bool wiced_hci_avrc_ct_button_press()
 // (implementation is embedded application dependent)
 bool wiced_hci_avrc_ct_long_button_press()
 {
-    return wiced_hci_send_command(HCI_CONTROL_AVRC_CONTROLLER_COMMAND_BUTTON_PRESS, 0, 0);
+    return wiced_hci_send_command(HCI_CONTROL_AVRC_CONTROLLER_COMMAND_LONG_BUTTON_PRESS, 0, 0);
 }
 
 bool wiced_hci_avrc_unit_info(wiced_bt_avrc_ct_cmd_unit_info_data_t *p_data)

@@ -265,6 +265,7 @@ public:
     // command line
     QString str_cmd_port;
     QString str_cmd_baud;
+    int iSpyInstance;
 
     // Scripting support
     bool scripting;
@@ -280,9 +281,13 @@ public:
     void CreateReadPortThread();
     QMutex m_write;
 
+    // Startup timer
+    QTimer *m_dmStartupTimer;
+
     // audio source
     bool m_audio_connected;
     bool m_audio_started;
+    bool m_audio_i2s_input_enable;
     int m_audio_play_status_send_limit_count;
     int m_audio_play_status_send_limit_counter;
 #ifdef A2DP_STATS
@@ -658,6 +663,7 @@ public slots:
     void onStopAudio();
     void onAudioSrcSine(bool);
     void onAudioSrcFile(bool);
+    void onAudioSrcI2S(bool);
     void on_btnHelpAVSRC_clicked();
 
     // Hands-free

@@ -76,6 +76,8 @@ typedef struct
     uint16_t len;
 } wiced_hci_bt_audio_source_audio_data_t;
 
+#define AUDIO_SRC_FEATURE_I2S_INPUT (1 << 0)
+
 bool wiced_hci_audio_src_connect(wiced_hci_bt_audio_source_connect_data_t *p_data);
 bool wiced_hci_audio_src_disconnect(wiced_hci_bt_audio_source_disconnect_data_t *p_data);
 bool wiced_hci_audio_src_audio_start(wiced_hci_bt_audio_source_start_data_t *p_data);

@@ -41,7 +41,7 @@
          <x>0</x>
          <y>0</y>
          <width>1061</width>
-         <height>721</height>
+         <height>719</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayoutScrollArea" stretch="0,0,0,0">
@@ -427,7 +427,7 @@
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>9</number>
+           <number>12</number>
           </property>
           <property name="usesScrollButtons">
            <bool>true</bool>
@@ -437,6 +437,59 @@
             <string>AV Source</string>
            </attribute>
            <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0" columnstretch="2,3,0">
+            <item row="2" column="0">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignTop">
+             <widget class="QGroupBox" name="groupBox_5">
+              <property name="title">
+               <string>Audio Control</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <property name="bottomMargin">
+                <number>9</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="btnConnectAudio">
+                 <property name="text">
+                  <string>Connect</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QPushButton" name="btnStartAudio">
+                 <property name="text">
+                  <string>Start Streaming</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="btnDisconnectAudio">
+                 <property name="text">
+                  <string>Disconnect</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QPushButton" name="btnStopAudio">
+                 <property name="text">
+                  <string>Stop Streaming</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
             <item row="1" column="2">
              <widget class="QGroupBox" name="groupBox_3">
               <property name="title">
@@ -515,47 +568,7 @@
               </item>
              </layout>
             </item>
-            <item row="1" column="0" alignment="Qt::AlignTop">
-             <widget class="QGroupBox" name="groupBox_5">
-              <property name="title">
-               <string>Audio Control</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_4">
-               <property name="bottomMargin">
-                <number>9</number>
-               </property>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="btnConnectAudio">
-                 <property name="text">
-                  <string>Connect</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="btnStartAudio">
-                 <property name="text">
-                  <string>Start Streaming</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="btnDisconnectAudio">
-                 <property name="text">
-                  <string>Disconnect</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QPushButton" name="btnStopAudio">
-                 <property name="text">
-                  <string>Stop Streaming</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="1" column="1" alignment="Qt::AlignTop">
+            <item row="1" column="1">
              <widget class="QGroupBox" name="groupBox_4">
               <property name="title">
                <string>Media</string>
@@ -610,21 +623,19 @@
                  </item>
                 </layout>
                </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioSrcI2S">
+                   <property name="text">
+                    <string>I2S Input</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
               </layout>
              </widget>
-            </item>
-            <item row="2" column="0">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </widget>
@@ -906,104 +917,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabAVSink">
-           <attribute name="title">
-            <string>AV Sink</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_30">
-            <item row="1" column="0">
-             <widget class="QPushButton" name="btnAVSinkConnect">
-              <property name="text">
-               <string>Connect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="btnAvSinkDisconnect">
-              <property name="text">
-               <string>Disconnect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QPushButton" name="btnAvSinkStart">
-              <property name="text">
-               <string>Start</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QPushButton" name="btnAvSinkSuspend">
-              <property name="text">
-               <string>Suspend</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <spacer name="verticalSpacer_22">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="4">
-             <spacer name="horizontalSpacer_34">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0" colspan="4">
-             <layout class="QHBoxLayout" name="horizontalLayout_35">
-              <item>
-               <widget class="QLabel" name="label_29">
-                <property name="text">
-                 <string>AV Sink Profile</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnHelpAVK">
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>?</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_33">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
             </item>
            </layout>
           </widget>
@@ -1986,835 +1899,6 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabSPP">
-           <attribute name="title">
-            <string>SPP</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_27">
-            <property name="verticalSpacing">
-             <number>10</number>
-            </property>
-            <item row="0" column="0" colspan="3">
-             <layout class="QHBoxLayout" name="horizontalLayout_33">
-              <item>
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Serial Port Profile</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnHelpSPP">
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>?</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_29">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="btnSPConnect">
-              <property name="text">
-               <string>Connect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1" alignment="Qt::AlignLeft">
-             <widget class="QPushButton" name="btnSPPDisconnect">
-              <property name="text">
-               <string>Disconnect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEditSPPSend"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="btnSPPSend">
-              <property name="text">
-               <string>Send</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <widget class="QPushButton" name="btnSPPBrowseReceive">
-              <property name="text">
-               <string>Browse...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLineEdit" name="lineEditSPPreceive"/>
-            </item>
-            <item row="3" column="2">
-             <widget class="QCheckBox" name="cbSPPReceiveFile">
-              <property name="text">
-               <string>Receive to file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QLineEdit" name="lineEditSPPSendFile"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QCheckBox" name="cbSPPSendFile">
-              <property name="text">
-               <string>Send from file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0" alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="Receive">
-              <property name="text">
-               <string>Receive</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLineEdit" name="lineEditSPPReceiveFile"/>
-            </item>
-            <item row="2" column="4">
-             <widget class="QPushButton" name="btnSPPBrowseSend">
-              <property name="text">
-               <string>Browse...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <spacer name="verticalSpacer_19">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabHIDH">
-           <attribute name="title">
-            <string>HID Host</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_26">
-            <item row="6" column="3">
-             <widget class="QLabel" name="label_37">
-              <property name="text">
-               <string>Polarity (0/1):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2" alignment="Qt::AlignLeft">
-             <widget class="QLineEdit" name="editHIDHGPIO"/>
-            </item>
-            <item row="4" column="3">
-             <widget class="QComboBox" name="cbHIDHReportType"/>
-            </item>
-            <item row="5" column="1">
-             <widget class="QLabel" name="label_40">
-              <property name="text">
-               <string>Report ID (Hex):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLabel" name="label_39">
-              <property name="text">
-               <string>GPIO Num (Dec):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QLabel" name="label_41">
-              <property name="text">
-               <string>Report ID (Hex):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="3">
-             <widget class="QLabel" name="label_42">
-              <property name="text">
-               <string>Report Type:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QPushButton" name="btnHIDHWakeAdd">
-              <property name="text">
-               <string>Wake Up Add</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QPushButton" name="btnHIDHGetReport">
-              <property name="text">
-               <string>Get Report</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1" alignment="Qt::AlignLeft">
-             <widget class="QLineEdit" name="editHIDHGetSetReportID">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2" alignment="Qt::AlignLeft">
-             <widget class="QLineEdit" name="editHIDHReportID"/>
-            </item>
-            <item row="4" column="4">
-             <widget class="QComboBox" name="cbHIDHChannel"/>
-            </item>
-            <item row="3" column="0">
-             <widget class="QPushButton" name="btnHIDHSetReport">
-              <property name="text">
-               <string>Set Report</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <widget class="QLabel" name="label_43">
-              <property name="text">
-               <string>Channel (Set):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="3">
-             <widget class="QLabel" name="label_38">
-              <property name="text">
-               <string>Report Pattern (Hex):</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QPushButton" name="btnHIDHWakeEnable">
-              <property name="text">
-               <string>Wake Up Enable</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="2">
-             <spacer name="verticalSpacer_18">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="0" colspan="4">
-             <layout class="QHBoxLayout" name="horizontalLayout_31">
-              <item>
-               <widget class="QLabel" name="label_24">
-                <property name="text">
-                 <string>HID Host Profile (BR/EDR and and HID Over GATT )</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnHelpHIDH">
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>?</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_28">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="4">
-             <layout class="QHBoxLayout" name="horizontalLayout_32">
-              <item>
-               <widget class="QLabel" name="label_36">
-                <property name="text">
-                 <string>HID Protocol:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="cbHIDHProtocol"/>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <widget class="QPushButton" name="btnHIDHDisconnect">
-              <property name="text">
-               <string>Disconnect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="btnHIDHConnect">
-              <property name="text">
-               <string>Connect</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="btnHIDHGetDesc">
-              <property name="text">
-               <string>Get Desc</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5" alignment="Qt::AlignRight">
-             <widget class="QLabel" name="label_35">
-              <property name="text">
-               <string>Device type:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="6">
-             <widget class="QRadioButton" name="radioHIDHBLE">
-              <property name="text">
-               <string>BLE</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="6">
-             <widget class="QRadioButton" name="radioHIDHBREDR">
-              <property name="text">
-               <string>BR-EDR</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="5" colspan="2">
-             <widget class="QLineEdit" name="editHIDHSetGetReportData"/>
-            </item>
-            <item row="5" column="4" colspan="3">
-             <widget class="QLineEdit" name="editHIDHReportPatern"/>
-            </item>
-            <item row="6" column="4">
-             <widget class="QLineEdit" name="editHIDHPolarity">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabHIDD">
-           <attribute name="title">
-            <string>HID Device</string>
-           </attribute>
-           <widget class="QWidget" name="layoutWidget">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>194</y>
-              <width>671</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_29">
-             <item>
-              <widget class="QComboBox" name="cbBLEHIDInterupt">
-               <property name="toolTip">
-                <string>Select HID channel</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Interupt Channel</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Control Channel</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cbBLEHIDReport">
-               <property name="toolTip">
-                <string>Select HID report type</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Other</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Input</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Output</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Feature</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="lineEditBLEHIDSendText">
-               <property name="toolTip">
-                <string>Enter the value in HID report</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnBLEHIDSendReport">
-               <property name="toolTip">
-                <string>Send HID report</string>
-               </property>
-               <property name="text">
-                <string>Send Report</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QPushButton" name="btnHelpHIDD">
-            <property name="geometry">
-             <rect>
-              <x>920</x>
-              <y>10</y>
-              <width>21</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="toolTip">
-             <string>Display help in log</string>
-            </property>
-            <property name="text">
-             <string>?</string>
-            </property>
-           </widget>
-           <widget class="QWidget" name="layoutWidget_g">
-            <property name="geometry">
-             <rect>
-              <x>8</x>
-              <y>44</y>
-              <width>321</width>
-              <height>141</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_30">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_1">
-                 <property name="toolTip">
-                  <string>Button &quot;1&quot;</string>
-                 </property>
-                 <property name="text">
-                  <string>1</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_2">
-                 <property name="toolTip">
-                  <string>Button &quot;2&quot;</string>
-                 </property>
-                 <property name="statusTip">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string>2</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_3">
-                 <property name="toolTip">
-                  <string>Button &quot;3&quot;</string>
-                 </property>
-                 <property name="text">
-                  <string>3</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_38">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_a">
-                 <property name="toolTip">
-                  <string>Button &quot;a&quot;</string>
-                 </property>
-                 <property name="text">
-                  <string>a</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_b">
-                 <property name="toolTip">
-                  <string>Button &quot;b&quot;</string>
-                 </property>
-                 <property name="text">
-                  <string>b</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_c">
-                 <property name="toolTip">
-                  <string>Button &quot;c&quot;</string>
-                 </property>
-                 <property name="text">
-                  <string>c</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_40">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_esc">
-                 <property name="toolTip">
-                  <string>Button ESC</string>
-                 </property>
-                 <property name="text">
-                  <string>ESC</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_up">
-                 <property name="toolTip">
-                  <string>Button UP</string>
-                 </property>
-                 <property name="text">
-                  <string>Up</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_audio">
-                 <property name="toolTip">
-                  <string>Audio button</string>
-                 </property>
-                 <property name="text">
-                  <string>Audio</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
-                 <property name="toolTip">
-                  <string>Button Left</string>
-                 </property>
-                 <property name="text">
-                  <string>Left</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_enter">
-                 <property name="toolTip">
-                  <string>Button Enter key</string>
-                 </property>
-                 <property name="text">
-                  <string>Enter</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
-                 <property name="toolTip">
-                  <string>Button Right</string>
-                 </property>
-                 <property name="text">
-                  <string>Right</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_41">
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_motion">
-                 <property name="toolTip">
-                  <string>Motion Button</string>
-                 </property>
-                 <property name="text">
-                  <string>Motion</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_down">
-                 <property name="toolTip">
-                  <string>Button Down</string>
-                 </property>
-                 <property name="text">
-                  <string>Down</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnBLEHIDSendKey_ir">
-                 <property name="toolTip">
-                  <string>IR button</string>
-                 </property>
-                 <property name="text">
-                  <string>IR</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="layoutWidget7">
-            <property name="geometry">
-             <rect>
-              <x>342</x>
-              <y>110</y>
-              <width>51</width>
-              <height>81</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <item>
-              <widget class="QCheckBox" name="cbBLEHIDCapLock">
-               <property name="toolTip">
-                <string>Shift key</string>
-               </property>
-               <property name="text">
-                <string>Shift</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cbBLEHIDCtrl">
-               <property name="toolTip">
-                <string>Control key</string>
-               </property>
-               <property name="text">
-                <string>Ctrl</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cbBLEHIDAlt">
-               <property name="toolTip">
-                <string>Alternate key</string>
-               </property>
-               <property name="text">
-                <string>Alt</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QLabel" name="label_debug_route">
-            <property name="geometry">
-             <rect>
-              <x>640</x>
-              <y>10</y>
-              <width>47</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="toolTip">
-             <string>Device firmware debug message routing</string>
-            </property>
-            <property name="statusTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Debug</string>
-            </property>
-           </widget>
-           <widget class="QComboBox" name="cbBLEHIDDebug">
-            <property name="geometry">
-             <rect>
-              <x>680</x>
-              <y>10</y>
-              <width>81</width>
-              <height>22</height>
-             </rect>
-            </property>
-            <property name="toolTip">
-             <string>Select device firmware debug message routing</string>
-            </property>
-            <property name="statusTip">
-             <string/>
-            </property>
-            <property name="currentText">
-             <string comment="NONE">WICED_HCI</string>
-            </property>
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>NONE</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>WICED_HCI</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>HCI_UART</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>DBG_UART</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>PUART</string>
-             </property>
-            </item>
-           </widget>
-           <widget class="QWidget" name="layoutWidget4">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>10</y>
-              <width>611</width>
-              <height>25</height>
-             </rect>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_42">
-             <item>
-              <widget class="QPushButton" name="btnBLEHIDHost">
-               <property name="toolTip">
-                <string>Bonded host</string>
-               </property>
-               <property name="statusTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string>Host</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnBLEHIDPairingMode">
-               <property name="toolTip">
-                <string>Enter or exit pairing mode</string>
-               </property>
-               <property name="statusTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string>Enter Pairing Mode</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnBLEHIDConnectDisconnect">
-               <property name="toolTip">
-                <string>Connect or Disconnect the link </string>
-               </property>
-               <property name="statusTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string>Connect</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnBLEHIDDVirtualUnplug">
-               <property name="toolTip">
-                <string>Issue Virtual Unplug command to remove bonding</string>
-               </property>
-               <property name="statusTip">
-                <string/>
-               </property>
-               <property name="text">
-                <string>Virtual Unplug</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QCheckBox" name="cbBLEHIDHold">
-            <property name="geometry">
-             <rect>
-              <x>343</x>
-              <y>50</y>
-              <width>70</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="toolTip">
-             <string>When selected, clicking buttons stays in hold position until it is clicked again to release. This allows multiple keys entry.</string>
-            </property>
-            <property name="statusTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Hold</string>
-            </property>
-           </widget>
-          </widget>
           <widget class="QWidget" name="tabGATT">
            <attribute name="title">
             <string>GATT</string>
@@ -3051,93 +2135,25 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabGATT_DB">
+          <widget class="QWidget" name="tabSPP">
            <attribute name="title">
-            <string>GATT DB</string>
+            <string>SPP</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_23">
-            <item row="8" column="1">
-             <widget class="QLabel" name="label_70">
-              <property name="text">
-               <string>Data:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <widget class="QLabel" name="label_54">
-              <property name="text">
-               <string>Descriptor</string>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="14" colspan="2">
-             <widget class="QPushButton" name="btnStartAdvertGATTDB">
-              <property name="text">
-               <string>Start Advert</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="15">
-             <widget class="QPushButton" name="btnAddChar">
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="4" colspan="2">
-             <widget class="QLabel" name="label_63">
-              <property name="text">
-               <string>UUID:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="6">
-             <widget class="QLineEdit" name="editDescUUID"/>
-            </item>
-            <item row="7" column="2" colspan="2">
-             <widget class="QLineEdit" name="editDescHandle"/>
-            </item>
-            <item row="8" column="2" colspan="5">
-             <widget class="QLineEdit" name="editAdvertData"/>
-            </item>
-            <item row="7" column="11" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_69">
-              <property name="text">
-               <string>Permission:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5" colspan="3">
-             <widget class="QLabel" name="label_72">
-              <property name="text">
-               <string>XXXX or {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2" colspan="2">
-             <widget class="QLabel" name="label_71">
-              <property name="text">
-               <string>XXXX</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0" colspan="7">
-             <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <layout class="QGridLayout" name="gridLayout_27">
+            <property name="verticalSpacing">
+             <number>10</number>
+            </property>
+            <item row="0" column="0" colspan="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_33">
               <item>
-               <widget class="QLabel" name="label_34">
+               <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>GATT Database</string>
+                 <string>Serial Port Profile</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btnHelpGATT_DB">
+               <widget class="QPushButton" name="btnHelpSPP">
                 <property name="maximumSize">
                  <size>
                   <width>30</width>
@@ -3150,7 +2166,7 @@
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_23">
+               <spacer name="horizontalSpacer_29">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -3164,284 +2180,76 @@
               </item>
              </layout>
             </item>
-            <item row="3" column="4" colspan="2">
-             <widget class="QLabel" name="label_33">
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btnSPConnect">
               <property name="text">
-               <string>UUID:</string>
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" alignment="Qt::AlignLeft">
+             <widget class="QPushButton" name="btnSPPDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEditSPPSend"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btnSPPSend">
+              <property name="text">
+               <string>Send</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QPushButton" name="btnSPPBrowseReceive">
+              <property name="text">
+               <string>Browse...</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLabel" name="label_49">
+             <widget class="QLineEdit" name="lineEditSPPreceive"/>
+            </item>
+            <item row="3" column="2">
+             <widget class="QCheckBox" name="cbSPPReceiveFile">
               <property name="text">
-               <string>Handle:</string>
+               <string>Receive to file</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="2" colspan="2">
-             <widget class="QLineEdit" name="editPrimarySvcHandle"/>
+            <item row="2" column="3">
+             <widget class="QLineEdit" name="lineEditSPPSendFile"/>
             </item>
-            <item row="2" column="14" colspan="2">
-             <widget class="QPushButton" name="btnInitGATTDB">
+            <item row="2" column="2">
+             <widget class="QCheckBox" name="cbSPPSendFile">
               <property name="text">
-               <string>Init Database</string>
+               <string>Send from file</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_50">
+            <item row="3" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="Receive">
               <property name="text">
-               <string>Primary Service</string>
+               <string>Receive</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="6">
-             <widget class="QLineEdit" name="editPrimarySvcUUID"/>
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="lineEditSPPReceiveFile"/>
             </item>
-            <item row="3" column="15">
-             <widget class="QPushButton" name="btnAddPrimarySvc">
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
+            <item row="2" column="4">
+             <widget class="QPushButton" name="btnSPPBrowseSend">
               <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="10" colspan="3">
-             <widget class="QLabel" name="label_79">
-              <property name="text">
-               <string>Note: Enter all data is in hex</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="14">
-             <widget class="QLabel" name="label_74">
-              <property name="text">
-               <string>XXXX</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="15">
-             <widget class="QPushButton" name="btnAddSecondarySvc">
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="12" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_75">
-              <property name="text">
-               <string>XX</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="10">
-             <widget class="QLineEdit" name="editIncSvcServiceHandle"/>
-            </item>
-            <item row="5" column="2" colspan="2">
-             <widget class="QLineEdit" name="editIncludedSvcHandle"/>
-            </item>
-            <item row="4" column="6">
-             <widget class="QLineEdit" name="editSecondarySvcUUID"/>
-            </item>
-            <item row="5" column="13" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_68">
-              <property name="text">
-               <string>End Group:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QLabel" name="label_58">
-              <property name="text">
-               <string>Handle:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="6">
-             <widget class="QLineEdit" name="editIncludedSvcUUID"/>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_53">
-              <property name="text">
-               <string>Characteristic</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="4" colspan="2">
-             <widget class="QLabel" name="label_62">
-              <property name="text">
-               <string>UUID:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="8" colspan="2" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_64">
-              <property name="text">
-               <string>Char Value:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="2" colspan="2">
-             <widget class="QLineEdit" name="editCharHandle"/>
-            </item>
-            <item row="6" column="6">
-             <widget class="QLineEdit" name="editCharUUID"/>
-            </item>
-            <item row="5" column="1">
-             <widget class="QLabel" name="label_57">
-              <property name="text">
-               <string>Handle:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="15">
-             <widget class="QPushButton" name="btnAddIncSvc">
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="4" colspan="2">
-             <widget class="QLabel" name="label_60">
-              <property name="text">
-               <string>UUID:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="4" colspan="2">
-             <widget class="QLabel" name="label_61">
-              <property name="text">
-               <string>UUID:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="10">
-             <widget class="QLineEdit" name="editCharValue"/>
-            </item>
-            <item row="6" column="11" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_65">
-              <property name="text">
-               <string>Property:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="14">
-             <widget class="QLineEdit" name="editIncSvcEndGroup"/>
-            </item>
-            <item row="6" column="13" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_66">
-              <property name="text">
-               <string>Permission:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="12" alignment="Qt::AlignLeft">
-             <widget class="QLineEdit" name="editCharProperty">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="10">
-             <widget class="QLabel" name="label_73">
-              <property name="text">
-               <string>XXXX</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_52">
-              <property name="text">
-               <string>Included Service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="2" colspan="2">
-             <widget class="QLineEdit" name="editSecondarySvcHandle"/>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_51">
-              <property name="text">
-               <string>Secondary Service</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="8" colspan="2" alignment="Qt::AlignLeft">
-             <widget class="QLabel" name="label_67">
-              <property name="text">
-               <string>Service Handle:</string>
+               <string>Browse...</string>
               </property>
              </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QLabel" name="label_56">
-              <property name="text">
-               <string>Handle:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QLabel" name="label_59">
-              <property name="text">
-               <string>Handle:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="12" alignment="Qt::AlignLeft">
-             <widget class="QLineEdit" name="editDescPermission">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="8" column="0">
-             <widget class="QLabel" name="label_55">
-              <property name="text">
-               <string>Advertisement</string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="15">
-             <widget class="QPushButton" name="btnAddDesc">
-              <property name="maximumSize">
-               <size>
-                <width>30</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>+</string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="14">
-             <widget class="QLineEdit" name="editCharPermission"/>
-            </item>
-            <item row="9" column="2">
-             <spacer name="verticalSpacer_15">
+             <spacer name="verticalSpacer_19">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -3452,246 +2260,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tabHK">
-           <attribute name="title">
-            <string>HomeKit</string>
-           </attribute>
-           <layout class="QGridLayout" name="gridLayout_22">
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_26">
-              <item>
-               <widget class="QLabel" name="label_16">
-                <property name="text">
-                 <string>Apple HomeKit (Note: SDK support is available only for Apple MFI licensees)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="btnHelpHK">
-                <property name="maximumSize">
-                 <size>
-                  <width>30</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>?</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_20">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="btnHKGetToken">
-              <property name="text">
-               <string>Get Token</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QPushButton" name="btnHKFactoryReset">
-              <property name="text">
-               <string>Factory Reset</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <spacer name="verticalSpacer_14">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="0" colspan="3">
-             <widget class="QGroupBox" name="groupBox_6">
-              <property name="title">
-               <string>Characteristic</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_21">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>Handle:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLineEdit" name="lineEditHKHandle">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_5">
-                 <property name="text">
-                  <string>Hex Value:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLineEdit" name="lineEditHKHexVal"/>
-               </item>
-               <item row="0" column="4">
-                <widget class="QPushButton" name="btnHKRead">
-                 <property name="text">
-                  <string>Read</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="5">
-                <widget class="QPushButton" name="btnHKWrite">
-                 <property name="text">
-                  <string>Write</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="6">
-                <widget class="QPushButton" name="btnHKList">
-                 <property name="text">
-                  <string>List</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="3">
-             <widget class="QGroupBox" name="groupBox_7">
-              <property name="title">
-               <string>Light</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_19">
-               <item row="0" column="0">
-                <widget class="QLabel" name="labelHKLight">
-                 <property name="text">
-                  <string>ON</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLineEdit" name="lineEditHKBrightness">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_6">
-                 <property name="text">
-                  <string>Brightness (0 to 100):</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4">
-                <widget class="QPushButton" name="btnHKSet">
-                 <property name="text">
-                  <string>Set</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="btnHKSwitch">
-                 <property name="text">
-                  <string>Switch</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="5">
-                <spacer name="horizontalSpacer_22">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="3" column="0" colspan="3">
-             <widget class="QGroupBox" name="groupBox_8">
-              <property name="title">
-               <string>Lock</string>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_20">
-               <item row="0" column="2" alignment="Qt::AlignRight">
-                <widget class="QLabel" name="label_81">
-                 <property name="text">
-                  <string>Lock State:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4" alignment="Qt::AlignRight">
-                <widget class="QLabel" name="label_912">
-                 <property name="text">
-                  <string>Lock Target State:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" alignment="Qt::AlignRight">
-                <widget class="QLabel" name="label_7">
-                 <property name="text">
-                  <string>Door State:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="cbDoorState"/>
-               </item>
-               <item row="0" column="3">
-                <widget class="QComboBox" name="cbLockState"/>
-               </item>
-               <item row="0" column="5">
-                <widget class="QComboBox" name="cbLockTargetState"/>
-               </item>
-               <item row="0" column="6">
-                <spacer name="horizontalSpacer_21">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
             </item>
            </layout>
           </widget>
@@ -3937,22 +2505,22 @@
            <zorder>btniAPSDisconnect</zorder>
            <zorder>btniAPConnect</zorder>
           </widget>
-          <widget class="QWidget" name="tabBSG">
+          <widget class="QWidget" name="tabOPS">
            <attribute name="title">
-            <string>BSG</string>
+            <string>OPP</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_16">
-            <item row="0" column="0" colspan="3">
-             <layout class="QHBoxLayout" name="horizontalLayout_24">
+           <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,0,0,0,0,0">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="QLabel" name="label_84">
+               <widget class="QLabel" name="label_91">
                 <property name="text">
-                 <string>BLE Serial Over GATT</string>
+                 <string>OPP server</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btnHelpBSG">
+               <widget class="QPushButton" name="btnHelpOPPS">
                 <property name="maximumSize">
                  <size>
                   <width>30</width>
@@ -3965,7 +2533,7 @@
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_16">
+               <spacer name="horizontalSpacer_5">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -3980,81 +2548,7 @@
              </layout>
             </item>
             <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEditBSGSend"/>
-            </item>
-            <item row="2" column="2">
-             <widget class="QLineEdit" name="lineEditBSGSendFile"/>
-            </item>
-            <item row="2" column="3">
-             <widget class="QPushButton" name="btnBSGBrowseSend">
-              <property name="text">
-               <string>Browse...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QCheckBox" name="cbBSGSendFile">
-              <property name="text">
-               <string>Send from file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="4">
-             <widget class="QPushButton" name="btnBSGSend">
-              <property name="text">
-               <string>Send</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="2">
-             <widget class="QCheckBox" name="cbBSGReceiveFile">
-              <property name="text">
-               <string>Receive to file</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="Send_2">
-              <property name="text">
-               <string>Send</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <spacer name="verticalSpacer_12">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="4" column="1">
-             <widget class="QLineEdit" name="lineEditBSGreceive"/>
-            </item>
-            <item row="4" column="2">
-             <widget class="QLineEdit" name="lineEditBSGReceiveFile"/>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="Receive_3">
-              <property name="text">
-               <string>Receive</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="3">
-             <widget class="QPushButton" name="btnBSGBrowseReceive">
-              <property name="text">
-               <string>Browse...</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="5">
-             <spacer name="horizontalSpacer_17">
+             <spacer name="horizontalSpacer_6">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -4062,6 +2556,61 @@
                <size>
                 <width>40</width>
                 <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="labelOPSName">
+              <property name="text">
+               <string>File Name : </string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="labelOPSType">
+              <property name="text">
+               <string>Type : </string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignLeft">
+             <widget class="QPushButton" name="btnOPSDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="labelOPSStatus">
+              <property name="text">
+               <string>Status : </string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QProgressBar" name="progressBarOPS">
+              <property name="value">
+               <number>24</number>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="labelOPSSize">
+              <property name="text">
+               <string>Size : </string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <spacer name="verticalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
                </size>
               </property>
              </spacer>
@@ -4204,35 +2753,1018 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabOPS">
+          <widget class="QWidget" name="tabMAPClient">
            <attribute name="title">
-            <string>OPP</string>
+            <string>MAP Client</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,0,0,0,0,0">
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_17">
-              <item>
-               <widget class="QLabel" name="label_91">
+           <widget class="QComboBox" name="cbMceInstanceList">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>11</y>
+              <width>69</width>
+              <height>20</height>
+             </rect>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="cbMceFolderList">
+            <property name="geometry">
+             <rect>
+              <x>92</x>
+              <y>11</y>
+              <width>69</width>
+              <height>20</height>
+             </rect>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="edMceFrom">
+            <property name="geometry">
+             <rect>
+              <x>400</x>
+              <y>11</y>
+              <width>133</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QLabel" name="labelMceFrom">
+            <property name="geometry">
+             <rect>
+              <x>354</x>
+              <y>11</y>
+              <width>28</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>From:</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="edMceTo">
+            <property name="geometry">
+             <rect>
+              <x>662</x>
+              <y>11</y>
+              <width>133</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="labelMceTo">
+            <property name="geometry">
+             <rect>
+              <x>616</x>
+              <y>11</y>
+              <width>16</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>To:</string>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceGetServices">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>68</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Get Services</string>
+            </property>
+           </widget>
+           <widget class="QListWidget" name="listMceMessages">
+            <property name="geometry">
+             <rect>
+              <x>92</x>
+              <y>37</y>
+              <width>256</width>
+              <height>144</height>
+             </rect>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="edMceFromSubject">
+            <property name="geometry">
+             <rect>
+              <x>400</x>
+              <y>37</y>
+              <width>133</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QLabel" name="labelMceFromSubject">
+            <property name="geometry">
+             <rect>
+              <x>354</x>
+              <y>37</y>
+              <width>40</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Subject:</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="labelMceToSubject">
+            <property name="geometry">
+             <rect>
+              <x>616</x>
+              <y>37</y>
+              <width>40</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Subject:</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="edMceToSubject">
+            <property name="geometry">
+             <rect>
+              <x>662</x>
+              <y>37</y>
+              <width>133</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QPlainTextEdit" name="edtMceMessage">
+            <property name="geometry">
+             <rect>
+              <x>354</x>
+              <y>63</y>
+              <width>256</width>
+              <height>118</height>
+             </rect>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QPlainTextEdit" name="edtMceCompose">
+            <property name="geometry">
+             <rect>
+              <x>616</x>
+              <y>63</y>
+              <width>256</width>
+              <height>118</height>
+             </rect>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceDelete">
+            <property name="geometry">
+             <rect>
+              <x>92</x>
+              <y>187</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Delete</string>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceReply">
+            <property name="geometry">
+             <rect>
+              <x>400</x>
+              <y>187</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Reply</string>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceConnect">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>129</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceDisconnect">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>158</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Disconnect</string>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="btnMceSend">
+            <property name="geometry">
+             <rect>
+              <x>616</x>
+              <y>187</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Send</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabHIDD">
+           <attribute name="title">
+            <string>HID Device</string>
+           </attribute>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>223</y>
+              <width>671</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_29">
+             <item>
+              <widget class="QComboBox" name="cbBLEHIDInterupt">
+               <property name="toolTip">
+                <string>Select HID channel</string>
+               </property>
+               <item>
                 <property name="text">
-                 <string>OPP server</string>
+                 <string>Interupt Channel</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Control Channel</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="cbBLEHIDReport">
+               <property name="toolTip">
+                <string>Select HID report type</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Other</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Input</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Output</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Feature</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEditBLEHIDSendText">
+               <property name="toolTip">
+                <string>Enter the value in HID report</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnBLEHIDSendReport">
+               <property name="toolTip">
+                <string>Send HID report</string>
+               </property>
+               <property name="text">
+                <string>Send Report</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QPushButton" name="btnHelpHIDD">
+            <property name="geometry">
+             <rect>
+              <x>920</x>
+              <y>10</y>
+              <width>21</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>Display help in log</string>
+            </property>
+            <property name="text">
+             <string>?</string>
+            </property>
+           </widget>
+           <widget class="QWidget" name="layoutWidget_g">
+            <property name="geometry">
+             <rect>
+              <x>8</x>
+              <y>44</y>
+              <width>311</width>
+              <height>180</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_30">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_1">
+                 <property name="toolTip">
+                  <string>Button &quot;1&quot;</string>
+                 </property>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_2">
+                 <property name="toolTip">
+                  <string>Button &quot;2&quot;</string>
+                 </property>
+                 <property name="statusTip">
+                  <string/>
+                 </property>
+                 <property name="text">
+                  <string>2</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_3">
+                 <property name="toolTip">
+                  <string>Button &quot;3&quot;</string>
+                 </property>
+                 <property name="text">
+                  <string>3</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_38">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_a">
+                 <property name="toolTip">
+                  <string>Button &quot;a&quot;</string>
+                 </property>
+                 <property name="text">
+                  <string>a</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_b">
+                 <property name="toolTip">
+                  <string>Button &quot;b&quot;</string>
+                 </property>
+                 <property name="text">
+                  <string>b</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_c">
+                 <property name="toolTip">
+                  <string>Button &quot;c&quot;</string>
+                 </property>
+                 <property name="text">
+                  <string>c</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_esc">
+                 <property name="toolTip">
+                  <string>Button ESC</string>
+                 </property>
+                 <property name="text">
+                  <string>ESC</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_up">
+                 <property name="toolTip">
+                  <string>Button UP</string>
+                 </property>
+                 <property name="text">
+                  <string>Up</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_audio">
+                 <property name="toolTip">
+                  <string>Audio button</string>
+                 </property>
+                 <property name="text">
+                  <string>Audio</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_left">
+                 <property name="toolTip">
+                  <string>Button Left</string>
+                 </property>
+                 <property name="text">
+                  <string>Left</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_enter">
+                 <property name="toolTip">
+                  <string>Button Enter key</string>
+                 </property>
+                 <property name="text">
+                  <string>Enter</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_right">
+                 <property name="toolTip">
+                  <string>Button Right</string>
+                 </property>
+                 <property name="text">
+                  <string>Right</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_41">
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_motion">
+                 <property name="toolTip">
+                  <string>Motion Button</string>
+                 </property>
+                 <property name="text">
+                  <string>Motion</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_down">
+                 <property name="toolTip">
+                  <string>Button Down</string>
+                 </property>
+                 <property name="text">
+                  <string>Down</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBLEHIDSendKey_ir">
+                 <property name="toolTip">
+                  <string>IR button</string>
+                 </property>
+                 <property name="text">
+                  <string>IR</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="layoutWidget7">
+            <property name="geometry">
+             <rect>
+              <x>342</x>
+              <y>110</y>
+              <width>55</width>
+              <height>81</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <item>
+              <widget class="QCheckBox" name="cbBLEHIDCapLock">
+               <property name="toolTip">
+                <string>Shift key</string>
+               </property>
+               <property name="text">
+                <string>Shift</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="cbBLEHIDCtrl">
+               <property name="toolTip">
+                <string>Control key</string>
+               </property>
+               <property name="text">
+                <string>Ctrl</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="cbBLEHIDAlt">
+               <property name="toolTip">
+                <string>Alternate key</string>
+               </property>
+               <property name="text">
+                <string>Alt</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QLabel" name="label_debug_route">
+            <property name="geometry">
+             <rect>
+              <x>640</x>
+              <y>10</y>
+              <width>47</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>Device firmware debug message routing</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Debug</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="cbBLEHIDDebug">
+            <property name="geometry">
+             <rect>
+              <x>680</x>
+              <y>10</y>
+              <width>81</width>
+              <height>22</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>Select device firmware debug message routing</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="currentText">
+             <string comment="NONE">WICED_HCI</string>
+            </property>
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>NONE</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>WICED_HCI</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>HCI_UART</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>DBG_UART</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>PUART</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QWidget" name="layoutWidget4">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>10</y>
+              <width>611</width>
+              <height>30</height>
+             </rect>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_42">
+             <item>
+              <widget class="QPushButton" name="btnBLEHIDHost">
+               <property name="toolTip">
+                <string>Bonded host</string>
+               </property>
+               <property name="statusTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Host</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnBLEHIDPairingMode">
+               <property name="toolTip">
+                <string>Enter or exit pairing mode</string>
+               </property>
+               <property name="statusTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Enter Pairing Mode</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnBLEHIDConnectDisconnect">
+               <property name="toolTip">
+                <string>Connect or Disconnect the link </string>
+               </property>
+               <property name="statusTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Connect</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnBLEHIDDVirtualUnplug">
+               <property name="toolTip">
+                <string>Issue Virtual Unplug command to remove bonding</string>
+               </property>
+               <property name="statusTip">
+                <string/>
+               </property>
+               <property name="text">
+                <string>Virtual Unplug</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QCheckBox" name="cbBLEHIDHold">
+            <property name="geometry">
+             <rect>
+              <x>343</x>
+              <y>50</y>
+              <width>70</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>When selected, clicking buttons stays in hold position until it is clicked again to release. This allows multiple keys entry.</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Hold</string>
+            </property>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabLECOC">
+           <attribute name="title">
+            <string>LE COC</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_40">
+            <item row="1" column="0">
+             <layout class="QGridLayout" name="gridLayout_38">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_82">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>44</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <property name="text">
+                 <string>Send</string>
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QPushButton" name="btnHelpOPPS">
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEditLecocSend">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QCheckBox" name="cbLecocSendFile">
+                <property name="text">
+                 <string>Send from file</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLineEdit" name="lineEditLecocSendFile">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QPushButton" name="btnLecocBrowseSend">
+                <property name="text">
+                 <string>Browse...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QPushButton" name="btnLecocSend">
+                <property name="text">
+                 <string>Send</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_80">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <property name="text">
+                 <string>Receive</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineEditLecocReceive">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="frame">
+                 <bool>true</bool>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QCheckBox" name="cbLecocReceiveFile">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>108</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Receive to file</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLineEdit" name="lineEditLecocReceiveFile">
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QPushButton" name="btnLecocBrowseReceive">
+                <property name="text">
+                 <string>Browse...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_39">
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineEditLecocMtu">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>25</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
-                  <width>30</width>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="inputMask">
+                 <string>999</string>
+                </property>
+                <property name="text">
+                 <string>512</string>
+                </property>
+                <property name="cursorPosition">
+                 <number>3</number>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="placeholderText">
+                 <string>&gt; 23</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="btnLecocDisconnect">
+                <property name="text">
+                 <string>Disconnect</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QRadioButton" name="radioButtonLecoc2mPhy">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>28</height>
+                 </size>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::LeftToRight</enum>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>LE 2M</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPushButton" name="pushButtonLecocStartAdv">
+                <property name="text">
+                 <string>Start Adv</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_811">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>?</string>
+                 <string>LE PSM</string>
                 </property>
                </widget>
               </item>
-              <item>
-               <spacer name="horizontalSpacer_5">
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="lineEditLecocPsm">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="inputMask">
+                 <string>HH</string>
+                </property>
+                <property name="text">
+                 <string>19</string>
+                </property>
+                <property name="cursorPosition">
+                 <number>2</number>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="placeholderText">
+                 <string>in hex</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QPushButton" name="btnLecocConnect">
+                <property name="text">
+                 <string>Connect</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_83">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>MTU</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <spacer name="horizontalSpacer_38">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -4246,8 +3778,8 @@
               </item>
              </layout>
             </item>
-            <item row="2" column="1">
-             <spacer name="horizontalSpacer_6">
+            <item row="0" column="1">
+             <spacer name="horizontalSpacer_37">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -4259,50 +3791,8 @@
               </property>
              </spacer>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="labelOPSName">
-              <property name="text">
-               <string>File Name : </string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="labelOPSType">
-              <property name="text">
-               <string>Type : </string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" alignment="Qt::AlignLeft">
-             <widget class="QPushButton" name="btnOPSDisconnect">
-              <property name="text">
-               <string>Disconnect</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="labelOPSStatus">
-              <property name="text">
-               <string>Status : </string>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QProgressBar" name="progressBarOPS">
-              <property name="value">
-               <number>24</number>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="labelOPSSize">
-              <property name="text">
-               <string>Size : </string>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="0">
-             <spacer name="verticalSpacer_10">
+             <spacer name="verticalSpacer_27">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -4731,6 +4221,137 @@
            <zorder>groupBox_13</zorder>
            <zorder>line</zorder>
           </widget>
+          <widget class="QWidget" name="tabBSG">
+           <attribute name="title">
+            <string>BSG</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_16">
+            <item row="0" column="0" colspan="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_24">
+              <item>
+               <widget class="QLabel" name="label_84">
+                <property name="text">
+                 <string>BLE Serial Over GATT</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnHelpBSG">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_16">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEditBSGSend"/>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="lineEditBSGSendFile"/>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="btnBSGBrowseSend">
+              <property name="text">
+               <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QCheckBox" name="cbBSGSendFile">
+              <property name="text">
+               <string>Send from file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QPushButton" name="btnBSGSend">
+              <property name="text">
+               <string>Send</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QCheckBox" name="cbBSGReceiveFile">
+              <property name="text">
+               <string>Receive to file</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="Send_2">
+              <property name="text">
+               <string>Send</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <spacer name="verticalSpacer_12">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineEditBSGreceive"/>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="lineEditBSGReceiveFile"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="Receive_3">
+              <property name="text">
+               <string>Receive</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QPushButton" name="btnBSGBrowseReceive">
+              <property name="text">
+               <string>Browse...</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <spacer name="horizontalSpacer_17">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="tabDemo">
            <attribute name="title">
             <string>Demo</string>
@@ -4820,287 +4441,537 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabLECOC">
+          <widget class="QWidget" name="tabGATT_DB">
            <attribute name="title">
-            <string>LE COC</string>
+            <string>GATT DB</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_40">
-            <item row="1" column="0">
-             <layout class="QGridLayout" name="gridLayout_38">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_82">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+           <layout class="QGridLayout" name="gridLayout_23">
+            <item row="8" column="1">
+             <widget class="QLabel" name="label_70">
+              <property name="text">
+               <string>Data:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="label_54">
+              <property name="text">
+               <string>Descriptor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="14" colspan="2">
+             <widget class="QPushButton" name="btnStartAdvertGATTDB">
+              <property name="text">
+               <string>Start Advert</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="15">
+             <widget class="QPushButton" name="btnAddChar">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="4" colspan="2">
+             <widget class="QLabel" name="label_63">
+              <property name="text">
+               <string>UUID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="6">
+             <widget class="QLineEdit" name="editDescUUID"/>
+            </item>
+            <item row="7" column="2" colspan="2">
+             <widget class="QLineEdit" name="editDescHandle"/>
+            </item>
+            <item row="8" column="2" colspan="5">
+             <widget class="QLineEdit" name="editAdvertData"/>
+            </item>
+            <item row="7" column="11" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_69">
+              <property name="text">
+               <string>Permission:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5" colspan="3">
+             <widget class="QLabel" name="label_72">
+              <property name="text">
+               <string>XXXX or {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2" colspan="2">
+             <widget class="QLabel" name="label_71">
+              <property name="text">
+               <string>XXXX</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="7">
+             <layout class="QHBoxLayout" name="horizontalLayout_27">
+              <item>
+               <widget class="QLabel" name="label_34">
+                <property name="text">
+                 <string>GATT Database</string>
                 </property>
-                <property name="minimumSize">
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnHelpGATT_DB">
+                <property name="maximumSize">
                  <size>
-                  <width>44</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <property name="text">
-                 <string>Send</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEditLecocSend">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QCheckBox" name="cbLecocSendFile">
-                <property name="text">
-                 <string>Send from file</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QLineEdit" name="lineEditLecocSendFile">
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="4">
-               <widget class="QPushButton" name="btnLecocBrowseSend">
-                <property name="text">
-                 <string>Browse...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="5">
-               <widget class="QPushButton" name="btnLecocSend">
-                <property name="text">
-                 <string>Send</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_80">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <property name="text">
-                 <string>Receive</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEditLecocReceive">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="frame">
-                 <bool>true</bool>
-                </property>
-                <property name="readOnly">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QCheckBox" name="cbLecocReceiveFile">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>108</width>
-                  <height>0</height>
+                  <width>30</width>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>Receive to file</string>
+                 <string>?</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="3">
-               <widget class="QLineEdit" name="lineEditLecocReceiveFile">
-                <property name="text">
-                 <string/>
+              <item>
+               <spacer name="horizontalSpacer_23">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
-               </widget>
-              </item>
-              <item row="1" column="4">
-               <widget class="QPushButton" name="btnLecocBrowseReceive">
-                <property name="text">
-                 <string>Browse...</string>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
                 </property>
-               </widget>
+               </spacer>
               </item>
              </layout>
             </item>
+            <item row="3" column="4" colspan="2">
+             <widget class="QLabel" name="label_33">
+              <property name="text">
+               <string>UUID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="label_49">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2" colspan="2">
+             <widget class="QLineEdit" name="editPrimarySvcHandle"/>
+            </item>
+            <item row="2" column="14" colspan="2">
+             <widget class="QPushButton" name="btnInitGATTDB">
+              <property name="text">
+               <string>Init Database</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_50">
+              <property name="text">
+               <string>Primary Service</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="6">
+             <widget class="QLineEdit" name="editPrimarySvcUUID"/>
+            </item>
+            <item row="3" column="15">
+             <widget class="QPushButton" name="btnAddPrimarySvc">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="10" colspan="3">
+             <widget class="QLabel" name="label_79">
+              <property name="text">
+               <string>Note: Enter all data is in hex</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="14">
+             <widget class="QLabel" name="label_74">
+              <property name="text">
+               <string>XXXX</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="15">
+             <widget class="QPushButton" name="btnAddSecondarySvc">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="12" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_75">
+              <property name="text">
+               <string>XX</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="10">
+             <widget class="QLineEdit" name="editIncSvcServiceHandle"/>
+            </item>
+            <item row="5" column="2" colspan="2">
+             <widget class="QLineEdit" name="editIncludedSvcHandle"/>
+            </item>
+            <item row="4" column="6">
+             <widget class="QLineEdit" name="editSecondarySvcUUID"/>
+            </item>
+            <item row="5" column="13" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_68">
+              <property name="text">
+               <string>End Group:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="label_58">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="6">
+             <widget class="QLineEdit" name="editIncludedSvcUUID"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_53">
+              <property name="text">
+               <string>Characteristic</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="4" colspan="2">
+             <widget class="QLabel" name="label_62">
+              <property name="text">
+               <string>UUID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="8" colspan="2" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_64">
+              <property name="text">
+               <string>Char Value:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2" colspan="2">
+             <widget class="QLineEdit" name="editCharHandle"/>
+            </item>
+            <item row="6" column="6">
+             <widget class="QLineEdit" name="editCharUUID"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLabel" name="label_57">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="15">
+             <widget class="QPushButton" name="btnAddIncSvc">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="4" colspan="2">
+             <widget class="QLabel" name="label_60">
+              <property name="text">
+               <string>UUID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="4" colspan="2">
+             <widget class="QLabel" name="label_61">
+              <property name="text">
+               <string>UUID:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="10">
+             <widget class="QLineEdit" name="editCharValue"/>
+            </item>
+            <item row="6" column="11" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_65">
+              <property name="text">
+               <string>Property:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="14">
+             <widget class="QLineEdit" name="editIncSvcEndGroup"/>
+            </item>
+            <item row="6" column="13" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_66">
+              <property name="text">
+               <string>Permission:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="12" alignment="Qt::AlignLeft">
+             <widget class="QLineEdit" name="editCharProperty">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="10">
+             <widget class="QLabel" name="label_73">
+              <property name="text">
+               <string>XXXX</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_52">
+              <property name="text">
+               <string>Included Service</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2" colspan="2">
+             <widget class="QLineEdit" name="editSecondarySvcHandle"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_51">
+              <property name="text">
+               <string>Secondary Service</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="8" colspan="2" alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="label_67">
+              <property name="text">
+               <string>Service Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLabel" name="label_56">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLabel" name="label_59">
+              <property name="text">
+               <string>Handle:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="12" alignment="Qt::AlignLeft">
+             <widget class="QLineEdit" name="editDescPermission">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QLabel" name="label_55">
+              <property name="text">
+               <string>Advertisement</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="15">
+             <widget class="QPushButton" name="btnAddDesc">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>+</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="14">
+             <widget class="QLineEdit" name="editCharPermission"/>
+            </item>
+            <item row="9" column="2">
+             <spacer name="verticalSpacer_15">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabAVSink">
+           <attribute name="title">
+            <string>AV Sink</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_30">
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btnAVSinkConnect">
+              <property name="text">
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="btnAvSinkDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="btnAvSinkStart">
+              <property name="text">
+               <string>Start</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QPushButton" name="btnAvSinkSuspend">
+              <property name="text">
+               <string>Suspend</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <spacer name="verticalSpacer_22">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="4">
+             <spacer name="horizontalSpacer_34">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="0" column="0" colspan="4">
+             <layout class="QHBoxLayout" name="horizontalLayout_35">
+              <item>
+               <widget class="QLabel" name="label_29">
+                <property name="text">
+                 <string>AV Sink Profile</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnHelpAVK">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_33">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabHK">
+           <attribute name="title">
+            <string>HomeKit</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_22">
             <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_39">
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEditLecocMtu">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+             <layout class="QHBoxLayout" name="horizontalLayout_26">
+              <item>
+               <widget class="QLabel" name="label_16">
+                <property name="text">
+                 <string>Apple HomeKit (Note: SDK support is available only for Apple MFI licensees)</string>
                 </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>25</height>
-                 </size>
-                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnHelpHK">
                 <property name="maximumSize">
                  <size>
-                  <width>50</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="inputMask">
-                 <string>999</string>
-                </property>
-                <property name="text">
-                 <string>512</string>
-                </property>
-                <property name="cursorPosition">
-                 <number>3</number>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="placeholderText">
-                 <string>&gt; 23</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QPushButton" name="btnLecocDisconnect">
-                <property name="text">
-                 <string>Disconnect</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="3">
-               <widget class="QRadioButton" name="radioButtonLecoc2mPhy">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>28</height>
-                 </size>
-                </property>
-                <property name="layoutDirection">
-                 <enum>Qt::LeftToRight</enum>
-                </property>
-                <property name="autoFillBackground">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>LE 2M</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="3">
-               <widget class="QPushButton" name="pushButtonLecocStartAdv">
-                <property name="text">
-                 <string>Start Adv</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_811">
-                <property name="maximumSize">
-                 <size>
-                  <width>50</width>
+                  <width>30</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>LE PSM</string>
+                 <string>?</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="lineEditLecocPsm">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>50</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="inputMask">
-                 <string>HH</string>
-                </property>
-                <property name="text">
-                 <string>19</string>
-                </property>
-                <property name="cursorPosition">
-                 <number>2</number>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="placeholderText">
-                 <string>in hex</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2">
-               <widget class="QPushButton" name="btnLecocConnect">
-                <property name="text">
-                 <string>Connect</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_83">
-                <property name="maximumSize">
-                 <size>
-                  <width>50</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>MTU</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="4">
-               <spacer name="horizontalSpacer_38">
+              <item>
+               <spacer name="horizontalSpacer_20">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -5115,20 +4986,21 @@
              </layout>
             </item>
             <item row="0" column="1">
-             <spacer name="horizontalSpacer_37">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="QPushButton" name="btnHKGetToken">
+              <property name="text">
+               <string>Get Token</string>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+             </widget>
             </item>
-            <item row="2" column="0">
-             <spacer name="verticalSpacer_27">
+            <item row="0" column="2">
+             <widget class="QPushButton" name="btnHKFactoryReset">
+              <property name="text">
+               <string>Factory Reset</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <spacer name="verticalSpacer_14">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -5139,6 +5011,403 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="1" column="0" colspan="3">
+             <widget class="QGroupBox" name="groupBox_6">
+              <property name="title">
+               <string>Characteristic</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_21">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Handle:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="lineEditHKHandle">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Hex Value:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLineEdit" name="lineEditHKHexVal"/>
+               </item>
+               <item row="0" column="4">
+                <widget class="QPushButton" name="btnHKRead">
+                 <property name="text">
+                  <string>Read</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <widget class="QPushButton" name="btnHKWrite">
+                 <property name="text">
+                  <string>Write</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="6">
+                <widget class="QPushButton" name="btnHKList">
+                 <property name="text">
+                  <string>List</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="3">
+             <widget class="QGroupBox" name="groupBox_7">
+              <property name="title">
+               <string>Light</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_19">
+               <item row="0" column="0">
+                <widget class="QLabel" name="labelHKLight">
+                 <property name="text">
+                  <string>ON</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLineEdit" name="lineEditHKBrightness">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Brightness (0 to 100):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QPushButton" name="btnHKSet">
+                 <property name="text">
+                  <string>Set</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QPushButton" name="btnHKSwitch">
+                 <property name="text">
+                  <string>Switch</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <spacer name="horizontalSpacer_22">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
+             <widget class="QGroupBox" name="groupBox_8">
+              <property name="title">
+               <string>Lock</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_20">
+               <item row="0" column="2" alignment="Qt::AlignRight">
+                <widget class="QLabel" name="label_81">
+                 <property name="text">
+                  <string>Lock State:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4" alignment="Qt::AlignRight">
+                <widget class="QLabel" name="label_912">
+                 <property name="text">
+                  <string>Lock Target State:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" alignment="Qt::AlignRight">
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Door State:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="cbDoorState"/>
+               </item>
+               <item row="0" column="3">
+                <widget class="QComboBox" name="cbLockState"/>
+               </item>
+               <item row="0" column="5">
+                <widget class="QComboBox" name="cbLockTargetState"/>
+               </item>
+               <item row="0" column="6">
+                <spacer name="horizontalSpacer_21">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabHIDH">
+           <attribute name="title">
+            <string>HID Host</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_26">
+            <item row="6" column="3">
+             <widget class="QLabel" name="label_37">
+              <property name="text">
+               <string>Polarity (0/1):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2" alignment="Qt::AlignLeft">
+             <widget class="QLineEdit" name="editHIDHGPIO"/>
+            </item>
+            <item row="4" column="3">
+             <widget class="QComboBox" name="cbHIDHReportType"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLabel" name="label_40">
+              <property name="text">
+               <string>Report ID (Hex):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="label_39">
+              <property name="text">
+               <string>GPIO Num (Dec):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="label_41">
+              <property name="text">
+               <string>Report ID (Hex):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLabel" name="label_42">
+              <property name="text">
+               <string>Report Type:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QPushButton" name="btnHIDHWakeAdd">
+              <property name="text">
+               <string>Wake Up Add</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="btnHIDHGetReport">
+              <property name="text">
+               <string>Get Report</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1" alignment="Qt::AlignLeft">
+             <widget class="QLineEdit" name="editHIDHGetSetReportID">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2" alignment="Qt::AlignLeft">
+             <widget class="QLineEdit" name="editHIDHReportID"/>
+            </item>
+            <item row="4" column="4">
+             <widget class="QComboBox" name="cbHIDHChannel"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="btnHIDHSetReport">
+              <property name="text">
+               <string>Set Report</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QLabel" name="label_43">
+              <property name="text">
+               <string>Channel (Set):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QLabel" name="label_38">
+              <property name="text">
+               <string>Report Pattern (Hex):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QPushButton" name="btnHIDHWakeEnable">
+              <property name="text">
+               <string>Wake Up Enable</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <spacer name="verticalSpacer_18">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="0" column="0" colspan="4">
+             <layout class="QHBoxLayout" name="horizontalLayout_31">
+              <item>
+               <widget class="QLabel" name="label_24">
+                <property name="text">
+                 <string>HID Host Profile (BR/EDR and and HID Over GATT )</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnHelpHIDH">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_28">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="4">
+             <layout class="QHBoxLayout" name="horizontalLayout_32">
+              <item>
+               <widget class="QLabel" name="label_36">
+                <property name="text">
+                 <string>HID Protocol:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbHIDHProtocol"/>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="btnHIDHDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btnHIDHConnect">
+              <property name="text">
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="btnHIDHGetDesc">
+              <property name="text">
+               <string>Get Desc</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5" alignment="Qt::AlignRight">
+             <widget class="QLabel" name="label_35">
+              <property name="text">
+               <string>Device type:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <widget class="QRadioButton" name="radioHIDHBLE">
+              <property name="text">
+               <string>BLE</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="6">
+             <widget class="QRadioButton" name="radioHIDHBREDR">
+              <property name="text">
+               <string>BR-EDR</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="5" colspan="2">
+             <widget class="QLineEdit" name="editHIDHSetGetReportData"/>
+            </item>
+            <item row="5" column="4" colspan="3">
+             <widget class="QLineEdit" name="editHIDHReportPatern"/>
+            </item>
+            <item row="6" column="4">
+             <widget class="QLineEdit" name="editHIDHPolarity">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -5288,264 +5557,6 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabMAPClient">
-           <attribute name="title">
-            <string>MAP Client</string>
-           </attribute>
-           <widget class="QComboBox" name="cbMceInstanceList">
-            <property name="geometry">
-             <rect>
-              <x>11</x>
-              <y>11</y>
-              <width>69</width>
-              <height>20</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QComboBox" name="cbMceFolderList">
-            <property name="geometry">
-             <rect>
-              <x>92</x>
-              <y>11</y>
-              <width>69</width>
-              <height>20</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="edMceFrom">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>11</y>
-              <width>133</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="labelMceFrom">
-            <property name="geometry">
-             <rect>
-              <x>354</x>
-              <y>11</y>
-              <width>28</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>From:</string>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="edMceTo">
-            <property name="geometry">
-             <rect>
-              <x>662</x>
-              <y>11</y>
-              <width>133</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-           <widget class="QLabel" name="labelMceTo">
-            <property name="geometry">
-             <rect>
-              <x>616</x>
-              <y>11</y>
-              <width>16</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>To:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceGetServices">
-            <property name="geometry">
-             <rect>
-              <x>11</x>
-              <y>68</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Get Services</string>
-            </property>
-           </widget>
-           <widget class="QListWidget" name="listMceMessages">
-            <property name="geometry">
-             <rect>
-              <x>92</x>
-              <y>37</y>
-              <width>256</width>
-              <height>144</height>
-             </rect>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="edMceFromSubject">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>37</y>
-              <width>133</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="labelMceFromSubject">
-            <property name="geometry">
-             <rect>
-              <x>354</x>
-              <y>37</y>
-              <width>40</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Subject:</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="labelMceToSubject">
-            <property name="geometry">
-             <rect>
-              <x>616</x>
-              <y>37</y>
-              <width>40</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Subject:</string>
-            </property>
-           </widget>
-           <widget class="QLineEdit" name="edMceToSubject">
-            <property name="geometry">
-             <rect>
-              <x>662</x>
-              <y>37</y>
-              <width>133</width>
-              <height>20</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-           <widget class="QPlainTextEdit" name="edtMceMessage">
-            <property name="geometry">
-             <rect>
-              <x>354</x>
-              <y>63</y>
-              <width>256</width>
-              <height>118</height>
-             </rect>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QPlainTextEdit" name="edtMceCompose">
-            <property name="geometry">
-             <rect>
-              <x>616</x>
-              <y>63</y>
-              <width>256</width>
-              <height>118</height>
-             </rect>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceDelete">
-            <property name="geometry">
-             <rect>
-              <x>92</x>
-              <y>187</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Delete</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceReply">
-            <property name="geometry">
-             <rect>
-              <x>400</x>
-              <y>187</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Reply</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceConnect">
-            <property name="geometry">
-             <rect>
-              <x>11</x>
-              <y>129</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Connect</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceDisconnect">
-            <property name="geometry">
-             <rect>
-              <x>11</x>
-              <y>158</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Disconnect</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="btnMceSend">
-            <property name="geometry">
-             <rect>
-              <x>616</x>
-              <y>187</y>
-              <width>75</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Send</string>
-            </property>
-           </widget>
-          </widget>
          </widget>
         </item>
         <item>
@@ -5636,7 +5647,7 @@
      <x>0</x>
      <y>0</y>
      <width>1061</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

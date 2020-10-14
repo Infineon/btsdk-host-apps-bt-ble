@@ -71,7 +71,7 @@ extern void msleep(unsigned int to);
 #define HCI_VSE_TYPE_COREDUMP_CPU_REGS_EXT  0x05
 #define HCI_VSE_TYPE_COREDUMP_CALL_STACK    0x06
 
-extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index);
+extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index, int iSpyInstance);
 Q_DECLARE_METATYPE( CBtDevice* )
 static DownloadThread dl;
 
@@ -189,6 +189,11 @@ void MainWindow::InitDm()
     ui->cbBaudRate->setCurrentIndex(baud_inx);
     ui->btnFlowCntrl->setChecked(flow_control );
 
+    // Startup timer
+    m_dmStartupTimer = new QTimer(this);
+    m_dmStartupTimer->setInterval(2000);
+    m_dmStartupTimer->setSingleShot(true);
+    connect(m_dmStartupTimer, SIGNAL(timeout()), this, SLOT(startUpTimer()));
 
     // setup signals/slots
     connect(ui->btnStartDisc, SIGNAL(clicked()), this, SLOT(onStartDisc()));
@@ -1400,7 +1405,8 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
             memcpy(&trace[2], p_data, len);
             TraceHciPkt(0, reinterpret_cast<unsigned char *>(trace),
                         static_cast<USHORT>(len+2),
-                        static_cast<USHORT>(ui->cbCommport->currentIndex()));
+                        static_cast<USHORT>(ui->cbCommport->currentIndex()),
+                        iSpyInstance);
         }
 
         break;
@@ -1414,7 +1420,8 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
         // HCI trace.
         if (p_data)
             TraceHciPkt(p_data[0] + 1, &p_data[1], static_cast<USHORT>(len - 1),
-                    static_cast<USHORT>(ui->cbCommport->currentIndex()));
+                    static_cast<USHORT>(ui->cbCommport->currentIndex()),
+                    iSpyInstance);
         break;
 
         // received paired device data for all to save in NVRAM
@@ -1532,6 +1539,8 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
         }
 
         Startup();
+        // Stop the timer to prevent duplicate startup process
+        m_dmStartupTimer->stop();
         break;
 
         // received event that pairing completed
@@ -1840,7 +1849,7 @@ bool MainWindow::SetupCommPort()
 #endif
 
         // on opening the port, set a 2 sec timer
-        QTimer::singleShot(2000, this, SLOT(startUpTimer()));
+        m_dmStartupTimer->start();
     }
     else
     {

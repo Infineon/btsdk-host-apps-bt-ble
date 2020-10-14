@@ -43,7 +43,7 @@
 #include "ui_mainwindow.h"
 #include <QTimer>
 
-extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index);
+extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index,int iSpyInstance);
 
 extern "C"
 {
@@ -80,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scripting(false),
     ui(new Ui::MainWindow)
 {
+    iSpyInstance = 0;
     app_host_init();
     ui->setupUi(this);
 
@@ -152,6 +153,10 @@ MainWindow::MainWindow(QWidget *parent) :
     Log("   CYW20721, CYW20735 and CYW20835 chips. Please use ModusToolbox 2.x or command line for download.");
 
     ScrollToTop();
+
+    // Tab index 17 and higher are not used currently, remove then from UI
+    for(int i = 0; i < 8; i++)
+        ui->tabMain->removeTab(17);
 
 }
 
@@ -271,7 +276,7 @@ void MainWindow::Log(const char * fmt, ...)
     vsprintf(trace, fmt, cur_arg);
 
     // send to spy before the time stamp
-    TraceHciPkt(0, (BYTE *)trace, strlen(trace), 0);
+    TraceHciPkt(0, (BYTE *)trace, strlen(trace), 0, iSpyInstance);
 
     QString s = QDateTime::currentDateTime().toString("MM-dd-yyyy hh:mm:ss.zzz: ") + trace;
     va_end(cur_arg);

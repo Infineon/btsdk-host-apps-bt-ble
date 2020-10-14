@@ -57,6 +57,7 @@ void MainWindow::InitAudioSrc()
 {
     m_audio_connected = false;
     m_audio_started = false;
+    m_audio_i2s_input_enable = false;
     m_bPortOpen = false;
     m_fpAudioFile = NULL;
     memset(&m_uAudio, 0, sizeof(m_uAudio));
@@ -69,9 +70,12 @@ void MainWindow::InitAudioSrc()
     connect(ui->btnFindAudioFile, SIGNAL(clicked()), this, SLOT(onFindAudioFile()));
     connect(ui->rbAudioSrcFile, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcFile(bool)));
     connect(ui->rbAudioSrcSine, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcSine(bool)));
+    connect(ui->rbAudioSrcI2S, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcI2S(bool)));
     ui->edAudioFile->setText( m_settings.value("AudioFile","").toString());
     ui->rbAudioSrcFile->setChecked(m_settings.value("AudioSrcFile",true).toBool());
-    ui->rbAudioSrcSine->setChecked(!m_settings.value("AudioSrcFile",false).toBool());
+    ui->rbAudioSrcI2S->setChecked(m_settings.value("AudioSrcI2S",true).toBool());
+    ui->rbAudioSrcSine->setChecked(!m_settings.value("AudioSrcFile",false).toBool() &&
+                                   !m_settings.value("AudioSrcI2S",false).toBool());
     ui->cbSineFreq->clear();
     for (int i = 0; i < 4; i++)
     {
@@ -123,7 +127,18 @@ void MainWindow::onConnectAudioSrc()
 
     memcpy(data.bda, pDev->m_address, BDA_LEN);
 
-    data.audio_route = ui->rbAudioSrcFile->isChecked() ? AUDIO_SRC_ROUTE_UART : AUDIO_SRC_ROUTE_SINE_WAVE;
+    if (ui->rbAudioSrcFile->isChecked())
+    {
+        data.audio_route = AUDIO_SRC_ROUTE_UART;
+    }
+    else if (ui->rbAudioSrcI2S->isChecked())
+    {
+        data.audio_route = AUDIO_SRC_ROUTE_I2S;
+    }
+    else /* (ui->rbAudioSrcSine->isChecked()) */
+    {
+        data.audio_route = AUDIO_SRC_ROUTE_SINE_WAVE;
+    }
 
     app_host_audio_src_connect(&data);
 }
@@ -275,6 +290,20 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
 
     case HCI_CONTROL_AUDIO_EVENT_CONNECTION_FAILED:
         Log("Audio event connection attempt failed (0x%X)", opcode);
+        break;
+
+    case HCI_CONTROL_AUDIO_EVENT_SUPPORT_FEATURES:
+    {
+        uint8_t features = p_data[0];
+
+        if (features & AUDIO_SRC_FEATURE_I2S_INPUT)
+        {
+            Log("AV Source: Feature I2S INPUT enabled");
+            m_audio_i2s_input_enable = true;
+        }
+
+        setAudioSrcUI();
+    }
         break;
 
     default:
@@ -445,6 +474,7 @@ bool MainWindow::InitializeAudioFile()
 void MainWindow::onAudioSrcSine(bool)
 {
     m_settings.setValue("AudioSrcFile",false);
+    m_settings.setValue("AudioSrcI2S",false);
 }
 
 void MainWindow::onAudioSrcFile(bool)
@@ -457,6 +487,11 @@ void MainWindow::onAudioSrcFile(bool)
     m_settings.setValue("AudioSrcFile",true);
 }
 
+void MainWindow::onAudioSrcI2S(bool)
+{
+    m_settings.setValue("AudioSrcI2S",true);
+}
+
 void MainWindow::setAudioSrcUI()
 {
     ui->btnConnectAudio->setEnabled(!m_audio_connected );
@@ -465,6 +500,7 @@ void MainWindow::setAudioSrcUI()
     ui->btnStopAudio->setEnabled(m_audio_started & m_audio_connected );
     ui->rbAudioSrcSine->setEnabled(!m_audio_connected);
     ui->rbAudioSrcFile->setEnabled(!m_audio_connected);
+    ui->rbAudioSrcI2S->setEnabled(m_audio_i2s_input_enable && !m_audio_connected);
     ui->rbAudioModeMono->setEnabled(!m_audio_started);
     ui->cbSineFreq->setEnabled(!m_audio_started);
     ui->btnFindAudioFile->setEnabled(!m_audio_connected);
@@ -476,6 +512,7 @@ void MainWindow::closeEventAudioSrc(QCloseEvent *event)
     UNUSED(event);
     onDisconnectAudioSrc();
     m_settings.setValue("AudioSrcFile",ui->rbAudioSrcFile->isChecked());
+    m_settings.setValue("AudioSrcI2S",ui->rbAudioSrcI2S->isChecked());
 }
 
 // Read audio .wav file
