@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -103,11 +103,10 @@ bool app_host_audio_src_stop(uint8_t bda[6])
     return wiced_hci_audio_src_audio_stop(&data);
 }
 
-bool app_host_audio_src_audio_data(uint8_t *p_data, uint16_t len)
+bool app_host_audio_src_audio_data(uint16_t handle, uint8_t *p_data, uint16_t len)
 {
     wiced_hci_bt_audio_source_audio_data_t audio_data;
-    // Find any connected audio device
-    wiced_hci_bt_device_t* p_dev = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_AUDIO, 0);
+    wiced_hci_bt_device_t* p_dev = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_AUDIO, handle);
 
     if(!p_dev || (p_dev && (p_dev->m_audio_handle == WICED_NULL_HANDLE)))
     {
@@ -121,6 +120,20 @@ bool app_host_audio_src_audio_data(uint8_t *p_data, uint16_t len)
     return wiced_hci_audio_src_audio_data(&audio_data);
 }
 
+bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format)
+{
+    wiced_hci_bt_audio_source_audio_data_format_t payload;
+    wiced_hci_bt_device_t* p_dev = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_AUDIO, handle);
+
+    if(!p_dev || (p_dev && (p_dev->m_audio_handle == WICED_NULL_HANDLE)))
+    {
+        app_host_log("AV not connected");
+        return false;
+    }
+
+    payload.format = format;
+    return wiced_hci_audio_src_audio_data_format(&payload);
+}
 
 // Handle WICED HCI events for AV
 void app_host_audio_src_event(uint16_t opcode, uint8_t * p_data, uint32_t len)

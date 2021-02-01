@@ -22,6 +22,7 @@ macx {
 }
 
 SOURCES += main.cpp\
+    audio_src_dual_a2dp.cpp \
         mainwindow.cpp \
         audio_src.cpp \
         device_manager.cpp \
@@ -94,11 +95,11 @@ unix {
 win32|win64 {
     SOURCES += btspy_win32.cpp
     SOURCES += serial_port_win32.cpp
+    SOURCES += kp3_uart_wa_lib/kp3uart_workaround.cpp
 }
 
 
 HEADERS  += mainwindow.h \
-            fw_download.h \
             avrc.h \
             serial_port.h \
             app_include.h \
@@ -153,11 +154,12 @@ INCLUDEPATH += ../../../../dev-kit/btsdk-include
 INCLUDEPATH += ../../lib_host/lib_app
 INCLUDEPATH += ../../lib_host/lib_wiced_hci
 INCLUDEPATH += ./nanopb
+INCLUDEPATH += ./kp3_uart_wa_lib
 
 # ws2_32.lib and winmm.lib path might need to be adjusted on user PC, for example
 # C:\WINDDK\7600.16385.0\lib\win7\i386\ws2_32.lib
 # -L"Windows" -lws2_32
-win32: LIBS += -lQt5Network ..\Windows\ws2_32.lib ..\Windows\winmm.lib
+win32: LIBS += -lQt5Network ..\Windows\ws2_32.lib ..\Windows\winmm.lib -lsetupapi
 
 unix:!macx {
 LIBS += -lasound -lrt

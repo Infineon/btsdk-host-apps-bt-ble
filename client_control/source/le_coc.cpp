@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -122,7 +122,7 @@ DWORD MainWindow::SendFileThreadLECOC()
     fseek(fp, 0, SEEK_END);
     m_lecoc_total_to_send = ftell(fp);
 
-    Log("Total bytes to send : %d ", m_lecoc_total_to_send);
+    Log("Total bytes to send : %ld ", m_lecoc_total_to_send);
 
     fseek(fp, 0, SEEK_SET);
     m_lecoc_bytes_sent = 0;
@@ -131,7 +131,7 @@ DWORD MainWindow::SendFileThreadLECOC()
 
      m_uart_tx_size = m_settings.value("UartTxSize",ui->lineEditLecocMtu->text().toInt()).toInt();
 
-     Log("UartTxSize set to %d", m_uart_tx_size);
+     Log("UartTxSize set to %ld", m_uart_tx_size);
 
     while ((read_bytes = fread(&buf[0], 1, m_uart_tx_size, fp)) != 0)
     {
@@ -164,7 +164,7 @@ void updateAdvBtn(bool sts)
 void setPhy( void )
 {
     app_host_log("LE2M %d", g_pMainWindow->ui->radioButtonLecoc2mPhy->isChecked());
-    app_host_le_coc_set_phy(g_pMainWindow->ui->radioButtonLecoc2mPhy->isChecked());
+    app_host_le_coc_set_phy((uint16_t)g_pMainWindow->ui->radioButtonLecoc2mPhy->isChecked());
 }
 
 void recvData(char *p_data, unsigned int len)
@@ -266,6 +266,20 @@ void MainWindow::on_btnLecocBrowseReceive_clicked()
     QString file = QFileDialog::getOpenFileName(this, tr("Open File"),"","");
 
     ui->lineEditLecocReceiveFile->setText(file);
+}
+
+// send file check box clicked
+void MainWindow::on_cbLecocSendFile_clicked()
+{
+    if (ui->cbLecocSendFile->isChecked())
+    {
+        QString strfile = ui->lineEditLecocSendFile->text();
+
+        if (strfile.isEmpty()){
+            Log("Select a file to send first. Checbox disabled.");
+            ui->cbLecocSendFile->setChecked(false);
+        }
+    }
 }
 
 // receive data to file instead of text box

@@ -1,11 +1,11 @@
 
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -14,7 +14,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -76,12 +76,22 @@ typedef struct
     uint16_t len;
 } wiced_hci_bt_audio_source_audio_data_t;
 
+#define AUDIO_SRC_AUDIO_DATA_FORMAT_PCM 0
+#define AUDIO_SRC_AUDIO_DATA_FORMAT_MP3 1
+
+typedef struct
+{
+    uint8_t format;
+} wiced_hci_bt_audio_source_audio_data_format_t;
+
 #define AUDIO_SRC_FEATURE_I2S_INPUT (1 << 0)
+#define AUDIO_SRC_FEATURE_MP3_FORMAT (1 << 1)
 
 bool wiced_hci_audio_src_connect(wiced_hci_bt_audio_source_connect_data_t *p_data);
 bool wiced_hci_audio_src_disconnect(wiced_hci_bt_audio_source_disconnect_data_t *p_data);
 bool wiced_hci_audio_src_audio_start(wiced_hci_bt_audio_source_start_data_t *p_data);
 bool wiced_hci_audio_src_audio_stop(wiced_hci_bt_audio_source_stop_data_t *p_data);
 bool wiced_hci_audio_src_audio_data(wiced_hci_bt_audio_source_audio_data_t *p_data);
+bool wiced_hci_audio_src_audio_data_format(wiced_hci_bt_audio_source_audio_data_format_t *p_data);
 
 #endif

@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -75,7 +75,7 @@ void MainWindow::HandleDemoEvents(DWORD opcode, LPBYTE p_data, DWORD len)
 
             if(len < 2)
             {
-                Log("HandleDemoEvents, invalid data, packet size %d", len);
+                Log("HandleDemoEvents, invalid data, packet size %ld", len);
                 break;
             }
             sssid_len = p_data[0];
@@ -83,12 +83,12 @@ void MainWindow::HandleDemoEvents(DWORD opcode, LPBYTE p_data, DWORD len)
 
             if(len < (sssid_len + passwd_len))
             {
-                Log("HandleDemoEvents, invalid data, SSID len %d, passd len %d, total packet size %d",
+                Log("HandleDemoEvents, invalid data, SSID len %d, passd len %d, total packet size %ld",
                     sssid_len, passwd_len, len);
                 break;
             }
 
-            Log("HandleDemoEvents, SSID len %d, passd len %d, total packet size %d",
+            Log("HandleDemoEvents, SSID len %d, passd len %d, total packet size %ld",
                 sssid_len, passwd_len, len);
 
             if((sssid_len > 30) || (passwd_len > 30))

@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -44,7 +44,6 @@
  */
 
 #include "app_include.h"
-#include "fw_download.h"
 #include "rpc.pb.h"
 #include <time.h>
 #include <QTimer>
@@ -73,7 +72,6 @@ extern void msleep(unsigned int to);
 
 extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index, int iSpyInstance);
 Q_DECLARE_METATYPE( CBtDevice* )
-static DownloadThread dl;
 
 // CBtDevice data structure for caching peer device info
 CBtDevice::CBtDevice (bool paired) :
@@ -98,6 +96,8 @@ CBtDevice::CBtDevice (bool paired) :
     m_conn_type = 0;
     m_bIsLEDevice = false;
     role = 0;
+    address_type = 0;
+    con_handle = 0;
 }
 
 CBtDevice::~CBtDevice ()
@@ -208,14 +208,12 @@ void MainWindow::InitDm()
     connect(ui->btnPairable, SIGNAL(clicked(bool)), this, SLOT(onPairable(bool)));
     connect(ui->btnDownload, SIGNAL(clicked()), this, SLOT(onDownload()));
     connect(ui->btnFindPatchFile, SIGNAL(clicked()), this, SLOT(onFindPatchFile()));
-    connect(&dl, SIGNAL(dlProgress(QString*,int,int)), this, SLOT(onDlProgress(QString*,int,int)));
-    connect(&dl, SIGNAL(dlDone(QString)), this, SLOT(onDlDone(QString)));
     connect(&dl_msgbox,SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(onMsgBoxButton(QAbstractButton*)));
     connect(ui->btnBLEStartDisc, SIGNAL(clicked()), this, SLOT(OnBnClickedDiscoverDevicesStart()));
     connect(ui->btnBLEStopDisc, SIGNAL(clicked()), this, SLOT(OnBnClickedDiscoverDevicesStop()));
     connect(ui->btnVersionInfo, SIGNAL(clicked()), this, SLOT(OnBnClickedVersionInfo()));
 
-    ui->edPatchFile->setText(m_settings.value("HCDFile","").toString());
+    ui->edPatchFile->setText(m_settings.value("FirmwareFile","").toString());
     m_bPortOpen = false;
     m_bPeripheralUart = false;
 
@@ -225,11 +223,6 @@ void MainWindow::InitDm()
     m_build = 0;
     m_chip = 0;
     m_features = 0xFF;
-
-    char strBda[100];
-    srand (static_cast<unsigned int>(time(nullptr)));
-    sprintf(strBda, "%02x:%02x:%02x:%02x:%02x:%02x", 0x2, 0x0, 0x7, rand() % 255, rand() % 255, rand() % 255);
-    ui->edLocalBDA->setText(m_settings.value("LocalBDA",strBda).toString());
 }
 
 // Enable or disable UI
@@ -246,6 +239,7 @@ void MainWindow::EnableUI(bool bEnable)
     ui->btnDiscoverable->setEnabled(bEnable);
     ui->btnConnectable->setEnabled(bEnable);
     ui->btnVersionInfo->setEnabled(bEnable);
+    ui->btnDownload->setEnabled(bEnable);
 
     m_bUIEnabled = bEnable;
 }
@@ -278,6 +272,11 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             ui->tabAVSRC->setEnabled(bEnable);
             ui->tabMain->setCurrentWidget(ui->tabAVSRC);
             Log("AV Source");
+            break;
+        case HCI_CONTROL_GROUP_AUDIO_DUAL_A2DP:
+            ui->tabDualA2DP->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabDualA2DP);
+            Log("Dual A2DP");
             break;
         case HCI_CONTROL_GROUP_HIDD:
             ui->tabHIDD->setEnabled(bEnable);
@@ -393,6 +392,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
         ui->tabHF->setEnabled(bEnable);
         ui->tabHF_continue->setEnabled(bEnable);
         ui->tabAVSRC->setEnabled(bEnable);
+        ui->tabDualA2DP->setEnabled(bEnable);
         ui->tabAVRCCT->setEnabled(bEnable);
         ui->tabAVRCTG->setEnabled(bEnable);
         ui->tabHIDD->setEnabled(bEnable);
@@ -1126,7 +1126,7 @@ void MainWindow::WriteNVRAMToDevice(bool bBLEDevice)
             continue;
 
         len = pDev->m_nvram.size();
-        if (len <= 1000)
+        if (len <= 998)
         {
             if (m_b_is_hidd && (pDev->m_nvram_id == 0x10))
             {
@@ -1285,8 +1285,8 @@ int MainWindow::PortWrite(unsigned char * data, DWORD Length)
     while (Length && m_bPortOpen)
     {
         dwWritten = 0;
-        char * data = reinterpret_cast<char *>(p);
-        dwWritten = static_cast<unsigned long>(m_CommPort->write(data,static_cast<qint64>(Length)));
+        char * data_in = reinterpret_cast<char *>(p);
+        dwWritten = static_cast<unsigned long>(m_CommPort->write(data_in,static_cast<qint64>(Length)));
 
         m_CommPort->flush();
 
@@ -1301,7 +1301,7 @@ int MainWindow::PortWrite(unsigned char * data, DWORD Length)
             if(!m_bPortOpen)
                 break;
 
-            Log("port write mismatch, to write %d, written %d, wait and try", Length, dwWritten);
+            Log("port write mismatch, to write %ld, written %ld, wait and try", Length, dwWritten);
 
             if (!m_CommPort->waitForBytesWritten(100))
             {
@@ -1676,28 +1676,24 @@ void MainWindow::HandleDeviceEventsMisc(DWORD opcode, LPBYTE tx_buf, DWORD len)
 void MainWindow::onFindPatchFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Patch Download File"), "", tr("HCD Files (*.hcd)"));
+        tr("Firmware Download File"), "", tr("OTA BIN Files (*.ota.bin *.ota.bin.signed)"));
     ui->edPatchFile->setText(fileName);
 }
 
-// Start download of .hcd file
+// Start download of firmware file
 void MainWindow::onDownload()
 {
-    Log("Note: FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719");
-    Log("and CYW20721 chips. Please use ModusToolbox 2.x or command line for download.");
-
-    if (ui->edPatchFile->text().length() == 0 || ui->edLocalBDA->text().length() == 0)
+    if (ui->edPatchFile->text().length() == 0)
     {
-        Log("Specify valid configuration file and Address");
+        Log("Specify valid firmware file please");
         return;
     }
 
-    m_settings.setValue("HCDFile",ui->edPatchFile->text());
-    ClearPort();
+    m_settings.setValue("FirmwareFile", ui->edPatchFile->text());
 
-    // download patch file in separate thread
-    QString str = ui->edPatchFile->text();
-    dl.download(this,str);
+    // download firmware
+    if (!FirmwareDownloadStart(ui->edPatchFile->text()))
+        return;
 
     dl_msgbox.setText("Downloading new firmware.");
     dl_msgbox.setWindowTitle("Firmware Download");
@@ -1741,7 +1737,7 @@ void MainWindow::onDlDone(const QString &s)
 void MainWindow::onMsgBoxButton(QAbstractButton*btn)
 {
     UNUSED(btn);
-    dl.stop();
+    FirmwareDownloadStop();
 }
 
 /************** Serial port management *************/
@@ -1925,8 +1921,6 @@ void MainWindow::closeEventDm (QCloseEvent *)
 
     QString comm_port = ui->cbCommport->currentText();
     m_settings.setValue("port",comm_port);
-
-    m_settings.setValue("LocalBDA",ui->edLocalBDA->text());
 }
 
 // Clear port and UI
@@ -2046,7 +2040,7 @@ void Worker::read_serial_port_thread()
 
             if (len > 1024)
             {
-                m_pParent->Log("Skip bad packet %d", len);
+                m_pParent->Log("Skip bad packet %ld", len);
                 continue;
             }
 
@@ -2055,7 +2049,7 @@ void Worker::read_serial_port_thread()
             // can cause audio glitches because of other UI activity.
             if(m_pParent->m_audio_started && (HCI_CONTROL_AUDIO_EVENT_REQUEST_DATA == channel_id))
             {
-                if (m_pParent->m_uAudio.m_pWavData != nullptr)
+                if (m_pParent->m_uAudio.m_pAudioData != nullptr)
                 {
                     m_pParent->HandleA2DPAudioRequestEvent(&au8Hdr[5], len);
                 }
@@ -2138,7 +2132,7 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
             offset += 2;
         }
         else
-            m_pParent->Log("error HCI_EVENT_PKT, needed 2 got %d", dwLen);
+            m_pParent->Log("error HCI_EVENT_PKT, needed 2 got %ld", dwLen);
     }
         break;
 
@@ -2149,10 +2143,10 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
         {
             len = static_cast<DWORD>(pu8Buffer[3] | (pu8Buffer[4] << 8));
             offset += 4;
-            m_pParent->Log("HCI_ACL_DATA_PKT, len %d", len);
+            m_pParent->Log("HCI_ACL_DATA_PKT, len %ld", len);
         }
         else
-            m_pParent->Log("error HCI_ACL_DATA_PKT needed 4 got %d", dwLen);
+            m_pParent->Log("error HCI_ACL_DATA_PKT needed 4 got %ld", dwLen);
     }
         break;
 
@@ -2165,7 +2159,7 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
             offset += 4;
         }
         else
-            m_pParent->Log("error HCI_WICED_PKT,  needed 4 got %d", dwLen);
+            m_pParent->Log("error HCI_WICED_PKT,  needed 4 got %ld", dwLen);
     }
         break;
     default:
@@ -2180,7 +2174,7 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
 
     if(len > 1024)
     {
-        m_pParent->Log("bad packet %d", len);
+        m_pParent->Log("bad packet %ld", len);
         return static_cast<DWORD>(-1); // bad packet
     }
 
@@ -2189,7 +2183,7 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
         DWORD lenRd = m_pParent->qtmin(len, static_cast<DWORD>(static_cast<DWORD>(bufLen)-offset));
         dwLen = Read(&pu8Buffer[offset], lenRd);
         if(dwLen != lenRd)
-            m_pParent->Log("read error to read %d, read %d", lenRd, dwLen);
+            m_pParent->Log("read error to read %ld, read %ld", lenRd, dwLen);
     }
 
     *pOffset = static_cast<int>(offset);
@@ -2202,7 +2196,7 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
 {
     BYTE * p = lpBytes;
     DWORD Length = dwLen;
-    DWORD dwRead = 0;
+    int64_t dwRead = 0;
     DWORD dwTotalRead = 0;
 
     if(!m_pParent->m_CommPort)
@@ -2220,16 +2214,16 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
         char buff_temp[1030];
         memset(buff_temp, 0, 1030);
 
-        dwRead = static_cast<DWORD>(m_pParent->m_CommPort->read(buff_temp,static_cast<qint64>(Length)));
-        if(static_cast<int>(dwRead) <= 0)
+        dwRead = m_pParent->m_CommPort->read(buff_temp,static_cast<qint64>(Length));
+        if(dwRead <= 0)
         {
             if(m_bClosing)
                 return 0;
 
-            if(static_cast<int>(dwRead) < 0)
+            if(dwRead < 0)
             {
                 m_pParent->Log("Error in port read");
-                return static_cast<DWORD>(-1);
+                return 0;
             }
 
             // retry 3 time with longer timeout for each subsequent
@@ -2300,7 +2294,7 @@ void Worker::process_vse(BYTE *pu8Buffer, DWORD packet_len)
 
     if (packet_len < 8)
     {
-        m_pParent->Log("Bad VSE len %d", packet_len);
+        m_pParent->Log("Bad VSE len %ld", packet_len);
         dump_hci_data_hexa("HCI Event:", pu8Buffer, packet_len);
         return;
     }

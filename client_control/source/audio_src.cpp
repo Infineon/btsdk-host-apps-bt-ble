@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -41,6 +41,7 @@ extern "C"
 {
 #include "app_host.h"
 }
+#include <QStandardItemModel>
 
 const char * audio_freq[] =
 {
@@ -50,7 +51,7 @@ const char * audio_freq[] =
     "48 kHz"
 };
 
-WaveFileWriter * pWaveFileWriter=NULL;
+AudioFileWriter * pAudioFileWriter=NULL;
 
 // Initialize app
 void MainWindow::InitAudioSrc()
@@ -58,9 +59,11 @@ void MainWindow::InitAudioSrc()
     m_audio_connected = false;
     m_audio_started = false;
     m_audio_i2s_input_enable = false;
+    m_audio_mp3_format_enable = false;
     m_bPortOpen = false;
     m_fpAudioFile = NULL;
     memset(&m_uAudio, 0, sizeof(m_uAudio));
+    m_audio_format = (m_settings.value("AudioSrcFormatMp3", true).toBool()) ? 1 : 0;
 
     // setup signals/slots
     connect(ui->btnStartAudio, SIGNAL(clicked()), this, SLOT(onStartAudio()));
@@ -71,25 +74,41 @@ void MainWindow::InitAudioSrc()
     connect(ui->rbAudioSrcFile, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcFile(bool)));
     connect(ui->rbAudioSrcSine, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcSine(bool)));
     connect(ui->rbAudioSrcI2S, SIGNAL(clicked(bool)), this, SLOT(onAudioSrcI2S(bool)));
+    connect(ui->rbAudioFileFormatWav, SIGNAL(clicked(bool)), this, SLOT(onAudioFileFormatWav(bool)));
+    connect(ui->rbAudioFileFormatMp3, SIGNAL(clicked(bool)), this, SLOT(onAudioFileFormatMp3(bool)));
     ui->edAudioFile->setText( m_settings.value("AudioFile","").toString());
     ui->rbAudioSrcFile->setChecked(m_settings.value("AudioSrcFile",true).toBool());
     ui->rbAudioSrcI2S->setChecked(m_settings.value("AudioSrcI2S",true).toBool());
     ui->rbAudioSrcSine->setChecked(!m_settings.value("AudioSrcFile",false).toBool() &&
                                    !m_settings.value("AudioSrcI2S",false).toBool());
+    ui->rbAudioFileFormatWav->setChecked(m_settings.value("AudioSrcFormatWav", true).toBool());
+    ui->rbAudioFileFormatMp3->setChecked(m_settings.value("AudioSrcFormatMp3", true).toBool());
     ui->cbSineFreq->clear();
+
     for (int i = 0; i < 4; i++)
     {
         ui->cbSineFreq->addItem(audio_freq[i]);
     }
+
+    QStandardItemModel *model =
+      qobject_cast<QStandardItemModel *>(ui->cbSineFreq->model());
+
+    // disable not supported freq
+    for (int i = 0; i < 2; i++)
+    {
+        QStandardItem *item = model->item(i);
+        item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+    }
+
     setAudioSrcUI();
 
     ui->rbAudioModeMono->setChecked(false);
     ui->rbAudioModeSterio->setChecked(true);
     ui->cbSineFreq->setCurrentIndex(3); // 48.1 KHz
 
-    // Create a thread to send .wav file data to embedded app
-    pWaveFileWriter=new WaveFileWriter (this);
-    pWaveFileWriter->start(QThread::TimeCriticalPriority);
+    // Create a thread to send audio file data to embedded app
+    pAudioFileWriter=new AudioFileWriter (this);
+    pAudioFileWriter->start(QThread::TimeCriticalPriority);
 
 }
 
@@ -165,6 +184,11 @@ void MainWindow::onDisconnectAudioSrc()
 // Handle WICED HCI events
 void MainWindow::onHandleWicedEventAudioSrc(unsigned int opcode, unsigned char *p_data, unsigned int len)
 {
+    if(ui->tabDualA2DP->isEnabled())
+    {
+        return;
+    }
+
     switch (HCI_CONTROL_GROUP(opcode))
     {
     case HCI_CONTROL_GROUP_DEVICE:
@@ -234,6 +258,23 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
             SetDevicePaired(device->m_address);
 
         setAudioSrcUI();
+
+        if (ui->rbAudioSrcFile->isChecked())
+        {
+            // send audio data format to device
+            uint8_t format;
+
+            if (ui->rbAudioFileFormatMp3->isChecked())
+            {
+                format = AUDIO_SRC_AUDIO_DATA_FORMAT_MP3;
+            }
+            else /* ui->rbAudioFileFormatWav->isChecked() */
+            {
+                format = AUDIO_SRC_AUDIO_DATA_FORMAT_PCM;
+            }
+
+            app_host_audio_src_audio_data_format(handle, format);
+        }
     }
         break;
 
@@ -261,7 +302,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
         Log("Audio started");
         m_audio_started = true;
         DisableAppTraces();
-        if (ui->rbAudioSrcFile->isChecked() && (m_uAudio.m_pWavData == NULL))
+        if (ui->rbAudioSrcFile->isChecked() && (m_uAudio.m_pAudioData == NULL))
             InitializeAudioFile();
         setAudioSrcUI();
         break;
@@ -276,7 +317,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
 
     // Embedded app requested audio data
     case HCI_CONTROL_AUDIO_EVENT_REQUEST_DATA:
-        if (m_uAudio.m_pWavData != NULL)
+        if (m_uAudio.m_pAudioData != NULL)
             HandleA2DPAudioRequestEvent(p_data, len);
         break;
 
@@ -289,7 +330,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
         break;
 
     case HCI_CONTROL_AUDIO_EVENT_CONNECTION_FAILED:
-        Log("Audio event connection attempt failed (0x%X)", opcode);
+        Log("Audio event connection attempt failed (0x%lX)", opcode);
         break;
 
     case HCI_CONTROL_AUDIO_EVENT_SUPPORT_FEATURES:
@@ -302,12 +343,18 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
             m_audio_i2s_input_enable = true;
         }
 
+        if (features & AUDIO_SRC_FEATURE_MP3_FORMAT)
+        {
+            Log("AV Source: Feature MP3 FORMAT enabled");
+            m_audio_mp3_format_enable = true;
+        }
+
         setAudioSrcUI();
     }
         break;
 
     default:
-        Log("Rcvd cmd: %d (0x%X)", opcode, opcode);
+        Log("Rcvd cmd: %ld (0x%lX)", opcode, opcode);
         /* Unhandled */
         break;
     }
@@ -349,15 +396,15 @@ void MainWindow::HandleA2DPAudioRequestEvent(BYTE * pu8Data, DWORD len)
     }
 
 
-    if (pWaveFileWriter == NULL)
+    if (pAudioFileWriter == NULL)
     {
         Log("thread not running\n");
         return;
     }
 
-    if (!m_uAudio.m_pWavData)
+    if (!m_uAudio.m_pAudioData)
     {
-        Log("Setup the wave file to send using wavefile <wavfile.wav>\n");
+        Log("Setup the audio file\n");
         return;
     }
 
@@ -429,11 +476,20 @@ void MainWindow::onStopAudio()
     app_host_audio_src_stop(pDev->m_address);
 }
 
-// Select audio .wav file
+// Select audio file
 void MainWindow::onFindAudioFile()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open Audio File"), "", tr("Audio Files (*.wav)"));
+    QString fileName;
+    if (ui->rbAudioFileFormatWav->isChecked())
+    {
+        fileName = QFileDialog::getOpenFileName(this, tr("Open Audio File"),
+            "", tr("Audio Files (*.wav)"));
+    }
+    else
+    {
+        fileName = QFileDialog::getOpenFileName(this, tr("Open Audio File"),
+            "", tr("Audio Files (*.mp3)"));
+    }
     ui->edAudioFile->setText(fileName);
     m_settings.setValue("AudioFile",fileName);
 }
@@ -457,14 +513,14 @@ CBtDevice* MainWindow::GetConnectedAudioSrcDevice()
     return pDev;
 }
 
-// Initialize audio stream from wav file
+// Initialize audio stream from audio file
 #define MAX_PATH          260
 bool MainWindow::InitializeAudioFile()
 {
     char audioFile[MAX_PATH] = { 0 };
-    strcpy(audioFile, ui->edAudioFile->text().toStdString().c_str());
+    strncpy(audioFile, ui->edAudioFile->text().toStdString().c_str(), MAX_PATH-1);
 
-    if (!ExecuteSetWavFile(audioFile)){
+    if (!ExecuteSetAudioFile(audioFile)){
         return false;
     }
 
@@ -475,6 +531,10 @@ void MainWindow::onAudioSrcSine(bool)
 {
     m_settings.setValue("AudioSrcFile",false);
     m_settings.setValue("AudioSrcI2S",false);
+    ui->rbAudioFileFormatWav->setEnabled(!m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->rbAudioFileFormatMp3->setEnabled(m_audio_mp3_format_enable && !m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->cbSineFreq->setEnabled(!m_audio_started);
+    ui->rbAudioModeMono->setEnabled(true);
 }
 
 void MainWindow::onAudioSrcFile(bool)
@@ -485,11 +545,45 @@ void MainWindow::onAudioSrcFile(bool)
     return;
 #endif
     m_settings.setValue("AudioSrcFile",true);
+    ui->rbAudioFileFormatWav->setEnabled(!m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->rbAudioFileFormatMp3->setEnabled(m_audio_mp3_format_enable && !m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->cbSineFreq->setEnabled(!ui->rbAudioFileFormatMp3->isChecked());
+    ui->rbAudioModeMono->setEnabled(!ui->rbAudioFileFormatMp3->isChecked());
 }
 
 void MainWindow::onAudioSrcI2S(bool)
 {
     m_settings.setValue("AudioSrcI2S",true);
+    ui->rbAudioFileFormatWav->setEnabled(!m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->rbAudioFileFormatMp3->setEnabled(m_audio_mp3_format_enable && !m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->cbSineFreq->setEnabled(!m_audio_started);
+    ui->rbAudioModeMono->setEnabled(true);
+}
+
+void MainWindow::onAudioFileFormatWav(bool)
+{
+    m_audio_format = 0;
+    m_settings.setValue("AudioSrcFormatWav", true);
+    m_settings.setValue("AudioSrcFormatMp3", false);
+    /* clear previous selected file */
+    ui->edAudioFile->clear();
+    m_settings.setValue("AudioFile", "");
+    /* set the selection of sample rate */
+    ui->cbSineFreq->setEnabled(!m_audio_started);
+    ui->rbAudioModeMono->setEnabled(true);
+}
+
+void MainWindow::onAudioFileFormatMp3(bool)
+{
+    m_audio_format = 1;
+    m_settings.setValue("AudioSrcFormatWav", false);
+    m_settings.setValue("AudioSrcFormatMp3", true);
+    /* clear previous selected file */
+    ui->edAudioFile->clear();
+    m_settings.setValue("AudioFile", "");
+    /* disable the selection of sample rate */
+    ui->cbSineFreq->setEnabled(false);
+    ui->rbAudioModeMono->setEnabled(false);
 }
 
 void MainWindow::setAudioSrcUI()
@@ -505,6 +599,13 @@ void MainWindow::setAudioSrcUI()
     ui->cbSineFreq->setEnabled(!m_audio_started);
     ui->btnFindAudioFile->setEnabled(!m_audio_connected);
     ui->edAudioFile->setEnabled(!m_audio_started && ui->rbAudioSrcFile->isChecked());
+    ui->rbAudioFileFormatWav->setEnabled(!m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    ui->rbAudioFileFormatMp3->setEnabled(m_audio_mp3_format_enable && !m_audio_connected && ui->rbAudioSrcFile->isChecked());
+    if (ui->rbAudioSrcFile->isChecked() && ui->rbAudioFileFormatMp3->isChecked())
+    {
+        ui->cbSineFreq->setEnabled(false);
+        ui->rbAudioModeMono->setEnabled(false);
+    }
 }
 
 void MainWindow::closeEventAudioSrc(QCloseEvent *event)
@@ -515,8 +616,8 @@ void MainWindow::closeEventAudioSrc(QCloseEvent *event)
     m_settings.setValue("AudioSrcI2S",ui->rbAudioSrcI2S->isChecked());
 }
 
-// Read audio .wav file
-BYTE* MainWindow::ReadFile(const char* FilePathName, DWORD *pdwWavDataLen)
+// Read audio file
+BYTE* MainWindow::ReadFile(const char* FilePathName, DWORD *pdwAudioDataLen)
     {
     BYTE* res = NULL;
     FILE *fp = NULL;
@@ -528,16 +629,19 @@ BYTE* MainWindow::ReadFile(const char* FilePathName, DWORD *pdwWavDataLen)
         fseek(fp, 0, SEEK_END);
         long size = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        res = (BYTE*)malloc(size);
-        if (res)
+        if(size > 0)
         {
-            if (fread(res, 1, size, fp) != (size_t)size)
-    {
-                free(res);
-                res = NULL;
+            res = (BYTE*)malloc(size);
+            if (res)
+            {
+                if (fread(res, 1, size, fp) != (size_t)size)
+                {
+                    free(res);
+                    res = NULL;
+                }
+                else
+                    *pdwAudioDataLen = size;
             }
-            else
-                *pdwWavDataLen = size;
         }
         fclose(fp);
     }
@@ -545,70 +649,78 @@ BYTE* MainWindow::ReadFile(const char* FilePathName, DWORD *pdwWavDataLen)
 }
 
 // Get audio data chunks
-BYTE* MainWindow::GetWavDataDataChunk(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen)
+BYTE* MainWindow::GetAudioDataDataChunk(BYTE *pAudioData, DWORD dwAudioDataLen, DWORD *pdwDataLen)
 {
     BYTE* pData = NULL;
     DWORD dwChunkLen;
 
-    do
+    if (ui->rbAudioFileFormatWav->isChecked())
     {
-        // skip "RIFF", check RIFF chunk lenght and skip type ID (WAVE)
-        if (dwWavDataLen < 12)
-            break;
-        if (0 != memcmp(pWavData, "RIFF", 4))
-            break;
-        dwChunkLen = LE_DWORD(pWavData + 4);
-        if (dwChunkLen + 8 > dwWavDataLen)
-            break;
-        if (0 != memcmp(pWavData + 8, "WAVE", 4))
-            break;
-        pWavData += 12;
-        dwWavDataLen -= 12;
-        // find data chunk and return it to caller
-        while (dwWavDataLen > 8)
+        do
         {
-            dwChunkLen = LE_DWORD(pWavData + 4);
-            if (dwChunkLen + 8 > dwWavDataLen)
+            // skip "RIFF", check RIFF chunk lenght and skip type ID (WAVE)
+            if (dwAudioDataLen < 12)
                 break;
-            if (0 == memcmp(pWavData, "data", 4))
+            if (0 != memcmp(pAudioData, "RIFF", 4))
+                break;
+            dwChunkLen = LE_DWORD(pAudioData + 4);
+            if (dwChunkLen + 8 > dwAudioDataLen)
+                break;
+            if (0 != memcmp(pAudioData + 8, "WAVE", 4))
+                break;
+            pAudioData += 12;
+            dwAudioDataLen -= 12;
+            // find data chunk and return it to caller
+            while (dwAudioDataLen > 8)
             {
-                pData = pWavData + 8;
-                *pdwDataLen = dwChunkLen;
-                break;
+                dwChunkLen = LE_DWORD(pAudioData + 4);
+                if (dwChunkLen + 8 > dwAudioDataLen)
+                    break;
+                if (0 == memcmp(pAudioData, "data", 4))
+                {
+                    pData = pAudioData + 8;
+                    *pdwDataLen = dwChunkLen;
+                    break;
+                }
+                pAudioData += 8 + dwChunkLen;
+                dwAudioDataLen -= 8 + dwChunkLen;
             }
-            pWavData += 8 + dwChunkLen;
-            dwWavDataLen -= 8 + dwChunkLen;
-        }
-    } while (false);
+        } while (false);
+    }
+    else /* ui->rbAudioFileFormatMp3->isChecked() */
+    {
+        pData =pAudioData;
+        *pdwDataLen = dwAudioDataLen;
+    }
     return pData;
 }
 
 
-BYTE * MainWindow::ExecuteSetWavFile(char *pcFileName)
+BYTE * MainWindow::ExecuteSetAudioFile(char *pcFileName)
 {
-    // Read file with WAV data
+    // Read file with audio data
 
-    if (m_uAudio.m_pWavData)
+    if (m_uAudio.m_pAudioData)
     {
-        free(m_uAudio.m_pWavData);
+        free(m_uAudio.m_pAudioData);
 
-        m_uAudio.m_pWavData = NULL;
+        m_uAudio.m_pAudioData = NULL;
         m_uAudio.m_pData = NULL;
-        m_uAudio.m_dwWavDataLen = 0;
+        m_uAudio.m_dwAudioDataLen = 0;
         m_uAudio.m_dwChunkLen = 0;
-        m_uAudio.m_dwWavSent = 0;
+        m_uAudio.m_dwAudioSent = 0;
     }
 
-    if (NULL == (m_uAudio.m_pWavData = ReadFile(pcFileName, &m_uAudio.m_dwWavDataLen)))
+    if (NULL == (m_uAudio.m_pAudioData = ReadFile(pcFileName, &m_uAudio.m_dwAudioDataLen)))
     {
         Log("Could not open audio file %s", pcFileName);
         return NULL;
     }
 
     //get Data chunk pointer and length
-    if (NULL == (m_uAudio.m_pData = GetWavDataDataChunk(m_uAudio.m_pWavData, m_uAudio.m_dwWavDataLen, &m_uAudio.m_dwChunkLen)))
+    if (NULL == (m_uAudio.m_pData = GetAudioDataDataChunk(m_uAudio.m_pAudioData, m_uAudio.m_dwAudioDataLen, &m_uAudio.m_dwChunkLen)))
     {
-        Log("Error: could not get the data section of the wav file %s ", pcFileName);
+        Log("Error: could not get the data section of the audio file %s ", pcFileName);
         return NULL;
     }
 
@@ -617,8 +729,8 @@ BYTE * MainWindow::ExecuteSetWavFile(char *pcFileName)
 }
 
 /******************************************************************/
-// thread for reading WAV file
-WaveFileWriter::WaveFileWriter(MainWindow * pParent) : QThread()
+// thread for reading Audio file
+AudioFileWriter::AudioFileWriter(MainWindow * pParent) : QThread()
 {
     m_pParent = pParent;
     moveToThread(this);
@@ -628,13 +740,29 @@ WaveFileWriter::WaveFileWriter(MainWindow * pParent) : QThread()
 uint8_t *gu8AudioBuffer = NULL;
 int gs32AudioBufferSize = 0;
 
-// Send wav packets to serial port
-void WaveFileWriter::SendNextWav(hci_audio_sample_t * puHci, int bytesPerPacket)
+// Send audio packets to serial port
+void AudioFileWriter::SendNextData(hci_audio_sample_t * puHci, int bytesPerPacket)
 {
-    int remaining = puHci->m_dwChunkLen - puHci->m_dwWavSent;
+    int remaining = puHci->m_dwChunkLen - puHci->m_dwAudioSent;
 
-    BYTE au8Hdr[5] =
-        { HCI_WICED_PKT, (BYTE)(HCI_CONTROL_AUDIO_DATA & 0xff), (BYTE)((HCI_CONTROL_AUDIO_DATA >> 8) & 0xff), (BYTE)(bytesPerPacket & 0xff), (BYTE)((bytesPerPacket >> 8) & 0xff) };
+    BYTE au8Hdr[5];
+    UINT16 hciCmd;
+
+
+    if (m_pParent->m_audio_format == 1)
+    {
+        hciCmd = HCI_CONTROL_AUDIO_DATA_MP3;
+    }
+    else /* m_pParent->ui->rbAudioFileFormatWav->isChecked() */
+    {
+        hciCmd = HCI_CONTROL_AUDIO_DATA;
+    }
+
+    au8Hdr[0] = HCI_WICED_PKT;
+    au8Hdr[1] = (BYTE)(hciCmd & 0xff);
+    au8Hdr[2] = (BYTE)((hciCmd >> 8) & 0xff);
+    au8Hdr[3] = (BYTE)(bytesPerPacket & 0xff);
+    au8Hdr[4] = (BYTE)((bytesPerPacket >> 8) & 0xff);
 
     int headerLen = 0;
     int written = 0;
@@ -652,22 +780,22 @@ void WaveFileWriter::SendNextWav(hci_audio_sample_t * puHci, int bytesPerPacket)
     written += sizeof(au8Hdr);
 
     if (remaining >= bytesPerPacket){
-        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwWavSent, bytesPerPacket);
+        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwAudioSent, bytesPerPacket);
         written += bytesPerPacket;
 
-        puHci->m_dwWavSent += bytesPerPacket;
+        puHci->m_dwAudioSent += bytesPerPacket;
     }
     else{
-        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwWavSent, remaining);
+        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwAudioSent, remaining);
         written += remaining;
 
-        // resetting the wav file to the origin.
-        puHci->m_dwWavSent = 0;
+        // resetting the audio file to the origin.
+        puHci->m_dwAudioSent = 0;
 
-        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwWavSent, bytesPerPacket - remaining);
+        memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwAudioSent, bytesPerPacket - remaining);
         written += bytesPerPacket - remaining;
 
-        puHci->m_dwWavSent += bytesPerPacket - remaining;
+        puHci->m_dwAudioSent += bytesPerPacket - remaining;
     }
 
     m_pParent->m_audio_packets.lock();
@@ -699,13 +827,13 @@ void WaveFileWriter::SendNextWav(hci_audio_sample_t * puHci, int bytesPerPacket)
 
     m_pParent->m_audio_packets.unlock();
 
-    if (puHci->m_dwWavSent >= puHci->m_dwChunkLen){
-        puHci->m_dwWavSent = 0;
+    if (puHci->m_dwAudioSent >= puHci->m_dwChunkLen){
+        puHci->m_dwAudioSent = 0;
     }
 }
 
 // Loop till the embedded app asks for audio data
-void WaveFileWriter::run()
+void AudioFileWriter::run()
 {
     int packetsToSend = 0;
     QMutex mutex;
@@ -727,7 +855,7 @@ void WaveFileWriter::run()
         {
           if (m_pParent->m_uAudio.m_BytesPerPacket)
           {
-              SendNextWav(&m_pParent->m_uAudio, m_pParent->m_uAudio.m_BytesPerPacket);
+              SendNextData(&m_pParent->m_uAudio, m_pParent->m_uAudio.m_BytesPerPacket);
           }
           m_pParent->m_uAudio.m_PacketsSent++;
         }

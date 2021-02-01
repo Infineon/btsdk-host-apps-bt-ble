@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -71,6 +71,28 @@ void app_host_log(const char * fmt, ...)
 MainWindow *g_pMainWindow = NULL ;
 bool m_bClosing = false;
 
+class EventFilter : public QObject
+{
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+};
+
+bool EventFilter::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == g_pMainWindow->ui->tabDualA2DP && event->type() == QEvent::EnabledChange)
+    {
+        if (g_pMainWindow->ui->tabDualA2DP->isEnabled())
+        {
+            g_pMainWindow->m_audio_format = (g_pMainWindow->m_settings.value("AudioSrcFormatMp3DualA2DP", true).toBool()) ? 1 : 0;
+        }
+        else
+        {
+            g_pMainWindow->m_audio_format = (g_pMainWindow->m_settings.value("AudioSrcFormatMp3", true).toBool()) ? 1 : 0;
+        }
+    }
+    return true;
+}
+
 // Initialize UI and variables
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -111,6 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Initialize each profile/feature tab
     InitDm();
     InitAudioSrc();
+    InitAudioSrc_DualA2DP();
     InitAVRCTG();
     InitAudioSnk();
     InitAVRCCT();
@@ -144,20 +167,15 @@ MainWindow::MainWindow(QWidget *parent) :
     Log("    This is usually enumerated 'WICED HCI UART' on Windows or Linux PCs.");
     Log("    The UI will be enabled when the Client Control app is able to communicate with the embedded BT app.");
     Log("4.  For more information on application tabs, select a tab and click on the help (?) icon.");
-    Log(" ");
-    Log("Notes:");
-    Log("1. To re-download the embedded application, first close the serial port.");
-    Log("2. Default baud rate for most WICED boards is 3M. For CYBT-213043-EVAL and CYBT-213043-MESH boards,");
-    Log("   use baud rate of 115200.");
-    Log("3. FW download is not supported through ClientControl for CYW20819, CYW20820, CYW20719,");
-    Log("   CYW20721, CYW20735 and CYW20835 chips. Please use ModusToolbox 2.x or command line for download.");
 
     ScrollToTop();
 
-    // Tab index 17 and higher are not used currently, remove then from UI
+    // Tab index 18 and higher are not used currently, remove then from UI
     for(int i = 0; i < 8; i++)
-        ui->tabMain->removeTab(17);
+        ui->tabMain->removeTab(18);
 
+    EventFilter *evtFilter = new EventFilter();
+    ui->tabDualA2DP->installEventFilter(evtFilter);
 }
 
 MainWindow::~MainWindow()
@@ -197,6 +215,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     // send event to modules, DM should be first
     onHandleWicedEventDm(opcode,p_data,len);
     onHandleWicedEventAudioSrc(opcode, p_data, len);
+    onHandleWicedEventAudioSrc_DualA2DP(opcode, p_data, len);
     onHandleWicedEventHF(opcode, p_data, len);
     onHandleWicedEventSPP(opcode, p_data, len);
     onHandleWicedEventAG(opcode, p_data, len);
@@ -219,6 +238,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventLECOC(opcode, p_data, len);
     onHandleWicedEventOTPClient(opcode, p_data, len);
     onHandleWicedEventMAPClient(opcode, p_data, len);
+    onHandleWicedEventHciDfu(opcode, p_data, len);
     // free event data, allocated in Dm module when event arrives
     if (p_data)
         free(p_data);
@@ -439,7 +459,7 @@ void MainWindow::DumpData(char *description, void* p, unsigned int length, unsig
             }
             if (j == 0)
             {
-                strcpy(full_buff, description);
+                strncpy(full_buff, description, 3000-1);
                 strcat(full_buff, buff);
                 //qDebug(full_buff);
             }
@@ -482,13 +502,6 @@ void DecodeEIR_Hostmode(LPBYTE p_data, DWORD len, char * szName, int name_len)
 
 void MainWindow::DecodeEIR(LPBYTE p_data, DWORD len, char * szName, int name_len)
 {
-#if 0
-    if (ui->cbCommport->itemData(ui->cbCommport->currentIndex()).toString().compare("0") == 0)
-    {
-        DecodeEIR_Hostmode(p_data, len, szName, name_len);
-        return;
-    }
-#endif
     char trace[1024] = {0};
     //static char bd_name[100]={0};
     BYTE tag;
@@ -527,10 +540,10 @@ void MainWindow::DecodeEIR(LPBYTE p_data, DWORD len, char * szName, int name_len
             unsigned long uuid32;
             for (i = 0; i < tag_len - 1; i += 2)
             {
-                uuid32 = *p_data++;
-                uuid32 |= (*p_data++ << 8);
-                uuid32 |= (*p_data++ << 16);
-                uuid32 |= (*p_data++ << 24);
+                uuid32 = *(char *)p_data++;
+                uuid32 |= (*(char *)p_data++ << 8);
+                uuid32 |= (*(char *)p_data++ << 16);
+                uuid32 |= (*(char *)p_data++ << 24);
                 sprintf(&trace[strlen(trace)], "%08X ", (uint32_t) uuid32);
             }
             break;

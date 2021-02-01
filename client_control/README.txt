@@ -14,12 +14,12 @@ application was developed using QT IDE (QT version 5.9.1).
 Supported OS
 ============
 Windows: Windows 7, Windows 8.1, Windows 10, x86, x64
-Linux: Ubuntu 16.04/18 and above, 64 bit
+Linux: Ubuntu 16.04/18 and above, 64-bit
 macOS: Sierra version 10.12.1 and above. See note for macOS below.
 
 Running the ClientControl application
 =====================================
-To run the ClientControl sample application, follow these steps -
+To run the ClientControl sample application, follow these steps:
 1. Plug in the WICED BT kit into the computer using a USB cable.
 2. On Linux PC, additional steps may be required to enable serial port access,
    see "Note for Linux" below.
@@ -33,21 +33,21 @@ To run the ClientControl sample application, follow these steps -
    macOS: Execute "ClientControl.dmg" in OSX folder. See "Note for macOS" below.
 6. In the ClientControl UI, select the serial port for the WICED BT kit and
    open the port. (See note below.)
-7. Once the "Client Control" app can communicate with the embedded
+7. Once the "ClientControl" app can communicate with the embedded
    Bluetooth application, the application UI will be enabled. Then use the
    UI to perform Bluetooth operations.
-8. Bluetooth application and protocol traces will be displayed in BTSpy
+8. Bluetooth application and protocol traces will be displayed in the BTSpy
    application.
 
 Note for selecting serial port
 ==============================
 1. The serial port on Windows OS corresponds to the WICED HCI UART COM port.
-   On Linux OS it corresponds to /dev/ttyWICED_HCI_UARTx. On Mac OS the
+   On Linux it corresponds to /dev/ttyWICED_HCI_UARTx. On macOS the
    WICED HCI UART port is usually the lower numbered of the two
    /dev/tty-usbserial* ports.
 2. If after opening the serial port the UI is not enabled, check if:
    - The correct serial port is selected
-   - Embedded application (running on WICED BT kit) supports WICED HCI transport
+   - The embedded application (running on WICED BT kit) supports WICED HCI transport
    - The baud rate selected in the UI matches the baud rate specified in the
      embedded application. See the baud rate specified in the
      wiced_transport_cfg_t structure of the embedded application.
@@ -83,17 +83,17 @@ Note for macOS
    > sudo rm -rf /Library/Extensions/FTDIUSBSerialDriver.kext /System/Library/Extensions/FTDIUSBSerialDriver.kext
    Reboot the system after performing the rm command.
 3. Opening multiple instances of the app on macOS is not as easy as it is in
-   Windows, you can’t simply double click on the app like in Windows. This is
-   a limitation of the macOS, not the ClientControl app.  It is possible
-   however to run multiple instances on macOS using one of these two methods:
+   Windows, you cannot simply double click on the app like in Windows. This is
+   a limitation of the macOS, not the ClientControl app.  However, it is possible
+   to run multiple instances on macOS using one of these two methods:
    Method 1:
-      1.  Open .dmg, drag the clientcontrol application to desktop or any folder.
+      1.  Open the .dmg, drag the ClientControl application to the Desktop or any folder.
       2.  Open a terminal window, go to the location of ClientControl.app.
-          Repeat below for each new instance of ClientControl application.
+          Repeat the command below for each new instance of ClientControl application.
       3.  $open -n ClientControl.app
    Method 2:
-      1.  Drag app from .dmg to desktop or other folder.
-      2.  Right-click on app and select ‘Duplicate’.
+      1.  Open the .dmg, drag the ClientControl application to the Desktop or any folder.
+      2.  Right-click on the app and select "Duplicate".
       3.  Open the duplicated app.
 4. If you see an error message when trying to execute ClientControl saying it
    is damaged and cannot be opened, perform the following step to workaround:
@@ -108,7 +108,7 @@ follow these steps:
    "Development Tools", "Development Libraries", libGLU-devel, before
    installing QT Creator
 2. Download installer for QT Creator from https://www.qt.io/download/
-3. On Windows OS, select the option for MinGW 32 bit compiler
+3. On Windows OS, select the option for MinGW 32-bit compiler
 4. Open the QT project file "ClientControl.pro" with QT Creator
 5. Build the QT project
 6. On Windows OS, ws2_32.lib path might need to be adjusted in the project
@@ -138,7 +138,7 @@ Device Manager
 - Pairable:
   This option enables or disables pairing from a peer device.
 - Connectable:
-  This option enables or disables connectablity from a peer device.
+  This option enables or disables connectability from a peer device.
 - Discoverable:
   This option enables or disables discoverability from a peer device.
 - Reset Device:
@@ -150,22 +150,18 @@ Device Manager
   Search for BR/EDR devices.
 - Unbond:
   Un-pair the selected device. Paired devices will show 'link' icon.
-- Patch file download:
-  *** NOTE *** 20719/20721/208xx/20735/20835 devices do not support this option.
-  Normally the embedded application is downloaded to the board through BTSDK.
-  If desired, the ClientControl application can be used to directly load an
-  embedded application built with DIRECT_LOAD option. This produces a patch (.hcd)
-  file in the build folder containing the embedded application. To download a
-  patch file to a board, click the 'Browse' button to select the hcd file.
-  The 'Local BD Address' will be programmed to the board during the patch file
-  download process. Before clicking on the 'Download' button, close the serial
-  port if open and select the desired port number in the drop-down box. Prepare
-  the WICED BT board using the reset/recovery procedure. Then click the
-  'Download' button.
+- Firmwre download:
+  ClientControl application can be used to upgrade the firmware on the board.
+  After an embedded application is built, there will be a .OTA.BIN file in the
+  build folder (the same file that is used in OTA upgrade). Click the 'Browse'
+  button to select the .OTA.BIN file, then click the 'Download' button to
+  start the download. The serial port needs to be opened before this operation.
+  Please note this firmware download does not clean up parameters saved on the
+  board. It only upgrades the firmware.
 
 AV Source (A2DP Source):
 +++++++++++++++++++++++
-Setup: app - 'watch'.
+Setup: app - watch
 Peer device - headset, speaker, car-kit
 - Connect
   Connect to the selected BR/EDR device to create an A2DP connection. The peer
@@ -177,7 +173,7 @@ Peer device - headset, speaker, car-kit
 
 AVRC TG (AVRCP Target):
 +++++++++++++++++++++++
-Setup: app - 'watch'
+Setup: app - watch
 Peer device - headset, speaker, car-kit
 - Connect
   Connect to the selected BR/EDR device to create an AVRCP connection. The peer
@@ -209,7 +205,7 @@ Peer device - headset, speaker, car-kit
 
 AVRC CT (AVRCP Controller):
 ++++++++++++++++++++++++++
-Setup: app - 'watch'
+Setup: app - watch
 Peer device - iPhone or Android phone
 Discover the phone from the "BR/EDR Discovery" control and pair the phone
 - Connect
@@ -287,9 +283,9 @@ non-iOS devices. For UI description, see "Serial Port Profile" above.
 OPP Server
 ++++++++++
 Setup: app - opp_server
-Peer device : PC, Android phone, etc supporting OPP Client profile.
+Peer device: PC, Android phone, etc. supporting OPP Client profile.
 
-From peer device, find the 'OPP server' device, pair and send file.
+From peer device, find the 'OPP server' device, pair, and send a file.
 
 - Disconnect
   Disconnects from OPP client
@@ -299,10 +295,10 @@ Phonebook Client
 ++++++++++++++++
 Setup: app - pbap_client
 Peer device - phone supporting PBAP server (any recent iPhone or Android phone)
-- From the phone, initiate device discovery and find the pbap_client application
+- From the phone, initiate device discovery, find the pbap_client application,
   and perform pairing.
-- From the Client Control UI, select the paired phone and click Connect
-- Use the UI to download phone book contacts, and incoming, outgoing or missed
+- From the ClientControl UI, select the paired phone and click Connect
+- Use the UI to download phone book contacts, and incoming, outgoing, or missed
   calls.
 Note: only the first 100 records will be displayed. The application can be
 updated to get more records if desired.
@@ -313,7 +309,7 @@ HID Device:
 Setup: app - dual_mode_keyboard for BR-EDR or BLE remote/mouse for BLE HOGP
 Peer device - Windows PC or any HID host
 - Enter Pairing Mode
-  Sets the local device to pair-able
+  Sets the local device to pairable
 - Connect
   Connect with a HID host
 - Send Key

@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -45,6 +45,9 @@
 #include "wiced_types.h"
 #include "hci_control_api.h"
 #include "wiced_hci_spp.pb.h"
+
+#include "kp3uart_workaround.h"
+using namespace Cypress::KitProg3Sepcifics;
 
 extern bool m_bClosing;
 
@@ -290,6 +293,15 @@ BOOL Win32SerialPort::OpenPort(const char *str_port_name, int baudRate, int flow
         }
         memset(&comStat, 0, sizeof(comStat));
         ClearCommError(m_handle, &dwError, &comStat);
+
+        //
+        // Workaround for https://jira.cypress.com/browse/BTSDK-4891 -
+        // KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
+        // Do addtional UART control flow handling, specific for the KP3 serial device on Windows.
+        // For FTDI based devices this call does nothing.
+        //
+        Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(str_port_name, m_handle);
+
     }
     Log ("Opened%s at speed: %u flow %s", str_port_name, baudRate, flow_control?"on":"off");
     m_bClosing = false;

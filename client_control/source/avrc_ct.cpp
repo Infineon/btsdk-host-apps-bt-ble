@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -372,8 +372,8 @@ void MainWindow::onCTSkipBackwardPressed()
     if(pDev)
     {
         memcpy(bda, pDev->m_address, BDA_LEN);
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_PRESS);
     }
-    app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_PRESS);
 }
 
 // Send skip backward release command
@@ -384,8 +384,8 @@ void MainWindow::onCTSkipBackwardReleased()
     if(pDev)
     {
         memcpy(bda, pDev->m_address, BDA_LEN);
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_RELEASE);
     }
-    app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_RELEASE);
 }
 
 // Handle WICED HCI events
@@ -609,7 +609,7 @@ void MainWindow::OnBnClickedAncsPositive()
     command[1] = (m_notification_uid >> 8) & 0xff;
     command[2] = (m_notification_uid >> 16) & 0xff;
     command[3] = (m_notification_uid >> 24) & 0xff;
-    Log("Sent command %d for notification uid %d", 0, m_notification_uid);
+    Log("Sent command %d for notification uid %ld", 0, m_notification_uid);
 
     SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 5);
 }
@@ -623,7 +623,7 @@ void MainWindow::OnBnClickedAncsNegative()
     command[2] = (m_notification_uid >> 16) & 0xff;
     command[3] = (m_notification_uid >> 24) & 0xff;
 
-    Log("Sent command %d for notification uid %d", 1, m_notification_uid);
+    Log("Sent command %d for notification uid %ld", 1, m_notification_uid);
 
     SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 5);
 }

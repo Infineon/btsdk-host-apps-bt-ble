@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -110,17 +110,17 @@ void MainWindow::on_btniAPSDisconnect_clicked()
     int    commandBytes = 0;
     UINT16 session_id = 0;
     CBtDevice * pDev = GetConnectediAP2Device();
-    if (pDev != NULL)
+    if (pDev == NULL)
     {
-        session_id = pDev->m_iap2_handle;
         return;
     }
 
-    cmd[commandBytes++] = session_id & 0xff;
-    cmd[commandBytes++] = (session_id >> 8) & 0xff;
-
+    session_id = pDev->m_iap2_handle;
     pDev->m_iap2_handle = NULL_HANDLE;
     pDev->m_conn_type &= ~CONNECTION_TYPE_IAP2;
+
+    cmd[commandBytes++] = session_id & 0xff;
+    cmd[commandBytes++] = (session_id >> 8) & 0xff;
 
     Log("Sending iap2 Disconnect Command, session_id:%d", session_id);
     SendWicedCommand(HCI_CONTROL_IAP2_COMMAND_DISCONNECT , cmd, commandBytes);
@@ -466,7 +466,10 @@ DWORD MainWindow::SendFileThreadiAP2()
     UINT16 session_id;
     CBtDevice * pDev = GetConnectediAP2Device();
     if (pDev == NULL)
+    {
+        fclose(fp);
         return 0;
+    }
 
     session_id = pDev->m_iap2_handle;
 
@@ -491,7 +494,7 @@ DWORD MainWindow::SendFileThreadiAP2()
 
 #ifdef DEBUG_SENDING_FILE
         m_cnt_packetsent++;
-        Log("read_bytes:%d bytes_sent:%d, packets_sent:%d, session_id:%d", read_bytes, m_iap2_bytes_sent, m_cnt_packetsent, session_id);
+        Log("read_bytes:%d bytes_sent:%ld, packets_sent:%ld, session_id:%d", read_bytes, m_iap2_bytes_sent, m_cnt_packetsent, session_id);
 #endif
         // wait for iap tx complete event
         iap2_tx_wait.wait(&mutex);
@@ -521,7 +524,7 @@ void MainWindow::on_cbiAP2ThreadComplete()
     ui->btniAPSend->setDisabled(false);
 
 #ifdef DEBUG_SENDING_FILE
-    Log("packet sent:%d, completed:%d, ACK:%d, NAK:%d\n", m_cnt_packetsent, m_cnt_completed, m_cnt_ack, m_cnt_Nack);
+    Log("packet sent:%ld, completed:%ld, ACK:%ld, NAK:%ld\n", m_cnt_packetsent, m_cnt_completed, m_cnt_ack, m_cnt_Nack);
 #endif
 }
 

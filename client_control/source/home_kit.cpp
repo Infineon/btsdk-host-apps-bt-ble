@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -170,8 +170,11 @@ void MainWindow::SendHciCommand(UINT16 command, USHORT handle, LPBYTE p, DWORD d
         break;
     case HCI_CONTROL_HK_COMMAND_WRITE:
         sprintf(trace, "Write characteristic [%02x] : ", handle);
-        for (int i = 0; i < (int)dwLen; i++)
-            sprintf(&trace[strlen(trace)], "%02x", p[i]);
+        if(p)
+        {
+            for (int i = 0; i < (int)dwLen; i++)
+                sprintf(&trace[strlen(trace)], "%02x", p[i]);
+        }
         Log(trace);
         break;
     }
@@ -325,7 +328,7 @@ void MainWindow::UpdateUI(USHORT handle, LPBYTE p, DWORD dwLen)
 {
     if(dwLen < 1)
     {
-        Log("UpdateUI bad length: %d", dwLen);
+        Log("UpdateUI bad length: %ld", dwLen);
         return;
     }
 
@@ -467,7 +470,7 @@ void MainWindow::HandleHkEvent(DWORD opcode, LPBYTE p_data, DWORD len)
     char strhandle[20];
     FILE *fp = NULL;
 
-    Log("CLightbulbControlDlg::HandleHkEvent  Rcvd Op Code: 0x%04x, len: %d", opcode, len);
+    Log("CLightbulbControlDlg::HandleHkEvent  Rcvd Op Code: 0x%04lx, len: %ld", opcode, len);
 
     switch (opcode)
     {
@@ -568,7 +571,7 @@ void MainWindow::HandleHkEvent(DWORD opcode, LPBYTE p_data, DWORD len)
         }
         break;
     default:
-        Log("HandleHkEvent  Rcvd Unsupported Op Code: 0x%04x", opcode);
+        Log("HandleHkEvent  Rcvd Unsupported Op Code: 0x%04lx", opcode);
         break;
     }
 }

@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -133,8 +133,6 @@ void MainWindow::on_btnHIDHSetReport_clicked()
 {
     CBtDevice *pDev;
     USHORT nHandle;
-//    BYTE cmd[60];
- //   uint8_t *p_cmd = cmd;
     int channel;
     int report_type;
     int report_id;
@@ -142,9 +140,7 @@ void MainWindow::on_btnHIDHSetReport_clicked()
     char string[1000];
     char *p;
     int value;
-    int rv;
 
-    UNUSED(rv); // silence warning
     if (m_CommPort == nullptr)
         return;
 
@@ -162,11 +158,11 @@ void MainWindow::on_btnHIDHSetReport_clicked()
 
     // Get The Report Id to Set
     str = ui->editHIDHGetSetReportID->text();
-    strcpy(string, str.toLocal8Bit().data());
+    strncpy(string, str.toLocal8Bit().data(), 1000-1);
     p = string;
     if (*p != 0)
     {
-        rv = sscanf(p, "%02x", &value);
+        sscanf(p, "%02x", &value);
         report_id = value;
     }
     else
@@ -176,7 +172,7 @@ void MainWindow::on_btnHIDHSetReport_clicked()
 
     // Get the Report Data
     str = ui->editHIDHSetGetReportData->text();
-    strcpy(string, str.toLocal8Bit().data());
+    strncpy(string, str.toLocal8Bit().data(), 1000-1);
     app_host_hidh_set_report(nHandle, static_cast<uint8_t>(channel), static_cast<uint8_t>(report_type),
         static_cast<uint8_t>(report_id), string, static_cast<uint32_t>(str.length()));
 }
@@ -206,7 +202,7 @@ void MainWindow::on_btnHIDHGetReport_clicked()
 
     // Get The Report Id to Set
     str = ui->editHIDHGetSetReportID->text();
-    strcpy(string, str.toLocal8Bit().data());
+    strncpy(string, str.toLocal8Bit().data(), 1000-1);
     p = string;
     if (*p != 0)
     {
@@ -468,11 +464,11 @@ void MainWindow::on_btnHIDHWakeAdd_clicked()
     int rv;
 
     QString str = ui->editHIDHReportID->text();
-    strcpy(string, str.toLocal8Bit().data());
+    strncpy(string, str.toLocal8Bit().data(), 1000-1);
     p = string;
     if (*p != 0)
     {
-        rv = sscanf(p, "%02x", &value);
+        sscanf(p, "%02x", &value);
         report_id = value;
     }
     else
@@ -481,7 +477,7 @@ void MainWindow::on_btnHIDHWakeAdd_clicked()
     }
 
     str = ui->editHIDHReportPatern->text();
-    strcpy(string, str.toLocal8Bit().data());
+    strncpy(string, str.toLocal8Bit().data(), 1000-1);
 
     p = string;
     while (*p != 0)

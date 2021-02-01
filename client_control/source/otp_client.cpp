@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -125,7 +125,7 @@ void MainWindow::on_btnOTPClientUpgrade_clicked()
     fseek(fp, 0, SEEK_END);
     m_otpc_total_to_send = ftell(fp);
     fclose(fp);
-    Log("Image Size : %d ", m_otpc_total_to_send);
+    Log("Image Size : %ld ", m_otpc_total_to_send);
     app_host_otp_client_start_upgrade(m_otpc_total_to_send);
 }
 
@@ -198,7 +198,7 @@ DWORD MainWindow:: SendOTAImageFileThreadOTPClient()
     fseek(fp, 0, SEEK_END);
     m_otpc_total_to_send = ftell(fp);
 
-    Log("Total bytes to send : %d ", m_otpc_total_to_send);
+    Log("Total bytes to send : %ld ", m_otpc_total_to_send);
 
     fseek(fp, 0, SEEK_SET);
     m_otpc_bytes_sent = 0;
@@ -207,7 +207,7 @@ DWORD MainWindow:: SendOTAImageFileThreadOTPClient()
     QMutex mutex;
     m_uart_tx_size = MTU_SIZE;
 
-    Log("UartTxSize set to %d", m_uart_tx_size);
+    Log("UartTxSize set to %ld", m_uart_tx_size);
 
     while ((read_bytes = fread(&buf[0], 1, m_uart_tx_size, fp)) != 0)
     {
@@ -215,7 +215,7 @@ DWORD MainWindow:: SendOTAImageFileThreadOTPClient()
         m_otpc_crc32 = update_crc(m_otpc_crc32, (uint8_t*)buf, (UINT16)read_bytes);
         app_host_otp_client_send_image_data((uint8_t*)buf, read_bytes);
         m_otpc_bytes_sent += read_bytes;
-        Log("Sent bytes %d , total : %d", read_bytes,m_otpc_bytes_sent);
+        Log("Sent bytes %d , total : %ld", read_bytes,m_otpc_bytes_sent);
 
         if(otpc_tx_wait.wait(&mutex, 5000) == false)
         {
@@ -228,7 +228,7 @@ DWORD MainWindow:: SendOTAImageFileThreadOTPClient()
     if ( m_otpc_bytes_sent == m_otpc_total_to_send )
     {
         app_host_otp_client_upgrade(m_otpc_crc32);
-        Log("Sent Upgrade CRC %x ",m_otpc_crc32);
+        Log("Sent Upgrade CRC %lx ",m_otpc_crc32);
         m_otpc_bytes_sent = 0;
         m_otpc_total_to_send = 0;
     }

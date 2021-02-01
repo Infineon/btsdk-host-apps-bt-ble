@@ -1,11 +1,11 @@
 
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -14,7 +14,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -41,7 +41,8 @@ bool app_host_audio_src_connect(wiced_hci_bt_audio_source_connect_data_t *p_data
 bool app_host_audio_src_disconnect(uint8_t bda[BDA_LEN]);
 bool app_host_audio_src_start(uint8_t bda[BDA_LEN], uint8_t sample_freq, uint8_t audio_mode);
 bool app_host_audio_src_stop(uint8_t bda[BDA_LEN]);
-bool app_host_audio_src_audio_data(uint8_t *data, uint16_t len);
+bool app_host_audio_src_audio_data(uint16_t handle, uint8_t *data, uint16_t len);
+bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format);
 
 // Audio Src event
 void app_host_audio_src_event(uint16_t opcode, uint8_t * p_data, uint32_t len);

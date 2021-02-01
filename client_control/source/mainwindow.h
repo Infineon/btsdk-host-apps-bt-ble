@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -116,11 +116,11 @@ typedef unsigned long DWORD_PTR;
 
 typedef struct
 {
-    BYTE     *m_pWavData;
+    BYTE     *m_pAudioData;
     BYTE     *m_pData;
-    DWORD     m_dwWavDataLen;
+    DWORD     m_dwAudioDataLen;
     DWORD     m_dwChunkLen;
-    DWORD     m_dwWavSent;
+    DWORD     m_dwAudioSent;
     DWORD     m_PacketsToSend; // incremented on receiving the message to send new buffers
     DWORD     m_PacketsSent;   // incremented in the write thread
     DWORD     m_BytesPerPacket;// received
@@ -232,6 +232,20 @@ public:
     void VirtualUnplug(CBtDevice *pDev);
     void Startup();
 
+    // HCI Firmware Update
+    void onHandleWicedEventHciDfu(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    bool FirmwareDownloadStart(QString filename);
+    void FirmwareDownloadStop();
+    void FirmwareDownloadSendCmd(UINT8 cmd, void * p_data, int len);
+    void FirmwareDownloadSendData();
+    void FirmwareDownloadCleanUp();
+    void FirmwareDownloadTimeout();
+    FILE * m_fpDownload;
+    UINT32 m_nFirmwareSize;
+    UINT32 m_nFirmwareSentSize;
+    UINT32 m_nDownloadSectorSize;
+    UINT32 m_nDownloadCRC;
+    QTimer *m_pDownloadTimer;
 
     void HandleA2DPEvents(DWORD opcode, DWORD len, BYTE *p_data);
     CBtDevice *AddDeviceToList(BYTE *addr, QComboBox * pCb, char * bd_name=nullptr,bool bPaired=false);
@@ -288,6 +302,8 @@ public:
     bool m_audio_connected;
     bool m_audio_started;
     bool m_audio_i2s_input_enable;
+    bool m_audio_mp3_format_enable;
+    uint8_t m_audio_format;     /* 0: Wav    1: MP3 */
     int m_audio_play_status_send_limit_count;
     int m_audio_play_status_send_limit_counter;
 #ifdef A2DP_STATS
@@ -303,16 +319,37 @@ public:
     void HandleDeviceEventsAudioSrc(DWORD opcode, LPBYTE p_data, DWORD len);
     void HandleA2DPEventsAudioSrc(DWORD opcode, LPBYTE p_data, DWORD len);
     void setAudioSrcUI();
-    BYTE * ExecuteSetWavFile();
+    BYTE * ExecuteSetAudioFile();
     void HandleA2DPAudioRequestEvent(BYTE * pu8Data, DWORD len);
     CBtDevice* GetConnectedAudioSrcDevice();
-    BYTE* GetWavDataDataChunk(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen);
-    BYTE * ExecuteSetWavFile(char *pcFileName);
+    BYTE* GetAudioDataDataChunk(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen);
+    BYTE * ExecuteSetAudioFile(char *pcFileName);
     BYTE* ReadFile(const char* FilePathName, DWORD *pdwWavDataLen);
     bool InitializeAudioFile();
     int GetSamplingFrequencyValue(int index);
     QMutex m_audio_packets;
     QWaitCondition audio_tx_wait;
+
+    // Audio source dual A2DP
+    bool m_audio_connected_dual_a2dp;
+    bool m_audio_started_dual_a2dp;
+    bool m_audio_i2s_input_enable_dual_a2dp;
+    bool m_audio_mp3_format_enable_dual_a2dp;
+    int m_audio_play_status_send_limit_count_dual_a2dp;
+    int m_audio_play_status_send_limit_counter_dual_a2dp;
+    int m_audio_connected_num_dual_a2dp;
+    void InitAudioSrc_DualA2DP();
+    void closeEventAudioSrc_DualA2DP(QCloseEvent *event);
+    void onHandleWicedEventAudioSrc_DualA2DP(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    void HandleDeviceEventsAudioSrc_DualA2DP(DWORD opcode, LPBYTE p_data, DWORD len);
+    void HandleA2DPEventsAudioSrc_DualA2DP(DWORD opcode, LPBYTE p_data, DWORD len);
+    void setAudioSrcUI_DualA2DP();
+    void HandleA2DPAudioRequestEvent_DualA2DP(BYTE * pu8Data, DWORD len);
+    bool InitializeAudioFile_DualA2DP();
+    BYTE* GetAudioDataDataChunk_DualA2DP(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen);
+    BYTE* ExecuteSetAudioFile_DualA2DP(char *pcFileName);
+    int GetSamplingFrequencyValue_DualA2DP(int index);
+    CBtDevice* GetConnectedAudioSrcDevice_DualA2DP();
 
     // Hands-free
     void InitHF();
@@ -664,7 +701,22 @@ public slots:
     void onAudioSrcSine(bool);
     void onAudioSrcFile(bool);
     void onAudioSrcI2S(bool);
+    void onAudioFileFormatWav(bool);
+    void onAudioFileFormatMp3(bool);
     void on_btnHelpAVSRC_clicked();
+
+    // AV source dual A2DP
+    void onDisconnectAudioSrc_DualA2DP();
+    void onConnectAudioSrc_DualA2DP();
+    void onFindAudioFile_DualA2DP();
+    void onStartAudio_DualA2DP();
+    void onStopAudio_DualA2DP();
+    void onAudioSrcSine_DualA2DP(bool);
+    void onAudioSrcFile_DualA2DP(bool);
+    void onAudioSrcI2S_DualA2DP(bool);
+    void onAudioFileFormatWav_DualA2DP(bool);
+    void onAudioFileFormatMp3_DualA2DP(bool);
+    void on_btnHelpAVSRC_clicked_DualA2DP();
 
     // Hands-free
     void on_btnConnectHF_clicked();
@@ -898,6 +950,7 @@ public slots:
     void on_btnLecocSend_clicked();
     void on_cbLECOCThreadComplete();
     void on_cbLecocReceiveFile_clicked();
+    void on_cbLecocSendFile_clicked();
     void on_pushButtonLecocStartAdv_clicked();
     void on_btnLecocBrowseSend_clicked();
     void on_btnLecocBrowseReceive_clicked();
@@ -978,7 +1031,7 @@ class Worker : public QObject
      Q_OBJECT
 
 public:
-    explicit Worker() {}
+    explicit Worker() {m_pParent=NULL;}
     ~Worker(){}
 
     // Read serial port
@@ -1007,17 +1060,17 @@ private:
 
  };
 
-class WaveFileWriter : public QThread
+class AudioFileWriter : public QThread
 {
     Q_OBJECT
 
 public:
-    explicit WaveFileWriter(MainWindow * pParent);
-    ~WaveFileWriter() {}
+    explicit AudioFileWriter(MainWindow * pParent);
+    ~AudioFileWriter() {}
     MainWindow * m_pParent;
-    void SendNextWav(hci_audio_sample_t * puHci, int bytesPerPacket);
-    BYTE* GetWavDataDataChunk(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen);
-    BYTE * ExecuteSetWavFile(char *pcFileName);
+    void SendNextData(hci_audio_sample_t * puHci, int bytesPerPacket);
+    BYTE* GetAudioDataDataChunk(BYTE *pWavData, DWORD dwWavDataLen, DWORD *pdwDataLen);
+    BYTE * ExecuteSetAudioFile(char *pcFileName);
 
 
 protected:

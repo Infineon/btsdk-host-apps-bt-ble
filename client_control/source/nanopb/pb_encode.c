@@ -360,7 +360,7 @@ static bool checkreturn encode_basic_field(pb_ostream_t *stream,
             break;
 
         case PB_HTYPE_REPEATED:
-            if (!encode_array(stream, field, pData, *(const pb_size_t*)pSize, func))
+            if (!pData || !encode_array(stream, field, pData, *(const pb_size_t*)pSize, func))
                 return false;
             break;
 

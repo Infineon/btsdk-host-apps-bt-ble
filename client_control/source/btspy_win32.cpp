@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -38,6 +38,7 @@
 
 #include <QObject>
 #include <WinSock2.h>
+#include <QDebug>
 
 static int wiced_trace_to_spy_trace[] = { 0, 4, 3, 6, 7 };
 
@@ -96,7 +97,10 @@ void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_inde
     socket_addr.sin_addr.s_addr = ntohl(0x7f000001);
     socket_addr.sin_port = 9876 + iSpyInstance;
 
-    length = sendto(log_sock, (const char *)buf, length + 8, 0, (SOCKADDR *)&socket_addr, sizeof(SOCKADDR_IN));
+    if(sendto(log_sock, (const char *)buf, length + 8, 0, (SOCKADDR *)&socket_addr, sizeof(SOCKADDR_IN)) < 0)
+    {
+        qDebug("sendto socket failed");
+    }
 }
 #else
 void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index, int iSpyInstance)

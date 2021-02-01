@@ -240,102 +240,6 @@
              </layout>
             </widget>
            </item>
-           <item row="1" column="1" rowspan="2">
-            <widget class="QGroupBox" name="groupBox_12">
-             <property name="title">
-              <string>FW Download</string>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_41">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_25">
-                <property name="text">
-                 <string>Patch File:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLineEdit" name="edPatchFile"/>
-              </item>
-              <item row="2" column="0">
-               <widget class="QFrame" name="frame">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <property name="leftMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="topMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="rightMargin">
-                  <number>0</number>
-                 </property>
-                 <property name="bottomMargin">
-                  <number>0</number>
-                 </property>
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_23">
-                   <property name="text">
-                    <string>Local BD Address :</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLineEdit" name="edLocalBDA">
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_48">
-                   <property name="text">
-                    <string>(XX:XX:XX:XX:XX:XX)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QCheckBox" name="btnFlowCntrl_2">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Flow Control</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QCheckBox" name="btnUpgrdeTo3m">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Upgrade to 3M baud rate</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
            <item row="1" column="2" rowspan="2">
             <widget class="QFrame" name="frameRightBtns">
              <property name="sizePolicy">
@@ -412,6 +316,25 @@
              </layout>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QGroupBox" name="groupBox_12">
+             <property name="title">
+              <string>Firmware Download</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_41">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_25">
+                <property name="text">
+                 <string>Firmware File:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLineEdit" name="edPatchFile"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -427,7 +350,7 @@
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>12</number>
+           <number>1</number>
           </property>
           <property name="usesScrollButtons">
            <bool>true</bool>
@@ -590,6 +513,26 @@
                   <widget class="QLineEdit" name="edAudioFile"/>
                  </item>
                  <item>
+                  <widget class="QRadioButton" name="rbAudioFileFormatWav">
+                   <property name="text">
+                    <string>WAV</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioFileFormatMp3">
+                   <property name="text">
+                    <string>MP3</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="btnFindAudioFile">
                    <property name="text">
                     <string>...</string>
@@ -627,6 +570,233 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
                  <item>
                   <widget class="QRadioButton" name="rbAudioSrcI2S">
+                   <property name="text">
+                    <string>I2S Input</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tabDualA2DP">
+           <attribute name="title">
+            <string>DualA2DP</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_42" rowstretch="0,0,0" columnstretch="2,3,0">
+            <item row="2" column="0">
+             <spacer name="verticalSpacer_1">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignTop">
+             <widget class="QGroupBox" name="groupBox_15">
+              <property name="title">
+               <string>Audio Control</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_44">
+               <property name="bottomMargin">
+                <number>9</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QPushButton" name="btnConnectAudio_DualA2DP">
+                 <property name="text">
+                  <string>Connect</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QPushButton" name="btnStartAudio_DualA2DP">
+                 <property name="text">
+                  <string>Start Streaming</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QPushButton" name="btnDisconnectAudio_DualA2DP">
+                 <property name="text">
+                  <string>Disconnect</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QPushButton" name="btnStopAudio_DualA2DP">
+                 <property name="text">
+                  <string>Stop Streaming</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QGroupBox" name="groupBox_16">
+              <property name="title">
+               <string>Mode</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <item>
+                <widget class="QRadioButton" name="rbAudioModeSterio_DualA2DP">
+                 <property name="text">
+                  <string>Stereo</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rbAudioModeMono_DualA2DP">
+                 <property name="text">
+                  <string>Mono</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_43">
+              <property name="leftMargin">
+               <number>9</number>
+              </property>
+              <property name="rightMargin">
+               <number>9</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_92">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>AV Source Profile</string>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignLeft">
+               <widget class="QPushButton" name="btnHelpDualA2DP">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>?</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_39">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="1">
+             <widget class="QGroupBox" name="groupBox_10">
+              <property name="title">
+               <string>Media</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <property name="bottomMargin">
+                <number>9</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_44">
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioSrcFile_DualA2DP">
+                   <property name="text">
+                    <string>File: </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="edAudioFile_DualA2DP"/>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioFileFormatWav_DualA2DP">
+                   <property name="text">
+                    <string>WAV</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup_2</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioFileFormatMp3_DualA2DP">
+                   <property name="text">
+                    <string>MP3</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">buttonGroup_2</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btnFindAudioFile_DualA2DP">
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_45">
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioSrcSine_DualA2DP">
+                   <property name="text">
+                    <string>Sine Wave sampling at:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="cbSineFreq_DualA2DP">
+                   <item>
+                    <property name="text">
+                     <string>44.1 kHz</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>48 kHz</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_46">
+                 <item>
+                  <widget class="QRadioButton" name="rbAudioSrcI2S_DualA2DP">
                    <property name="text">
                     <string>I2S Input</string>
                    </property>
@@ -5671,9 +5841,6 @@
   <tabstop>cbDeviceList</tabstop>
   <tabstop>btnUnbond</tabstop>
   <tabstop>edPatchFile</tabstop>
-  <tabstop>edLocalBDA</tabstop>
-  <tabstop>btnFlowCntrl_2</tabstop>
-  <tabstop>btnUpgrdeTo3m</tabstop>
   <tabstop>btnFindPatchFile</tabstop>
   <tabstop>btnDownload</tabstop>
   <tabstop>btnVersionInfo</tabstop>
@@ -5956,4 +6123,8 @@
  </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
+ </buttongroups>
 </ui>

@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -87,7 +87,7 @@ void MainWindow::HandleGattReadRequestEvent(LPBYTE p_data, DWORD len)
 
     if (len < 8)
     {
-        Log("%s: event length too short, len = %d", __func__, len);
+        Log("%s: event length too short, len = %ld", __func__, len);
         return;
     }
 
@@ -96,7 +96,7 @@ void MainWindow::HandleGattReadRequestEvent(LPBYTE p_data, DWORD len)
     STREAM_TO_UINT16(offset,  p_data);
     STREAM_TO_UINT16(len,     p_data);
 
-    Log("%s: conn_id = %d, handle = %d, offset = %d, len = %d", __func__, conn_id, handle, offset, len);
+    Log("%s: conn_id = %d, handle = %d, offset = %d, len = %ld", __func__, conn_id, handle, offset, len);
 
     // For real application, process Read
 }
@@ -117,7 +117,7 @@ void MainWindow::HandleGattWriteRequestEvent(LPBYTE p_data, DWORD len)
     STREAM_TO_UINT16(write_len, p_data);
 
     Log("%s: conn_id = %d, handle = %d, offset = %d, len = %d", __func__, conn_id, handle, offset, write_len);
-    Log("%s: data[0] = %d", p_data[0]);
+    Log("data[0] = %d", p_data[0]);
 
     // For real application, process the Write
 }

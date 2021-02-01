@@ -1,10 +1,10 @@
 /*
- * Copyright 2016-2020, Cypress Semiconductor Corporation or a subsidiary of
- * Cypress Semiconductor Corporation. All Rights Reserved.
+ * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
- * materials ("Software"), is owned by Cypress Semiconductor Corporation
- * or one of its subsidiaries ("Cypress") and is protected by and subject to
+ * materials ("Software") is owned by Cypress Semiconductor Corporation
+ * or one of its affiliates ("Cypress") and is protected by and subject to
  * worldwide patent protection (United States and foreign),
  * United States copyright laws and international treaty provisions.
  * Therefore, you may use this Software only as provided in the license
@@ -13,7 +13,7 @@
  * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
  * non-transferable license to copy, modify, and compile the Software
  * source code solely for use in connection with Cypress's
- * integrated circuit products. Any reproduction, modification, translation,
+ * integrated circuit products.  Any reproduction, modification, translation,
  * compilation, or representation of this Software except as specified
  * above is prohibited without the express written permission of Cypress.
  *
@@ -44,6 +44,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "wiced_types.h"
+#include <QDebug>
 
 #define INVALID_SOCKET  -1
 typedef unsigned char BYTE;
@@ -89,7 +90,10 @@ void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_inde
 
     if ((char)type == -1)
     {
-        sendto(log_sock, (const char *)buffer, length, 0, (sockaddr *)&socket_addr, sizeof(socket_addr));
+        if(sendto(log_sock, (const char *)buffer, length, 0, (sockaddr *)&socket_addr, sizeof(socket_addr)) < 0)
+        {
+            qDebug("sendto socket failed");
+        }
     }
     else
     {
@@ -98,6 +102,9 @@ void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_inde
         *p++ = 0;
         *p++ = serial_port_index;
         memcpy(p, buffer, length);
-        sendto(log_sock, (const char *)buf, length + 8, 0, (sockaddr *)&socket_addr, sizeof(socket_addr));
+        if(sendto(log_sock, (const char *)buf, length + 8, 0, (sockaddr *)&socket_addr, sizeof(socket_addr)) < 0)
+        {
+            qDebug("sendto socket failed");
+        }
     }
 }
