@@ -322,7 +322,7 @@ void MainWindow::HandleHFEvents(DWORD opcode, LPBYTE p_data, DWORD len)
     {
         handle = p_data[0] | (p_data[1] << 8);
         sprintf(trace, "[Handle: %u] Rcvd HCI_CONTROL_HF_EVENT_OPEN   BDA: %02x:%02x:%02x:%02x:%02x:%02x  Status: %u",
-            handle, p_data[2], p_data[3], p_data[4], p_data[5], p_data[6], p_data[7], p_data[8]);
+            handle, p_data[7], p_data[6], p_data[5], p_data[4], p_data[3], p_data[2], p_data[8]);
         Log(trace);
 
         if (p_data[8] == HCI_CONTROL_HF_STATUS_SUCCESS)

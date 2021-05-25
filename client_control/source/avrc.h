@@ -109,7 +109,7 @@ typedef struct {
 /*********************************************************************/
 /* Application defined sample data */
 /*********************************************************************/
-#define APP_AVRC_NUMSONGS                           3
+#define APP_AVRC_NUMSONGS                           4
 #define APP_AVRC_ATTR_SONG_LEN                      255000
 #define APP_AVRC_ATTR_SONG_POS                      120000
 

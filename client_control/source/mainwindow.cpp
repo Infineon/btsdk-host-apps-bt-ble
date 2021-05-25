@@ -157,6 +157,7 @@ MainWindow::MainWindow(QWidget *parent) :
     InitLED_Demo();
     InitOTPClient();
     InitMAPClient();
+    InitHciLoopbackTest();
 
     ListClear();
 
@@ -239,6 +240,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventOTPClient(opcode, p_data, len);
     onHandleWicedEventMAPClient(opcode, p_data, len);
     onHandleWicedEventHciDfu(opcode, p_data, len);
+    onHandleWicedEventHciLoopback(opcode, p_data, len);
     // free event data, allocated in Dm module when event arrives
     if (p_data)
         free(p_data);
@@ -661,6 +663,9 @@ void MainWindow::on_btnHelpTab_clicked()
 
     if(ui->tabAlertNotfn->isVisible())
         on_btnHelpANP_clicked();
+
+    if(ui->tabTest->isVisible())
+        on_btnHelpLoopBack_clicked();
 }
 
 

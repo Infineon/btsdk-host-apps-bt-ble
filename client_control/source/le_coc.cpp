@@ -81,7 +81,7 @@ void MainWindow::on_btnLecocDisconnect_clicked()
     CBtDevice * pDev =(CBtDevice *)GetSelectedLEDevice();
     /* There is no requirement of bdaddr for disconnection. All it needs cid.
     For now allow NULL bda to send for two reasons,
-    1)To allow slave to initiate disconnect,
+    1)To allow peripheral to initiate disconnect,
     2) because le coc app does not need bda on disconnection,
     but keeping prototypes with bda in case if we enhance to allow multiple connections */
     if (NULL == pDev)

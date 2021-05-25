@@ -90,6 +90,7 @@
 #define HCI_CONTROL_GROUP_HCI_AUDIO                           0x29
 #define HCI_CONTROL_GROUP_DFU                                 0x2a
 #define HCI_CONTROL_GROUP_AUDIO_DUAL_A2DP                     0x2b
+#define HCI_CONTROL_GROUP_HCITEST                             0x2c
 #define HCI_CONTROL_GROUP_MISC                                0xFF
 
 #define HCI_CONTROL_GROUP(x) ((((x) >> 8)) & 0xff)
@@ -292,6 +293,8 @@
 #define HCI_CONTROL_AG_COMMAND_DISCONNECT                   ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x02 )    /* Release HF connection */
 #define HCI_CONTROL_AG_COMMAND_OPEN_AUDIO                   ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x03 )    /* Create audio connection on existing service level connection */
 #define HCI_CONTROL_AG_COMMAND_CLOSE_AUDIO                  ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x04 )    /* Disconnect audio */
+#define HCI_CONTROL_AG_COMMAND_SET_CIND                     ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x05 )    /* Set CIND */
+#define HCI_CONTROL_AG_COMMAND_STR                          ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x06 )    /* Send AT Command */
 
 /* BT Serial over GATT service commands */
 #define HCI_CONTROL_BSG_COMMAND_DATA                        ( ( HCI_CONTROL_GROUP_BSG << 8 ) | 0x03 )    /* Send data */
@@ -635,6 +638,10 @@
 #define HCI_CONTROL_DFU_COMMAND_WRITE_COMMAND               ( ( HCI_CONTROL_GROUP_DFU << 8 ) | 0x01 ) /* DFU Data Transfer Packet */
 #define HCI_CONTROL_DFU_COMMAND_WRITE_DATA                  ( ( HCI_CONTROL_GROUP_DFU << 8 ) | 0x02 ) /* DFU Data Transfer Packet */
 
+/* HCI TEST */
+#define HCI_CONTROL_HCITEST_COMMAND                         ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x0 ) /* Test start request */
+#define HCI_CONTROL_HCITEST_CONFIGURE                       ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x1 ) /* Test configure request */
+
 /* General events that the controller can send */
 #define HCI_CONTROL_EVENT_COMMAND_STATUS                    ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x01 )    /* Command status event for the requested operation */
 #define HCI_CONTROL_EVENT_WICED_TRACE                       ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x02 )    /* WICED trace packet */
@@ -840,6 +847,9 @@
 #define HCI_CONTROL_AG_EVENT_CONNECTED                      ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x03 )
 #define HCI_CONTROL_AG_EVENT_AUDIO_OPEN                     ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x04 )
 #define HCI_CONTROL_AG_EVENT_AUDIO_CLOSE                    ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x05 )
+#define HCI_CONTROL_AG_EVENT_AT_CMD                         ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x06 )
+#define HCI_CONTROL_AG_EVENT_CLCC_REQ                       ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x07 )
+
 
 /* Events for the Broadcom Serial over GATT profile */
 #define HCI_CONTROL_BSG_EVENT_CONNECTED                     ( ( HCI_CONTROL_GROUP_BSG << 8 ) | 0x01 )    /* BSG Connected */
@@ -1131,6 +1141,10 @@
 #define HCI_CONTROL_DFU_EVENT_VERIFICATION                  ( ( HCI_CONTROL_GROUP_DFU << 8 ) | 0x04 ) /* verification Complete */
 #define HCI_CONTROL_DFU_EVENT_VERIFIED                      ( ( HCI_CONTROL_GROUP_DFU << 8 ) | 0x05 ) /* verified */
 #define HCI_CONTROL_DFU_EVENT_ABORTED                       ( ( HCI_CONTROL_GROUP_DFU << 8 ) | 0x06 ) /* aborted */
+
+/* HCI TEST events */
+#define HCI_CONTROL_HCITEST_EVENT_STATUS                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x01 ) /* test status */
+#define HCI_CONTROL_HCITEST_EVENT_PACKET                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x02 ) /* test packet (for loopback) */
 
 /* Status codes returned in HCI_CONTROL_EVENT_COMMAND_STATUS the event */
 #define HCI_CONTROL_STATUS_SUCCESS                          0

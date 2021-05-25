@@ -109,6 +109,32 @@ bool app_host_ag_audio_close(uint8_t bda[6])
     return false;
 }
 
+bool app_host_ag_send_clcc_response(uint8_t bda[6], uint8_t *call_id_list, uint8_t num_item)
+{
+    wiced_hci_bt_ag_clcc_res_t data;
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        app_host_log("Sending AG CLCL RESPONSE");
+        data.num_calls = num_item;
+        data.handle = p_dev->m_ag_handle;
+        memcpy(data.call_list_status, call_id_list, num_item *sizeof(uint8_t));
+        return wiced_hci_ag_send_clcc_response(&data);
+    }
+
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_update_cind(char *cind, uint8_t length)
+{
+    wiced_hci_bt_ag_cind_t data;
+
+    app_host_log("Sending AG CIND");
+    memcpy(data.cind_str, cind, length);
+    data.cind_str[length]='\0';
+    return wiced_hci_ag_send_cind(&data);
+}
 
 void app_host_ag_event(uint16_t opcode, uint8_t * p_data, uint32_t len)
 {
@@ -194,4 +220,98 @@ void app_host_ag_event(uint16_t opcode, uint8_t * p_data, uint32_t len)
 
     app_host_handle_event(opcode, p_data, len);
 
+}
+
+bool app_host_ag_send_ciev(uint8_t bda[6], char *ciev, uint8_t length)
+{
+    wiced_hci_bt_ag_ciev_t data;
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        app_host_log("Sending AG CIEV %s",ciev);
+        data.handle = p_dev->m_ag_handle;
+        memcpy(data.ciev_str, ciev, length);
+        data.ciev_str[length]='\0';
+        return wiced_hci_ag_send_ciev(&data);
+    }
+
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_ring_cmd(uint8_t bda[6])
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_ring_cmd(p_dev->m_ag_handle);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_clip_cmd(uint8_t bda[6])
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_clip_cmd(p_dev->m_ag_handle);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_ccwa_cmd(uint8_t bda[6])
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_ccwa_cmd(p_dev->m_ag_handle);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_ok_cmd(uint8_t bda[6])
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_ok_cmd(p_dev->m_ag_handle);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_error_cmd(uint8_t bda[6])
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_error_cmd(p_dev->m_ag_handle);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_spk_vol_cmd(uint8_t bda[6], int vol)
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_spk_vol_cmd(p_dev->m_ag_handle, vol);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
+}
+
+bool app_host_ag_send_mic_vol_cmd(uint8_t bda[6], int vol)
+{
+    wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
+    if(p_dev && (p_dev->m_ag_handle != WICED_NULL_HANDLE))
+    {
+        return wiced_hci_ag_send_mic_vol_cmd(p_dev->m_ag_handle, vol);
+    }
+    app_host_log("Device not connected as AG");
+    return false;
 }

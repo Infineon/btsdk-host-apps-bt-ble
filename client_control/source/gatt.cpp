@@ -385,7 +385,7 @@ void MainWindow::OnBnClickedCharacteristicWriteWithoutResponse()
     app_host_gatt_write_char_no_rspn(con_handle, hdlc, value, num_bytes);
 }
 
-// Set role as slave or master
+// Set role as peripheral or central
 void MainWindow::SetRole(CBtDevice *pDevice, uint8_t role)
 {
     pDevice->role = role;
@@ -402,7 +402,7 @@ void MainWindow::UpdateGattButtons(CBtDevice *pDevice)
     BOOL enable = 1;
     UNUSED(pDevice);
 
-    // Enable GATT Buttons for both Master and Slave connections
+    // Enable GATT Buttons for both Central and Peripheral connections
     ui->btnBLEDiscoverServices->setEnabled(enable);
     ui->btnBLEDiscoverChars->setEnabled(enable);
     ui->btnBLEDiscoverDescriptors->setEnabled(enable);
@@ -516,7 +516,7 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
             p_data[0], p_data[6], p_data[5], p_data[4], p_data[3], p_data[2], p_data[1], p_data[7] + (p_data[8] << 8), p_data[9]);
         Log(trace);
 
-        // Check if the device is connected in Peripheral (Slave) role.
+        // Check if the device is connected in Peripheral role.
         if (p_data[9])
         {
             // If the device is connected in a peripheral role adv. would be stopped automatically.

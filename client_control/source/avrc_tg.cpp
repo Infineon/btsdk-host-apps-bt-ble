@@ -273,12 +273,89 @@ tAPP_AVRC_ITEM_MEDIA song3 =
      },
 };
 
+/* Sample song, third song */
+tAPP_AVRC_ITEM_MEDIA song4 =
+{
+
+    //.attr_count =
+    APP_AVRC_MAX_NUM_MEDIA_ATTR_ID,
+
+    {
+        // .p_attr_list[0] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_TITLE,
+            {   /* The player name, name length and character set id.*/
+                181,
+                (uint8_t *)"Walking On Air On His Circus -Title of songs Title of songs Title of songs Title of songs Title of songs Title of songs Title of songs Title of songs Title of songs Title of songs"
+            },
+        },
+
+
+    //.p_attr_list[1] =
+
+        {
+           APP_AVRC_MEDIA_ATTR_ID_ARTIST,
+            {   /* The player name, name length and character set id.*/
+                158,
+                (uint8_t *)"Favourite Forever  Favourite Forever  Favourite Forever  Favourite Forever  Favourite Forever  Favourite Forever Favourite Forever  Favourite Forever- Artist"
+            },
+        },
+
+
+        //.p_attr_list[2] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_ALBUM,
+            {   /* The player name, name length and character set id.*/
+                161,
+                (uint8_t *)"Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION   Lights & CHAMPION    "
+            },
+        },
+
+        //.p_attr_list[3] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_GENRE,
+            {   /* The player name, name length and character set id.*/
+                11,
+                (uint8_t *)"Airy House"
+            },
+        },
+
+        //.p_attr_list[4] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_NUM_TRACKS,
+            {   /* The player name, name length and character set id.*/
+                1,
+                (uint8_t *)"3"
+            },
+        },
+
+        //.p_attr_list[5] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_TRACK_NUM,
+            {   /* The player name, name length and character set id.*/
+                1,
+                (uint8_t *)"3"
+            },
+        },
+
+        //.p_attr_list[6] =
+        {
+            APP_AVRC_MEDIA_ATTR_ID_PLAYING_TIME,
+            {   /* The player name, name length and character set id.*/
+                6,
+                (uint8_t *)"211000"
+            },
+        },
+     },
+};
+
 /* list of songs */
 tAPP_AVRC_ITEM_MEDIA * app_avrc_songs_list[] =
 {
     &song1,
     &song2,
-    &song3
+    &song3,
+    &song4
 };
 
 
@@ -859,7 +936,7 @@ void MainWindow::PlayerStatus()
     songlen = m_uAudio.m_dwChunkLen / ((sample_freq*2*2)/1000);
     songpos = m_uAudio.m_dwAudioSent / ((sample_freq*2*2)/1000);
 
-    if (m_current_song_pos > songpos)
+    if (m_current_song_pos > songpos || (m_current_song_pos  == 0))
     {
         send_track_change = true;
     }
@@ -911,6 +988,19 @@ CBtDevice* MainWindow::GetConnectedAVRCDevice()
     return pDev;
 }
 
+void MainWindow::on_btnTGDeselectTrack_clicked()
+{
+    BYTE     cmd[10];
+    uint16_t commandBytes = 0;
+
+    memset(&cmd[0], 0, sizeof(cmd));
+
+    /* Deselect the track */
+    cmd[commandBytes++] = APP_AVRC_MEDIA_ATTR_ID_TRACK_NUM;;
+    cmd[commandBytes++] = 0;
+
+    SendWicedCommand(HCI_CONTROL_AVRC_TARGET_COMMAND_TRACK_INFO, cmd, commandBytes);
+}
 
 void MainWindow::on_btnHelpAVRC_TG_clicked()
 {

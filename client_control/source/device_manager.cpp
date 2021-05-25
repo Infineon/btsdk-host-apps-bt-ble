@@ -384,6 +384,11 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             ui->tabMain->setCurrentWidget(ui->tabMAPClient);
             Log("MAP Client");
             break;
+        case HCI_CONTROL_GROUP_HCITEST:
+            ui->tabTest->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabTest);
+            Log("Test");
+            break;
         }
     }
     else
@@ -414,6 +419,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
         ui->tabLedDemo->setEnabled(bEnable);
         ui->tabDemo->setEnabled(bEnable);
         ui->tabMAPClient->setEnabled(bEnable);
+        ui->tabTest->setEnabled(bEnable);
     }
 }
 
@@ -2174,7 +2180,26 @@ DWORD Worker::ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset)
 
     if(len > 1024)
     {
-        m_pParent->Log("bad packet %ld", len);
+        m_pParent->Log("bad packet %ld, %02X %02X %02X %02X %02X", len,
+                            pu8Buffer[0], pu8Buffer[1], pu8Buffer[2], pu8Buffer[3], pu8Buffer[4]);
+#if 0
+        BYTE u8_buf[16];
+        while(1)
+        {
+            dwLen = Read(&u8_buf[0], 16);
+            if(dwLen != 16)
+            {
+                DWORD i;
+                for(i=0; i < dwLen; i++)
+                    m_pParent->Log(" %02X", u8_buf[i]);
+                break;
+            }
+            m_pParent->Log(" %02X %02X %02X %02X %02X %02X %02X %02X",
+                            u8_buf[0], u8_buf[1], u8_buf[2], u8_buf[3], u8_buf[4], u8_buf[5], u8_buf[6], u8_buf[7]);
+            m_pParent->Log(" %02X %02X %02X %02X %02X %02X %02X %02X",
+                            u8_buf[8], u8_buf[9], u8_buf[10], u8_buf[11], u8_buf[12], u8_buf[13], u8_buf[14], u8_buf[15]);
+        }
+#endif
         return static_cast<DWORD>(-1); // bad packet
     }
 
@@ -2214,6 +2239,12 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
         char buff_temp[1030];
         memset(buff_temp, 0, 1030);
 
+#if 0 // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+        m_pParent->m_CommPort->waitForReadyRead(10);
+        dwRead = m_pParent->m_CommPort->read(buff_temp, static_cast<qint64>(Length));
+        if (dwRead > 0)
+            memcpy(p, buff_temp, dwRead);
+#else
         dwRead = m_pParent->m_CommPort->read(buff_temp,static_cast<qint64>(Length));
         if(dwRead <= 0)
         {
@@ -2249,14 +2280,14 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
             memcpy(p, buff_temp, dwRead);
             retry_cnt = 0;
         }
+#endif
 
-        if (dwRead > Length)
+        if (dwRead > static_cast<int64_t>(Length))
             break;
         p += dwRead;
         Length -= dwRead;
         dwTotalRead += dwRead;
     }
-
     return dwTotalRead;
 }
 

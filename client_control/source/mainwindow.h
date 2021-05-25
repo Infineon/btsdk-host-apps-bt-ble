@@ -619,6 +619,15 @@ public:
     BYTE    m_otpc_tx_complete_result;
     QWaitCondition otpc_tx_wait;
 
+    // Test hci loopback
+    void onHandleWicedEventHciLoopback(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    void InitHciLoopbackTest();
+    void StartHciLoopbackTest();
+    void StopHciLoopbackTest();
+    void ConfigHciLoopbackTest();
+    void HciLoopbackSendCmd(UINT8 cmd, void * p_data, unsigned int len);
+    bool m_hci_test_is_active;
+
     //MAP Client
     void InitMAPClient();
     void onHandleWicedEventMAPClient(unsigned int opcode, unsigned char *p_data, unsigned int len);
@@ -757,6 +766,22 @@ public slots:
     void on_btnAGDisconnect_clicked();
     void on_btnAGAudioConnect_clicked();
     void on_btnHelpAG_clicked();
+    void on_comboBoxAGCallID_1_currentIndexChanged(int index);
+    void on_comboBoxAGCallID_2_currentIndexChanged(int index);
+    void on_comboBoxAGHeldCall_currentIndexChanged(int index);
+    void on_comboBoxAGCallSetup_currentIndexChanged(int index);
+    void on_comboBoxAGCallStatus_currentIndexChanged(int index);
+    void on_comboBoxAGBattLevel_currentIndexChanged(int index);
+    void on_comboBoxAGService_currentIndexChanged(int index);
+    void on_comboBoxAGSignal_currentIndexChanged(int index);
+    void on_comboBoxAGCallSpkVol_currentIndexChanged(int index);
+    void on_comboBoxAGCallMicVol_currentIndexChanged(int index);
+    void handle_ag_call_status_update();
+    void handle_ag_send_ciev_command(int id, int index);
+    void on_btnAGRing_clicked();
+    void on_btnAGCCWA_clicked();
+    void on_btnAGOK_clicked();
+    void on_btnAGError_clicked();
 
     // BLE/BR HID Device
     void on_btnBLEHIDSendReport_clicked();
@@ -821,6 +846,7 @@ public slots:
     void oncbTGRepeatCurrentIndexChanged(int index);
     void on_btnHelpAVRC_TG_clicked();
     void onTGMute();
+    void on_btnTGDeselectTrack_clicked();
 
     //GATT
     void OnBnClickedAncsPositive();
@@ -983,6 +1009,10 @@ public slots:
     UINT16 MceSendMessageData(UINT16 mce_handle);
     void MceResizeMessageWindows(bool larger);
     void MceSendGetMessageListing(UINT16 mce_handle, UINT16 start_offset, UINT16 max_count);
+
+    // Test
+    void on_btnTest_clicked();
+    void on_btnHelpLoopBack_clicked();
 
 public:
     Ui::MainWindow *ui;

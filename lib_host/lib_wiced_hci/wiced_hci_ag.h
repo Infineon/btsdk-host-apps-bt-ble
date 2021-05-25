@@ -48,9 +48,36 @@ typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_disconnect_data_t;
 typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_open_data_t;
 typedef wiced_hci_bt_handle_t wiced_hci_bt_ag_audio_close_data_t;
 
+typedef struct
+{
+    uint16_t handle;
+    uint8_t num_calls;
+    uint8_t call_list_status[5];
+} wiced_hci_bt_ag_clcc_res_t;
+
+typedef struct
+{
+    char cind_str[20];
+} wiced_hci_bt_ag_cind_t;
+
+typedef struct
+{
+    uint16_t handle;
+    char ciev_str[20];
+} wiced_hci_bt_ag_ciev_t;
+
 bool wiced_hci_ag_connect(wiced_hci_bt_ag_connect_data_t *p_data);
 bool wiced_hci_ag_disconnect(wiced_hci_bt_ag_disconnect_data_t *p_data);
 bool wiced_hci_ag_audio_open(wiced_hci_bt_ag_audio_open_data_t *p_data);
 bool wiced_hci_ag_audio_close(wiced_hci_bt_ag_audio_close_data_t *p_data);
-
+bool wiced_hci_ag_send_clcc_response(wiced_hci_bt_ag_clcc_res_t *p_data);
+bool wiced_hci_ag_send_cind(wiced_hci_bt_ag_cind_t *p_data);
+bool wiced_hci_ag_send_ciev(wiced_hci_bt_ag_ciev_t *p_data);
+bool wiced_hci_ag_send_ring_cmd(uint16_t handle);
+bool wiced_hci_ag_send_ccwa_cmd(uint16_t handle);
+bool wiced_hci_ag_send_clip_cmd(uint16_t handle);
+bool wiced_hci_ag_send_ok_cmd(uint16_t handle);
+bool wiced_hci_ag_send_error_cmd(uint16_t handle);
+bool wiced_hci_ag_send_spk_vol_cmd(uint16_t handle, int volume);
+bool wiced_hci_ag_send_mic_vol_cmd(uint16_t handle, int volume);
 #endif

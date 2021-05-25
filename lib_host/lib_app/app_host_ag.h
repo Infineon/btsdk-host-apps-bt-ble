@@ -41,7 +41,17 @@ bool app_host_ag_connect(uint8_t bda[BDA_LEN]);
 bool app_host_ag_disconnect(uint8_t bda[BDA_LEN]);
 bool app_host_ag_audio_open(uint8_t bda[BDA_LEN]);
 bool app_host_ag_audio_close(uint8_t bda[BDA_LEN]);
-
+bool app_host_ag_send_clcc_response(uint8_t bda[6], uint8_t *call_id_list, uint8_t num_item);
+bool app_host_ag_update_cind(char *cind, uint8_t length);
+bool app_host_ag_send_callsetup_status(uint8_t bda[6], uint8_t status);
+bool app_host_ag_send_ciev(uint8_t bda[6], char *ciev, uint8_t length);
+bool app_host_ag_send_ring_cmd(uint8_t bda[6]);
+bool app_host_ag_send_clip_cmd(uint8_t bda[6]);
+bool app_host_ag_send_ccwa_cmd(uint8_t bda[6]);
+bool app_host_ag_send_ok_cmd(uint8_t bda[6]);
+bool app_host_ag_send_error_cmd(uint8_t bda[6]);
+bool app_host_ag_send_spk_vol_cmd(uint8_t bda[6], int vol);
+bool app_host_ag_send_mic_vol_cmd(uint8_t bda[6], int vol);
 // Audio Gateway events
 void app_host_ag_event(uint16_t opcode, uint8_t * p_data, uint32_t len);
 

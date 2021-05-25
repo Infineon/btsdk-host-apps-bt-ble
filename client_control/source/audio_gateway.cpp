@@ -46,6 +46,42 @@ extern "C"
 void MainWindow::InitAG()
 {
     m_audio_connection_active = false;
+    ui->comboBoxAGCallID_1->setCurrentIndex(0);
+    ui->comboBoxAGCallID_2->setCurrentIndex(0);
+    ui->comboBoxAGBattLevel->setCurrentIndex(5);
+    ui->comboBoxAGCallSetup->setCurrentIndex(0);
+    ui->comboBoxAGCallStatus->setCurrentIndex(0);
+    ui->comboBoxAGHeldCall->setCurrentIndex(0);
+    ui->comboBoxAGService->setCurrentIndex(1);
+    ui->comboBoxAGSignal->setCurrentIndex(5);
+}
+
+void MainWindow::handle_ag_call_status_update()
+{
+    int count = 0;
+    char cmd[20];
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+    {
+        Log("Device not selected ");
+        return;
+    }
+
+    cmd[count++] = '0'+ui->comboBoxAGCallStatus->currentIndex(); // call 0,1
+    cmd[count++] =',';
+    cmd[count++] = '0'+ui->comboBoxAGCallSetup->currentIndex(); // call setup
+    cmd[count++] =',';
+    cmd[count++] = '0'+ui->comboBoxAGHeldCall->currentIndex(); // call held
+    cmd[count++] =',';
+    cmd[count++] = ui->comboBoxAGService->currentIndex() + '0'; // service
+    cmd[count++] = ',';
+    cmd[count++] = ui->comboBoxAGBattLevel->currentIndex() + '0'; // battchg
+    cmd[count++] = ',';
+    cmd[count++] = ui->comboBoxAGSignal->currentIndex() + '0'; // signal
+    cmd[count++] = ',';
+    cmd[count++] = '0'; // roam
+
+    app_host_ag_update_cind(cmd, count);
 }
 
 // Connect AG to peer device
@@ -60,6 +96,25 @@ void MainWindow::on_btnAGConnect_clicked()
 
     app_host_ag_connect(pDev->m_address);
 
+}
+
+void MainWindow::on_btnAGRing_clicked()
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_ring_cmd(pDev->m_address);
+    app_host_ag_send_clip_cmd(pDev->m_address);
+}
+
+void MainWindow::on_btnAGCCWA_clicked()
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_ccwa_cmd(pDev->m_address);
 }
 
 // Disconnect AG from peer device
@@ -122,7 +177,7 @@ void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
     {
         handle = p_data[0] | (p_data[1] << 8);
         sprintf(trace, "[Handle: %u] Rcvd HCI_CONTROL_AG_EVENT_OPEN   BDA: %02x:%02x:%02x:%02x:%02x:%02x  Status: %u",
-            handle, p_data[2], p_data[3], p_data[4], p_data[5], p_data[6], p_data[7], p_data[8]);
+            handle, p_data[7], p_data[6], p_data[5], p_data[4], p_data[3], p_data[2], p_data[8]);
         Log(trace);
 
         if (p_data[8] == HCI_CONTROL_HF_STATUS_SUCCESS)
@@ -140,6 +195,7 @@ void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
             SelectDevice(ui->cbDeviceList, bda);
 
         }
+        handle_ag_call_status_update();
     }
         break;
 
@@ -188,6 +244,27 @@ void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
         ui->btnAGAudioConnect->setText("Audio Connect");
         m_audio_connection_active = false;
         break;
+    case HCI_CONTROL_AG_EVENT_AT_CMD:
+        handle   = p_data[0] | (p_data[1] << 8);
+        sprintf(trace, "[Handle: %u] Rcvd Event 0x15 - HCI_CONTROL_AG_EVENT_AT_CMD %s", handle, (char *)&p_data[2]);
+        Log(trace);
+        break;
+    // CLCC Request from HF
+    case HCI_CONTROL_AG_EVENT_CLCC_REQ:
+        {
+            CBtDevice * pDev = GetConnectedAGDevice();
+            UINT8 call_list[2];
+            if (pDev == NULL)
+                return;
+
+            call_list[0] = ui->comboBoxAGCallID_1->currentIndex();
+            call_list[1] = ui->comboBoxAGCallID_2->currentIndex();
+            handle   = p_data[0] | (p_data[1] << 8);
+            sprintf(trace, "[Handle: %u] Rcvd Event - HCI_CONTROL_AG_EVENT_CLCC_REQ", handle);
+            Log(trace);
+            app_host_ag_send_clcc_response(pDev->m_address, call_list, 2);
+            break;
+        }
     }
 }
 
@@ -227,4 +304,101 @@ void MainWindow::on_btnHelpAG_clicked()
     Log("  Open a SCO audio channel with a peer device");
 
     ScrollToTop();
+}
+
+void MainWindow::on_comboBoxAGCallID_1_currentIndexChanged(int index)
+{
+    handle_ag_call_status_update();
+    UNUSED(index);
+}
+
+void MainWindow::on_comboBoxAGCallID_2_currentIndexChanged(int index)
+{
+    handle_ag_call_status_update();
+    UNUSED(index);
+}
+
+void MainWindow::handle_ag_send_ciev_command(int id, int index)
+{
+    char cmd[4]={'0',',','0'};
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+    cmd[0] = '0'+id;
+    cmd[2] = '0'+index;
+
+    app_host_ag_send_ciev(pDev->m_address,cmd, 3);
+}
+#define BTA_AG_CIND_INFO        "(\"call\",(0,1)),(\"callsetup\",(0-3)),(\"callheld\",(0-2)),(\"service\",(0,1),(\"battchg\",(0-5)),(\"signal\",(0-5)),(\"roam\",(0-1))"
+// Call 1
+// Callsetup 2
+// Callheld 3
+// Service 4
+// battchg 5
+// signal 6
+// roam 7
+void MainWindow::on_comboBoxAGHeldCall_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(3,index);
+}
+
+void MainWindow::on_comboBoxAGCallSetup_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(2,index);
+}
+
+void MainWindow::on_comboBoxAGCallStatus_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(1,index);
+}
+
+void MainWindow::on_comboBoxAGBattLevel_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(5,index);
+}
+
+void MainWindow::on_comboBoxAGService_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(4,index);
+}
+
+void MainWindow::on_comboBoxAGSignal_currentIndexChanged(int index)
+{
+    handle_ag_send_ciev_command(6,index);
+}
+
+void MainWindow::on_btnAGOK_clicked()
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_ok_cmd(pDev->m_address);
+}
+
+void MainWindow::on_btnAGError_clicked()
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_error_cmd(pDev->m_address);
+}
+
+void MainWindow::on_comboBoxAGCallSpkVol_currentIndexChanged(int index)
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_spk_vol_cmd(pDev->m_address, index);
+}
+
+void MainWindow::on_comboBoxAGCallMicVol_currentIndexChanged(int index)
+{
+    CBtDevice * pDev = GetConnectedAGDevice();
+    if (pDev == NULL)
+        return;
+
+    app_host_ag_send_mic_vol_cmd(pDev->m_address, index);
 }

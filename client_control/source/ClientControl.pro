@@ -23,6 +23,7 @@ macx {
 
 SOURCES += main.cpp\
     audio_src_dual_a2dp.cpp \
+    hci_loopback.cpp \
         mainwindow.cpp \
         audio_src.cpp \
         device_manager.cpp \
@@ -101,6 +102,7 @@ win32|win64 {
 
 HEADERS  += mainwindow.h \
             avrc.h \
+    hci_loopback.h \
             serial_port.h \
             app_include.h \
     usb_kb_usage.h \

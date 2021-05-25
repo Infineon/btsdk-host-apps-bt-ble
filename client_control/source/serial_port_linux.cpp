@@ -174,6 +174,13 @@ bool WicedSerialPort::waitForBytesWritten(int iMilisec)
     return p_qt_serial_port->waitForBytesWritten(iMilisec);
 }
 
+#if 0 //defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+bool WicedSerialPort::waitForReadyRead(int iMilisec)
+{
+    return p_qt_serial_port->waitForReadyRead(iMilisec);
+}
+#endif
+
 void WicedSerialPort::indicate_close()
 {
 }

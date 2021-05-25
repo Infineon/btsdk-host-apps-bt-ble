@@ -100,7 +100,14 @@ bool wiced_hci_hf_at_command (wiced_hci_bt_hf_at_command_data_t * data)
     }
     else
     {
-        rval = wiced_hci_send_command(HCI_CONTROL_HF_AT_COMMAND_BASE + data->nAtCmd, cmd, commandBytes);
+    if(data->nAtCmd == HCI_CONTROL_HF_COMMAND_BUTTON_PRESS || data->nAtCmd == HCI_CONTROL_HF_COMMAND_LONG_BUTTON_PRESS)
+	{
+		rval = wiced_hci_send_command(data->nAtCmd, cmd, commandBytes);
+	}
+	else
+	{
+		rval = wiced_hci_send_command(HCI_CONTROL_HF_AT_COMMAND_BASE + data->nAtCmd, cmd, commandBytes);
+	}
     }
 
     return rval;
