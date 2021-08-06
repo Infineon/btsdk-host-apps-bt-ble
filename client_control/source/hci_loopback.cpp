@@ -118,13 +118,3 @@ void MainWindow::onHandleWicedEventHciLoopback(unsigned int opcode, unsigned cha
     }
 }
 
-void MainWindow::on_btnHelpLoopBack_clicked()
-{
-    onClear();
-    Log("Loop Back test:");
-    Log("");
-    Log(" Application to test the UART of the WICED device.");
-    Log(" Download the mtb-example-btsdk-loop-back app from GitHub, open the WICED HCI port and start the test.");
-    ScrollToTop();
-
-}

@@ -70,9 +70,6 @@ public:
     virtual bool waitForBytesWritten(int iMilisec);
     virtual int errorNum();
     virtual void handleReadyRead();
-#if 0 //defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-    bool waitForReadyRead(int msecs = 30000);
-#endif
 };
 
 class WicedSerialPortHostmode : public WicedSerialPort

@@ -179,18 +179,3 @@ void MainWindow::ConnectWiFi(BYTE *ssid, BYTE *password)
     addDelay();
 }
 
-
-void MainWindow::on_btnHelpDemo_clicked()
-{
-    onClear();
-    Log("Demo help topic:");
-    Log("");
-    Log("Apps : ble_wifi_introducer");
-    Log("");
-    Log("The BLE WiFi Introducer app shows an example interfacing the BLE and WiFi components on a combo chip.");
-    Log("It demonstrates GATT database initialization, DCT configuration, processing read/write requests ");
-    Log("from a BLE client, and sending data to the client.");
-    Log("https://community.cypress.com/community/wiced-wifi/wiced-wifi-forums/blog/2016/07/18/ble-wifi-introducer");
-
-    ScrollToTop();
-}

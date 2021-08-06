@@ -340,20 +340,3 @@ void Worker::process_bsg()
     g_pMainWindow->SendFileThreadBSG();
     emit finished();
 }
-
-void MainWindow::on_btnHelpBSG_clicked()
-{
-    onClear();
-    Log("Serial over GATT help topic:");
-    Log("");
-    Log("Apps : hci_serial_gatt_serivce");
-    Log("Peer device : Windows 10, Android or iPhone running Serial GATT cient found under ");
-    Log("              'hci_serial_gatt_serivce/peerapps'");
-    Log("");
-    Log("This application uses a Cypress BLE GATT service to send and receive data");
-    Log("over GATT. This is similar to Serial Port Profile application.");
-    Log("For UI description, see 'SPP' tab");
-
-    ScrollToTop();
-
-}

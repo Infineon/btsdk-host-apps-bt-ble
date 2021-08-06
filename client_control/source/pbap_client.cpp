@@ -480,28 +480,3 @@ CBtDevice* MainWindow::GetConnectedPBCDevice()
     return pDev;
 }
 
-
-void MainWindow::on_btnHelpPBC_clicked()
-{
-    onClear();
-    Log("Phonebook Client help topic:");
-    Log("");
-    Log("Apps : hci_pbap_client");
-    Log("Peer device - phone supporting PBAP server (any recent iPhone or Android phone)");
-    Log("");
-    Log("- From the phone, initiate device discovery and find the pbap_client application");
-    Log("  and perform pairing.");
-    Log("- From the Client Control UI, select the paired phone and click Connect");
-    Log("- Use the UI to download phone book contacts, and incoming, outgoing or missed");
-    Log("  calls.");
-    Log("Note: only the first 100 records will be displayed. The application can be");
-    Log("updated to get more records if desired.");
-    Log("");
-    Log("Note for iPhone users - upon pairing, iPhone will show error in esablishing connection.");
-    Log("This can be ignored. After establishing connection from Client Control UI, go to Settings->Blueooth");
-    Log("UI on iPhone, select the paired device (pbap client) and enable UI to 'Sync Contacts' before");
-    Log("attempting to use the Client Control buttons for accessing contacts or calls.");
-
-    ScrollToTop();
-
-}

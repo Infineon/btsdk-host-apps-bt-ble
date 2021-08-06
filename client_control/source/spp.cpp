@@ -417,24 +417,3 @@ void Worker::process_spp()
     emit finished();
 }
 
-
-void MainWindow::on_btnHelpSPP_clicked()
-{
-    onClear();
-    Log("Serial Port Profile help topic:");
-    Log("");
-    Log("Apps : spp_multi_port");
-    Log("Peer device - PC, Phone, etc. supporting SPP profile");
-    Log("");
-    Log("- Connect");
-    Log("  Connect to SPP server");
-    Log("- Disconnect");
-    Log("  Disconnect from SPP server");
-    Log("- Send");
-    Log("  Send characters typed in the edit control, or a file, to the peer device");
-    Log("- Receive");
-    Log("  Receive data in the edit control (first 50 bytes) or receive and save data");
-    Log("  to a file");
-
-    ScrollToTop();
-}

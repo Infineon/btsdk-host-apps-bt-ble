@@ -725,20 +725,3 @@ QString MainWindow::GetServiceUUIDDesc(uint8_t *p_uuid128)
     return "Unknown";
 }
 
-
-
-void MainWindow::on_btnHelpGATT_clicked()
-{
-    onClear();
-    Log("GATT help topic:");
-    Log("");
-    Log("Apps : watch");
-    Log("Peer device - BLE device or iPhone Light Blue app, Android BLE app, etc.");
-    Log("");
-
-    Log("GATT controls are provided for advertisements, discovering services, connecting");
-    Log("to a GATT server, reading/writing values of handles, and discovering");
-    Log("characteristics and descriptors of handles.");
-
-    ScrollToTop();
-}

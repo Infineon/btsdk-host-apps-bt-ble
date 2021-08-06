@@ -863,24 +863,3 @@ void AudioFileWriter::run()
 
     }
 }
-
-void MainWindow::on_btnHelpAVSRC_clicked()
-{
-    onClear();
-    Log("Audio Source help topic:");
-    Log("");
-    Log("Apps : watch");
-    Log("");
-
-    Log("Peer device - headset, speaker, car-kit, etc. containing Audio Sink service.");
-    Log("- Connect:");
-    Log("  Connect to the selected BR/EDR device to create an A2DP connection. The peer");
-    Log("  selected device should be an audio sink capable device such as a headset,");
-    Log("  speaker, or car-kit. Select the 'Media' and 'Mode' to stream before creating");
-    Log("  the A2DP connection.");
-    Log("- Disconnect:");
-    Log("  Disconnect an existing A2DP connection from selected BR/EDR.");
-
-    ScrollToTop();
-
-}

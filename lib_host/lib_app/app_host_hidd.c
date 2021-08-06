@@ -47,11 +47,11 @@ bool app_host_hidd_connect()
     return wiced_hci_hidd_connect();
 }
 
-bool app_host_hidd_send_report(uint8_t channel, uint8_t report_id, uint8_t *report, uint8_t report_len)
+bool app_host_hidd_send_report(uint8_t channel, uint8_t report_type, uint8_t *report, uint8_t report_len)
 {
 	wiced_hci_bt_hidd_report_t data;
 	data.channel = channel;
-	data.report_id = report_id;
+	data.report_type = report_type;
 	data.report_len = report_len;
 	data.report = report;
 

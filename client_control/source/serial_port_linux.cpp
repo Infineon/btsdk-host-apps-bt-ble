@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include <termios.h>
 #include <ctype.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -54,10 +55,15 @@
 #include <string.h>
 #include <sys/types.h>
 #include <time.h>
+#if defined(Q_OS_OSX)
+#include <sys/fcntl.h>
+#include <sys/ioctl.h>
+#include <IOKit/serial/ioss.h>
+#endif
 #include "wiced_types.h"
 
 
-
+#if USE_QT_SERIAL_PORT
 static QSerialPort * p_qt_serial_port;
 extern DWORD qtmin(DWORD len, DWORD bufLen);
 
@@ -67,7 +73,7 @@ extern DWORD qtmin(DWORD len, DWORD bufLen);
 WicedSerialPort::WicedSerialPort(bool hostmode)
 {
     if (hostmode)
-{
+    {
         p_qt_serial_port = NULL;
         return;
     }
@@ -86,7 +92,6 @@ qint64 WicedSerialPort::read(char *data, qint64 maxlen)
     qint64 read = 0;
     if(p_qt_serial_port)
         read = p_qt_serial_port->read(data, maxlen);
-
     return read;
 }
 
@@ -106,6 +111,7 @@ void WicedSerialPort::handleReadyRead()
 {
     g_pMainWindow->serial_read_wait.wakeAll();
 }
+
 
 qint64 WicedSerialPort::write(char *data, qint64 len)
 {
@@ -174,13 +180,6 @@ bool WicedSerialPort::waitForBytesWritten(int iMilisec)
     return p_qt_serial_port->waitForBytesWritten(iMilisec);
 }
 
-#if 0 //defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-bool WicedSerialPort::waitForReadyRead(int iMilisec)
-{
-    return p_qt_serial_port->waitForReadyRead(iMilisec);
-}
-#endif
-
 void WicedSerialPort::indicate_close()
 {
 }
@@ -189,6 +188,201 @@ bool openSerialPort(QSerialPort & serial)
 {
     return serial.open(QIODevice::ReadWrite);
 }
+
+#else
+
+static int fd_serial_port = -1;
+
+// Serial port read/write class
+// On linux platform use the Qt serial port class
+// just a wrapper around QSerialPort class
+WicedSerialPort::WicedSerialPort(bool hostmode)
+{
+    if (hostmode)
+    {
+        fd_serial_port = -1;
+        return;
+    }
+}
+
+WicedSerialPort::~WicedSerialPort()
+{
+    if(fd_serial_port >= 0)
+        fd_serial_port = 0;
+}
+
+qint64 WicedSerialPort::read(char *data, qint64 maxlen)
+{
+    qint64 bytes_read = 0;
+    if(fd_serial_port >= 0)
+        bytes_read = ::read(fd_serial_port, data, (int)maxlen);
+    return bytes_read;
+}
+
+qint64 WicedSerialPort::readline(char *data, qint64 maxlen)
+{
+    qint64 bytes_read = 0;
+    if(fd_serial_port >= 0)
+        bytes_read = ::read(fd_serial_port, data, maxlen);
+    return bytes_read;
+}
+
+int WicedSerialPort::errorNum()
+{
+    if(fd_serial_port >= 0)
+        return errno;
+    return 0;
+}
+
+void WicedSerialPort::handleReadyRead()
+{
+   // unused
+}
+
+
+qint64 WicedSerialPort::write(char *data, qint64 len)
+{
+    qint64 written = 0;
+
+    if(fd_serial_port >= 0)
+    {
+        written = ::write(fd_serial_port, data, len);
+        if(written < 0)
+        {
+            close();
+        }
+    }
+    return written;
+}
+
+bool WicedSerialPort::open(const char *str_port_name, qint32 baudRate, bool bFlowControl)
+{
+    struct termios tty;
+    int baud = B115200;
+    bool bopen = false;
+    int custom_speed = 0;
+
+    if(fd_serial_port < 0)
+    {
+        if ((fd_serial_port = ::open(str_port_name, O_RDWR | O_NOCTTY | O_NONBLOCK)) < 0)
+        {
+          //  perror(tty);
+            return bopen;
+        }
+        tcflush(fd_serial_port, TCIOFLUSH);
+
+        if (tcgetattr(fd_serial_port, &tty) < 0) {
+         //   printf("Error from tcgetattr: %s\n", strerror(errno));
+            return bopen;
+        }
+        switch(baudRate)
+        {
+            case 115200:
+                baud = B115200;
+                break;
+#if !defined(Q_OS_OSX)
+            case 921600:
+                baud = B921600;
+                break;
+            case 3000000:
+                baud = B3000000;
+                break;
+#endif
+            default:
+#if defined(Q_OS_MACOS)
+                custom_speed = baudRate;
+#else
+                return bopen;
+#endif
+                break;
+        }
+        cfsetospeed(&tty, (speed_t)baud);
+        cfsetispeed(&tty, (speed_t)baud);
+
+        tty.c_cflag |= (CLOCAL | CREAD);    /* ignore modem controls */
+        tty.c_cflag &= ~CSIZE;
+        tty.c_cflag |= CS8;         /* 8-bit characters */
+        tty.c_cflag &= ~PARENB;     /* no parity bit */
+        tty.c_cflag &= ~CSTOPB;     /* only need 1 stop bit */
+
+        if(bFlowControl)
+        {
+            tty.c_cflag |= CRTSCTS;
+        }
+        else
+        {
+            tty.c_cflag &= ~CRTSCTS;    /* no hardware flowcontrol */
+        }
+
+        /* setup for non-canonical mode */
+        tty.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
+        tty.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+        tty.c_oflag &= ~OPOST;
+
+        /* fetch bytes as they become available */
+        tty.c_cc[VMIN] = 0;
+        tty.c_cc[VTIME] = 0;
+
+        if (tcsetattr(fd_serial_port, TCSANOW, &tty) != 0) {
+          //  printf("Error from tcsetattr: %s\n", strerror(errno));
+            return bopen;
+        }
+#if defined(Q_OS_MACOS)
+        if(custom_speed != 0)
+        {
+            // Set 3000000 baud
+            if ( ioctl( fd_serial_port, IOSSIOSPEED, &custom_speed ) == -1 )
+            {
+              //  printf("failed to set custom baud rate\n");
+                return bopen;
+            }
+        }
+#endif
+        bopen = true;
+
+    }
+
+    if (bopen)
+    {
+        g_pMainWindow->CreateReadPortThread();
+        g_pMainWindow->m_port_read_thread->start();
+    }
+    return bopen;
+}
+
+void WicedSerialPort::close()
+{
+    if(fd_serial_port >= 0)
+        ::close(fd_serial_port);
+    fd_serial_port = -1;
+}
+
+bool WicedSerialPort::isOpen() const
+{
+    return (fd_serial_port >= 0);
+}
+
+void WicedSerialPort::flush()
+{
+    if(fd_serial_port >= 0)
+        tcflush(fd_serial_port, TCOFLUSH);
+}
+
+bool WicedSerialPort::waitForBytesWritten(int iMilisec)
+{
+    return (tcdrain(fd_serial_port) == 0);
+}
+
+void WicedSerialPort::indicate_close()
+{
+    close();
+}
+
+bool openSerialPort(QSerialPort & serial)
+{
+    return false;
+}
+#endif
 
 ///////////////////////////////
 

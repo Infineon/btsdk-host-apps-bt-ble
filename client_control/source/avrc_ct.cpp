@@ -161,122 +161,84 @@ void MainWindow::onCTDisconnect()
 // Send play command
 void MainWindow::onCTPlay()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_PLAY_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PLAY_CMD);
 }
 
 // Send stop command
 void MainWindow::onCTStop()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_STOP_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_STOP_CMD);
 }
 
 // Send pause command
 void MainWindow::onCTPause()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_PAUSE_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PAUSE_CMD);
 }
 
 // Send UnitInfo command
 void MainWindow::onCTUnitInfo()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_unit_info(bda);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_unit_info(pDev->m_address);
 }
 
 // Send UnitInfo command
 void MainWindow::onCTSubUnitInfo()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_sub_unit_info(bda);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_sub_unit_info(pDev->m_address);
 }
 
 // Send next command
 void MainWindow::onCTNext()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_NEXT_CMD);
-
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_NEXT_CMD);
 }
 
 // Send previous command
 void MainWindow::onCTPrevious()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_PREVIOUS_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PREVIOUS_CMD);
 }
 
 // Send vol up command
 void MainWindow::onCTVolumeUp()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_VOL_UP_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_VOL_UP_CMD);
 }
 
 // Send vol down command
 void MainWindow::onCTVolumeDown()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_VOL_DOWN_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_VOL_DOWN_CMD);
 }
 
 // Send mute command
 void MainWindow::onCTMute()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_MUTE_CMD);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_MUTE_CMD);
+    else
+        return;
+
     m_volMute = !m_volMute;
 
     ui->btnCTMute->setIcon(style()->standardIcon(m_volMute ? QStyle::SP_MediaVolumeMuted : QStyle::SP_MediaVolume));
@@ -285,107 +247,77 @@ void MainWindow::onCTMute()
 // Change repeat option
 void MainWindow::onCTRepeatMode(int index)
 {
-    uint8_t bda[6] = {0};
+    CBtDevice * pDev = NULL;
+
     if(index == (repeat_ct.curr_value -1))
         return;
-
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
 
     QVariant val = ui->cbCTRepeat->itemData(index);
     repeat_ct.curr_value = val.toUInt();
 
-    app_host_avrc_ct_repeat(bda, repeat_ct.curr_value);
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_repeat(pDev->m_address, repeat_ct.curr_value);
 }
 
 // Change shuffle option
 void MainWindow::onCTShuffleMode(int index)
 {
-    uint8_t bda[6] = {0};
+    CBtDevice * pDev = NULL;
 
     if(index == (shuffle_ct.curr_value -1))
         return;
 
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-
     QVariant val = ui->cbCTShuffle->itemData(index);
     shuffle_ct.curr_value = val.toUInt();
 
-    app_host_avrc_ct_shuffle(bda, shuffle_ct.curr_value);
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_shuffle(pDev->m_address, shuffle_ct.curr_value);
 }
 
 // Change volume
 void MainWindow::cbCTVolumeChanged(int index)
 {
-    uint8_t bda[6] = {0};
+    CBtDevice * pDev = NULL;
 
     if(m_current_volume_pct == index)
         return;
 
     m_current_volume_pct = index;
 
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-
-    app_host_avrc_ct_volume_level(bda, m_current_volume_pct);
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_volume_level(pDev->m_address, m_current_volume_pct);
 }
 
 // Send skip forward press command
 void MainWindow::onCTSkipForwardPressed()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_FF_CMD_PRESS);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_FF_CMD_PRESS);
 }
 
 // Send skip forward release command
 void MainWindow::onCTSkipForwardReleased()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
-    }
-    app_host_avrc_ct_command(bda, WICED_AVRCP_CT_FF_CMD_RELEASE);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
+        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_FF_CMD_RELEASE);
 }
 
 // Send skip backward press command
 void MainWindow::onCTSkipBackwardPressed()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
         app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_PRESS);
-    }
 }
 
 // Send skip backward release command
 void MainWindow::onCTSkipBackwardReleased()
 {
-    uint8_t bda[6] = {0};
-    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
-    if(pDev)
-    {
-        memcpy(bda, pDev->m_address, BDA_LEN);
+    CBtDevice * pDev = NULL;
+    if((pDev=GetDevice()))
         app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_RELEASE);
-    }
 }
 
 // Handle WICED HCI events
@@ -642,33 +574,3 @@ void MainWindow::on_btnAVRCTLongBtnPress_clicked()
     wiced_hci_avrc_ct_long_button_press();
 }
 
-
-void MainWindow::on_btnHelpAVRC_CT_clicked()
-{
-    onClear();
-    Log("AVRC Controller help topic:");
-    Log("");
-    Log("Apps : watch");
-    Log("Peer device - iPhone or Android phone");
-    Log("");
-    Log("Discover the phone from the 'BR/EDR Discovery' control and pair the phone");
-    Log("- Connect");
-    Log("  Create an AVRC connection with a peer device. Note that some peer devices may");
-    Log("  not support AVRC CT connection without the A2DP Sink profile.");
-    Log("- Disconnect");
-    Log("  Disconnect an AVRCP connection with a peer device.");
-    Log("- Repeat, Shuffle");
-    Log("  These controls change the AVRCP player settings and are used when a peer");
-    Log("  device supports AVRCP Controller 1.3 or higher.");
-    Log("- Volume");
-    Log("  This control displays the absolute volume. (Used when a peer device supports");
-    Log("  AVRCP Controller 1.4 or higher).");
-    Log("- AMS and ANCS");
-    Log("  For AMS and ANCS, reset the board and download the 'watch' app. From the 'GATT'");
-    Log("  tab click 'Start Advertisements'. From an iPhone app such as 'Light Blue',");
-    Log("  discover the 'watch' app running on the board and pair. Play media on the");
-    Log("  iPhone and control it with the AVRC CT controls. Incoming calls and messages");
-    Log("  will be displayed on the ANCS controls.");
-
-    ScrollToTop();
-}

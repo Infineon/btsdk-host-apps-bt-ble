@@ -91,6 +91,8 @@
 #define HCI_CONTROL_GROUP_DFU                                 0x2a
 #define HCI_CONTROL_GROUP_AUDIO_DUAL_A2DP                     0x2b
 #define HCI_CONTROL_GROUP_HCITEST                             0x2c
+#define HCI_CONTROL_GROUP_MESH_MODELS                         0x2d
+#define HCI_CONTROL_GROUP_CONN_MESH                           0x2e
 #define HCI_CONTROL_GROUP_MISC                                0xFF
 
 #define HCI_CONTROL_GROUP(x) ((((x) >> 8)) & 0xff)
@@ -347,6 +349,127 @@
 #define HCI_CONTROL_LED_COMMAND_TURN_OFF                    ( ( HCI_CONTROL_GROUP_LED_DEMO << 8 ) | 0x02 )   /* LED Turn Off */
 #define HCI_CONTROL_LED_COMMAND_SET_BRIGHTNESS              ( ( HCI_CONTROL_GROUP_LED_DEMO << 8 ) | 0x03 )   /* LED set brightness level */
 
+/* Mesh models commands */
+#define HCI_CONTROL_MESH_COMMAND_ONOFF_GET                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x01 )  /* Generic On/Off Get command */
+#define HCI_CONTROL_MESH_COMMAND_ONOFF_SET                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x02 )  /* Generic On/Off Get command */
+
+#define HCI_CONTROL_MESH_COMMAND_LEVEL_GET                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x03 )  /* Generic Level Client Get command */
+#define HCI_CONTROL_MESH_COMMAND_LEVEL_SET                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x04 )  /* Generic Level Client Set command */
+#define HCI_CONTROL_MESH_COMMAND_LEVEL_DELTA_SET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x05 )  /* Generic Level Client Delta command */
+#define HCI_CONTROL_MESH_COMMAND_LEVEL_MOVE_SET                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x06 )  /* Generic Level Client Move command */
+
+#define HCI_CONTROL_MESH_COMMAND_DEF_TRANS_TIME_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x07 )  /* Generic Default Transition Time Set command */
+#define HCI_CONTROL_MESH_COMMAND_DEF_TRANS_TIME_SET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x08 )  /* Generic Default Transition Time Get command */
+
+#define HCI_CONTROL_MESH_COMMAND_ONPOWERUP_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x09 )  /* Power On/Off Set command */
+#define HCI_CONTROL_MESH_COMMAND_ONPOWERUP_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0a )  /* Power On/Off Get command */
+
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_GET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0b )  /* Generic Power Level Get command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_SET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0c )  /* Generic Power Level Set command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_LAST_GET                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0d )  /* Generic Power Level Last Get command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_DEFAULT_GET                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0e )  /* Generic Power Level Default Get command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_DEFAULT_SET                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0f )  /* Generic Power Level Default Set command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_RANGE_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x10 )  /* Generic Power Level Range Get command */
+#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_RANGE_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x11 )  /* Generic Power Level Range Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_LOCATION_GLOBAL_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x12 )  /* Set Global Location data */
+#define HCI_CONTROL_MESH_COMMAND_LOCATION_LOCAL_SET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x13 )  /* Set Local Location data */
+#define HCI_CONTROL_MESH_COMMAND_LOCATION_GLOBAL_GET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x14 )  /* Get Global Location data */
+#define HCI_CONTROL_MESH_COMMAND_LOCATION_LOCAL_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x15 )  /* Get_Local Location data */
+
+#define HCI_CONTROL_MESH_COMMAND_BATTERY_GET                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x16 )  /* Battery Get state */
+#define HCI_CONTROL_MESH_COMMAND_BATTERY_SET                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x17 )  /* Battery state changed */
+
+#define HCI_CONTROL_MESH_COMMAND_PROPERTIES_GET                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x18 )  /* Generic Set Value of the Property */
+#define HCI_CONTROL_MESH_COMMAND_PROPERTY_GET                               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x19 )  /* Generic Set Value of the Property */
+#define HCI_CONTROL_MESH_COMMAND_PROPERTY_SET                               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1a )  /* Generic Value of the Property Changed Status*/
+
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_GET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1b )  /* Light Lightness Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1c )  /* Light Lightness Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LINEAR_GET                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1d )  /* Light Lightness Linear Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LINEAR_SET                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1e )  /* Light Lightness Linear Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LAST_GET                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1f )  /* Light Lightness Last Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_DEFAULT_GET                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x20 )  /* Light Lightness Default Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_DEFAULT_SET                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x21 )  /* Light Lightness Default Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_RANGE_GET                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x22 )  /* Light Lightness Range Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_RANGE_SET                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x23 )  /* Light Lightness Range Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x24 )  /* Light CTL Client Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x25 )  /* Light CTL Client Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_GET                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x26 )  /* Light CTL Client Temperature Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_SET                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x27 )  /* Light CTL Client Temperature Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_RANGE_GET            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x28 )  /* Light CTL Client Temperature Range Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_RANGE_SET            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x29 )  /* Light CTL Client Temperature Range Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2a )  /* Light CTL Client Default Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2b )  /* Light CTL Client Default Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2c )  /* Light HSL Client Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2d )  /* Light HSL Client Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_TARGET_GET                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2e )  /* Light HSL Client Target Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_RANGE_GET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2f )  /* Light HSL Client Range Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x30 )  /* Light HSL Client Range Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x31 )  /* Light HSL Client Default Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x32 )  /* Light HSL Client Default Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_HUE_GET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x33 )  /* Light HSL Client Hue Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_HUE_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x34 )  /* Light HSL Client Hue Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SATURATION_GET                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x35 )  /* Light HSL Client Saturation Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SATURATION_SET                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x36 )  /* Light HSL Client Saturation Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x37 )  /* Light XYL Client Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x38 )  /* Light XYL Client Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_RANGE_GET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x39 )  /* Light XYL Client Range Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3a )  /* Light XYL Client Range Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_TARGET_GET                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3b )  /* Light XYL Client Target Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3c )  /* Light XYL Client Default Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3d )  /* Light XYL Client Default Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_MODE_GET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3e )  /* Light LC Client Mode Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_MODE_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3f )  /* Light LC Client Mode Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_MODE_GET                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x40 )  /* Light LC Client Occupancy Mode Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_MODE_SET                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x41 )  /* Light LC Client Occupancy Mode Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_ONOFF_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x42 )  /* Light LC Client OnOff Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_ONOFF_SET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x43 )  /* Light LC Client OnOff Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_PROPERTY_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x44 )  /* Light LC Client Property Get command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_PROPERTY_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x45 )  /* Light LC Client Property Set command */
+#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_SET                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x46 )  /* Light LC Server Occupancy Detected command */
+
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_DESCRIPTOR_GET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x47 )  /* Sensor Descriptor Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_CADENCE_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x48 )  /* Sensor Cadence Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_CADENCE_SET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x49 )  /* Sensor Cadence Set command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTINGS_GET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4a )  /* Sensor Settings Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTING_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4b )  /* Sensor Setting Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_GET                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4c )  /* Sensor Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_COLUMN_GET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4d )  /* Sensor Column Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SERIES_GET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4e )  /* Sensor Series Get command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTING_SET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4f )  /* Sensor Setting Set command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SET                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x50 )  /* Sensor Status command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_COLUMN_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x51 )  /* Sensor Column Status command */
+#define HCI_CONTROL_MESH_COMMAND_SENSOR_SERIES_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x52 )  /* Sensor Series Status command */
+
+#define HCI_CONTROL_MESH_COMMAND_SCENE_STORE                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x53 )  /* Scene Store command */
+#define HCI_CONTROL_MESH_COMMAND_SCENE_RECALL                               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x54 )  /* Scene Delete command */
+#define HCI_CONTROL_MESH_COMMAND_SCENE_GET                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x55 )  /* Scene Get command */
+#define HCI_CONTROL_MESH_COMMAND_SCENE_REGISTER_GET                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x56 )  /* Scene Register Get command */
+#define HCI_CONTROL_MESH_COMMAND_SCENE_DELETE                               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x57 )  /* Scene Delete command */
+
+#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x58 )  /* Scheduler Register Get command */
+#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_ACTION_GET                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x59 )  /* Scheduler Action Get command */
+#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_ACTION_SET                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5a )  /* Scheduler Action Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_TIME_GET                                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5b )  /* Time Get command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_SET                                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5c )  /* Time Set command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_ZONE_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5d )  /* Time Zone Get command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_ZONE_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5e )  /* Time Zone Set command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_TAI_UTC_DELTA_GET                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x5f )  /* Time TAI_UTC Delta Get command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_TAI_UTC_DELTA_SET                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x60 )  /* Time TAI_UTC Delta Set command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_ROLE_GET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x61 )  /* Time Role Get command */
+#define HCI_CONTROL_MESH_COMMAND_TIME_ROLE_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x62 )  /* Time Role Set command */
+
+#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_START               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x63 )  /* Prepare Distribution Client for FW Upload */
+#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_DATA                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x64 )  /* FW Upload next data chunk */
+#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_FINISH              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x65 )  /* FW Upload completed */
+#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_GET_STATUS          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x66 )  /* Get current status and phase */
+
 /* Mesh commands */
 #define HCI_CONTROL_MESH_COMMAND_CORE_NETWORK_LAYER_TRNSMIT                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x01 )  /* Network Layer Transmit Mesage command */
 #define HCI_CONTROL_MESH_COMMAND_CORE_TRANSPORT_LAYER_TRNSMIT               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x02 )  /* Transport Layer Transmit Mesage command */
@@ -368,209 +491,147 @@
 #define HCI_CONTROL_MESH_COMMAND_PROXY_FILTER_ADDRESSES_ADD                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x11 )  /* Add Addresses to Filter */
 #define HCI_CONTROL_MESH_COMMAND_PROXY_FILTER_ADDRESSES_DELETE              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x12 )  /* Remove Addresses to Filter  */
 
-#define HCI_CONTROL_MESH_COMMAND_ONOFF_GET                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x13 )  /* Generic On/Off Get command */
-#define HCI_CONTROL_MESH_COMMAND_ONOFF_SET                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x14 )  /* Generic On/Off Get command */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_RESET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x13 )  /* Node Reset */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_BEACON_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x14 )  /* Beacon State Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_BEACON_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x15 )  /* Beacon State Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_COMPOSITION_DATA_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x16 )  /* Composition Data Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_DEFAULT_TTL_GET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x17 )  /* Default TTL Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_DEFAULT_TTL_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x18 )  /* Default TTL Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_GATT_PROXY_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x19 )  /* GATT Proxy State Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_GATT_PROXY_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1a )  /* GATT Proxy State Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_RELAY_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1b )  /* Relay Configuration Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_RELAY_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1c )  /* Relay Configuration Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_FRIEND_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1d )  /* Relay Configuration Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_FRIEND_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1e )  /* Relay Configuration Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_SUBSCRIPTION_GET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1f )  /* Hearbeat Subscription Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_SUBSCRIPTION_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x20 )  /* Hearbeat Subscription Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_PUBLICATION_GET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x21 )  /* Hearbeat Publication Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_PUBLICATION_SET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x22 )  /* Hearbeat Publication Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NETWORK_TRANSMIT_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x23 )  /* Network Transmit Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NETWORK_TRANSMIT_SET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x24 )  /* Network Transmit Set */
 
-#define HCI_CONTROL_MESH_COMMAND_LEVEL_GET                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x15 )  /* Generic Level Client Get command */
-#define HCI_CONTROL_MESH_COMMAND_LEVEL_SET                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x16 )  /* Generic Level Client Set command */
-#define HCI_CONTROL_MESH_COMMAND_LEVEL_DELTA_SET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x17 )  /* Generic Level Client Delta command */
-#define HCI_CONTROL_MESH_COMMAND_LEVEL_MOVE_SET                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x18 )  /* Generic Level Client Move command */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_PUBLICATION_GET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x25 )  /* Model Publication Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_PUBLICATION_SET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x26 )  /* Model Publication Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_ADD              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x27 )  /* Model Subscription Add */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_DELETE           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x28 )  /* Model Subscription Delete */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_OVERWRITE        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x29 )  /* Model Subscription Overwrite */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_DELETE_ALL       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2a )  /* Model Subscription Delete All */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_GET              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2b )  /* Model Subscription Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_ADD                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2c )  /* NetKey Add */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_DELETE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2d )  /* NetKey Delete */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_UPDATE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2e )  /* NetKey Update */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2f )  /* NetKey Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_ADD                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x30 )  /* AppKey Add */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_DELETE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x31 )  /* AppKey Delete */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_UPDATE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x32 )  /* AppKey Update */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x33 )  /* AppKey Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_BIND                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x34 )  /* Model App Bind */
 
-#define HCI_CONTROL_MESH_COMMAND_DEF_TRANS_TIME_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x19 )  /* Generic Default Transition Time Set command */
-#define HCI_CONTROL_MESH_COMMAND_DEF_TRANS_TIME_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1a )  /* Generic Default Transition Time Get command */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_UNBIND                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x35 )  /* Model App Unind */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x36 )  /* Model App Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_IDENTITY_GET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x37 )  /* Node Identity Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_IDENTITY_SET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x38 )  /* Node Identity Get */
 
-#define HCI_CONTROL_MESH_COMMAND_ONPOWERUP_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1b )  /* Power On/Off Set command */
-#define HCI_CONTROL_MESH_COMMAND_ONPOWERUP_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1c )  /* Power On/Off Get command */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_LPN_POLL_TIMEOUT_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x39 )  /* LPN Poll Timeout Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_KEY_REFRESH_PHASE_GET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3a )  /* Key Refresh Phase Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_KEY_REFRESH_PHASE_SET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3b )  /* Key Refresh Phase Set */
 
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_GET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1d )  /* Generic Power Level Get command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_SET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1e )  /* Generic Power Level Set command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_LAST_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1f )  /* Generic Power Level Last Get command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_DEFAULT_GET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x20 )  /* Generic Power Level Default Get command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_DEFAULT_SET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x21 )  /* Generic Power Level Default Set command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_RANGE_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x22 )  /* Generic Power Level Range Get command */
-#define HCI_CONTROL_MESH_COMMAND_POWER_LEVEL_RANGE_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x23 )  /* Generic Power Level Range Set command */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3c )  /* Health Fault Get */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_CLEAR                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3d )  /* Health Fault Clear */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_TEST                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3e )  /* Health Fault Test */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_PERIOD_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3f )  /* Health Period Get */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_PERIOD_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x40 )  /* Health Period Set */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_ATTENTION_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x41 )  /* Health Attention Get */
+#define HCI_CONTROL_MESH_COMMAND_HEALTH_ATTENTION_SET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x42 )  /* Health Attention Set */
 
-#define HCI_CONTROL_MESH_COMMAND_LOCATION_GLOBAL_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x24 )  /* Set Global Location data */
-#define HCI_CONTROL_MESH_COMMAND_LOCATION_LOCAL_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x25 )  /* Set Local Location data */
-#define HCI_CONTROL_MESH_COMMAND_LOCATION_GLOBAL_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x26 )  /* Get Global Location data */
-#define HCI_CONTROL_MESH_COMMAND_LOCATION_LOCAL_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x27 )  /* Get_Local Location data */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_ADD                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x43 )  /* Add Vendor Model */
 
-#define HCI_CONTROL_MESH_COMMAND_BATTERY_GET                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x28 )  /* Battery Get state */
-#define HCI_CONTROL_MESH_COMMAND_BATTERY_SET                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x29 )  /* Battery state changed */
+#define HCI_CONTROL_MESH_COMMAND_TRACE_CORE_SET                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x44 )  /* Set Level for Core Traces */
+#define HCI_CONTROL_MESH_COMMAND_TRACE_MODELS_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x45 )  /* Set Level for Models Traces */
+#define HCI_CONTROL_MESH_COMMAND_RSSI_TEST_START                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x46 )  /* Start RSSI test */
+#define HCI_CONTROL_MESH_COMMAND_SET_ADV_TX_POWER                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x47 )  /* Set Mesh Core ADV Tx Power */
 
-#define HCI_CONTROL_MESH_COMMAND_PROPERTIES_GET                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2a )  /* Generic Set Value of the Property */
-#define HCI_CONTROL_MESH_COMMAND_PROPERTY_GET                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2b )  /* Generic Set Value of the Property */
-#define HCI_CONTROL_MESH_COMMAND_PROPERTY_SET                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2c )  /* Generic Value of the Property Changed Status*/
+#define HCI_CONTROL_MESH_COMMAND_SET_LOCAL_DEVICE                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x48 )  /* Set Local Device. Application can set it once to make provisioner client. */
+#define HCI_CONTROL_MESH_COMMAND_SET_DEVICE_KEY                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x49 )  /* Setup device key.  Application can set it once and then send multiple configuration commands. */
+#define HCI_CONTROL_MESH_COMMAND_CORE_LOW_POWER_SEND_FRIEND_CLEAR           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4a )  /* Terminate friendship with a Friend by sending a Friend Clear */
+#define HCI_CONTROL_MESH_COMMAND_CORE_PROVISION                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4b )  /* Sends command to provision remote device */
+#define HCI_CONTROL_MESH_COMMAND_CORE_CLEAR_REPLAY_PROT_LIST                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4c )  /* Sends command to clear replay protection list */
+#define HCI_CONTROL_MESH_COMMAND_CORE_SET_IV_UPDATE_TEST_MODE               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4d )  /* Sends command to set or reset IV UPDATE test mode */
+#define HCI_CONTROL_MESH_COMMAND_CORE_SET_IV_RECOVERY_STATE                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4e )  /* Sends command to set or reset IV RECOVERY mode */
+#define HCI_CONTROL_MESH_COMMAND_CORE_HEALTH_SET_FAULTS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4f )  /* Sends command to set faults array */
+#define HCI_CONTROL_MESH_COMMAND_CORE_CFG_ADV_IDENTITY                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x50 )  /* Begin advertising with Node Identity, simulating user interaction */
+#define HCI_CONTROL_MESH_COMMAND_CORE_ACCESS_PDU                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x51 )  /* Handle Access PDU */
+#define HCI_CONTROL_MESH_COMMAND_CORE_SEND_SUBS_UPDT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x52 )  /* Send Friend Subscription Add or Remove message */
 
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2d )  /* Light Lightness Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2e )  /* Light Lightness Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LINEAR_GET                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2f )  /* Light Lightness Linear Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LINEAR_SET                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x30 )  /* Light Lightness Linear Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_LAST_GET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x31 )  /* Light Lightness Last Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_DEFAULT_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x32 )  /* Light Lightness Default Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_DEFAULT_SET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x33 )  /* Light Lightness Default Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_RANGE_GET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x34 )  /* Light Lightness Range Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LIGHTNESS_RANGE_SET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x35 )  /* Light Lightness Range Set command */
+#define HCI_CONTROL_MESH_COMMAND_CORE_SET_SEQ                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x53 )  /* Set Sequence Number Command */
+#define HCI_CONTROL_MESH_COMMAND_CORE_DEL_SEQ                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x54 )  /* Delete Sequence Number from RPL list Command */
 
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x36 )  /* Light CTL Client Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x37 )  /* Light CTL Client Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_GET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x38 )  /* Light CTL Client Temperature Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_SET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x39 )  /* Light CTL Client Temperature Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_RANGE_GET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3a )  /* Light CTL Client Temperature Range Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_TEMPERATURE_RANGE_SET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3b )  /* Light CTL Client Temperature Range Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3c )  /* Light CTL Client Default Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_CTL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3d )  /* Light CTL Client Default Set command */
+#define HCI_CONTROL_MESH_COMMAND_APP_START                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x55 )  /* Starts Mesh Application - calls mesh_application_init() and deletes all NVRAM chunks */
 
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3e )  /* Light HSL Client Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3f )  /* Light HSL Client Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_TARGET_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x40 )  /* Light HSL Client Target Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_RANGE_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x41 )  /* Light HSL Client Range Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x42 )  /* Light HSL Client Range Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x43 )  /* Light HSL Client Default Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x44 )  /* Light HSL Client Default Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_HUE_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x45 )  /* Light HSL Client Hue Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_HUE_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x46 )  /* Light HSL Client Hue Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SATURATION_GET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x47 )  /* Light HSL Client Saturation Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_HSL_SATURATION_SET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x48 )  /* Light HSL Client Saturation Set command */
+#define HCI_CONTROL_MESH_COMMAND_PROVISION_SCAN_EXTENDED_START              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x56 )  /* Sends command to start extended scan */
+#define HCI_CONTROL_MESH_COMMAND_GATEWAY_CONN_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x57 )  /* Application sends connect proxy */
+#define HCI_CONTROL_MESH_COMMAND_SEND_PROXY_DATA                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x58 )  /* Mesh Application can send proxy data from MCU */
+#define HCI_CONTROL_MESH_COMMAND_SET_MODEL_LEVEL_ACCESS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x59 )  /* Mesh Application processes raw data access layer data */
+#define HCI_CONTROL_MESH_COMMAND_RAW_MODEL_DATA                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5a )  /* Raw model data to be passed to access layer */
+#define HCI_CONTROL_MESH_COMMAND_VENDOR_DATA                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5b )  /* Vendor model data */
 
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x49 )  /* Light XYL Client Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4a )  /* Light XYL Client Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_RANGE_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4b )  /* Light XYL Client Range Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4c )  /* Light XYL Client Range Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_TARGET_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4d )  /* Light XYL Client Target Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_DEFAULT_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4e )  /* Light XYL Client Default Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_XYL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4f )  /* Light XYL Client Default Set command */
+#define HCI_CONTROL_MESH_COMMAND_HARD_RESET                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5c )  /* Sets UUID if it is not empty and then does factory reset */
 
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_MODE_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x50 )  /* Light LC Client Mode Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_MODE_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x51 )  /* Light LC Client Mode Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_MODE_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x53 )  /* Light LC Client Occupancy Mode Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_MODE_SET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x54 )  /* Light LC Client Occupancy Mode Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_ONOFF_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x56 )  /* Light LC Client OnOff Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_ONOFF_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x57 )  /* Light LC Client OnOff Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_PROPERTY_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x59 )  /* Light LC Client Property Get command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_PROPERTY_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5a )  /* Light LC Client Property Set command */
-#define HCI_CONTROL_MESH_COMMAND_LIGHT_LC_OCCUPANCY_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5c )  /* Light LC Server Occupancy Detected command */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_BEACON_GET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5d )  /* Private Beacon State Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_BEACON_SET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5e )  /* Private Beacon State Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_GATT_PROXY_GET              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5f )  /* Private GATT Proxy State Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_GATT_PROXY_SET              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x60 )  /* Private GATT Proxy State Set */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_NODE_IDENTITY_GET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x61 )  /* Private Node Identity Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_PRIVATE_NODE_IDENTITY_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x62 )  /* Private Node Identity Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_ON_DEMAND_PRIVATE_PROXY_GET         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x63 )  /* On-Demand Private Proxy State Get */
+#define HCI_CONTROL_MESH_COMMAND_CONFIG_ON_DEMAND_PRIVATE_PROXY_SET         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x64 )  /* On-Demand Private Proxy State Set */
+#define HCI_CONTROL_MESH_COMMAND_SOLICITATION_PDU_RPL_ITEMS_CLEAR           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x65 )  /* Solicitation PDU RPL items clear */
+#define HCI_CONTROL_MESH_COMMAND_SEND_SOLICITATION_PDU                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x66 )  /* Send solicitation PDU */
+#define HCI_CONTROL_MESH_COMMAND_TEST_EVENTS_REPORT_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x67 )  /* Mesh core to report events for test purpose */
 
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_DESCRIPTOR_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x60 )  /* Sensor Descriptor Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_CADENCE_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x61 )  /* Sensor Cadence Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_CADENCE_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x62 )  /* Sensor Cadence Set command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTINGS_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x63 )  /* Sensor Settings Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTING_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x64 )  /* Sensor Setting Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_GET                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x65 )  /* Sensor Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_COLUMN_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x66 )  /* Sensor Column Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SERIES_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x67 )  /* Sensor Series Get command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SETTING_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x68 )  /* Sensor Setting Set command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SET                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6b )  /* Sensor Status command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_COLUMN_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6c )  /* Sensor Column Status command */
-#define HCI_CONTROL_MESH_COMMAND_SENSOR_SERIES_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6d )  /* Sensor Series Status command */
+#define HCI_CONTROL_MESH_COMMAND_NETWORK_FILTER_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x68 )  /* Send Network Filter Get message */
+#define HCI_CONTROL_MESH_COMMAND_NETWORK_FILTER_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x69 )  /* Send Network Filter Set message */
 
-#define HCI_CONTROL_MESH_COMMAND_SCENE_STORE                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x70 )  /* Scene Store command */
-#define HCI_CONTROL_MESH_COMMAND_SCENE_RECALL                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x71 )  /* Scene Delete command */
-#define HCI_CONTROL_MESH_COMMAND_SCENE_GET                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x72 )  /* Scene Get command */
-#define HCI_CONTROL_MESH_COMMAND_SCENE_REGISTER_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x73 )  /* Scene Register Get command */
-#define HCI_CONTROL_MESH_COMMAND_SCENE_DELETE                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x74 )  /* Scene Delete command */
+#define HCI_CONTROL_MESH_COMMAND_DF_SET_PATH_MONITORING_TEST_MODE           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6a )  /* Set Path Monitoring Test Mode */
+#define HCI_CONTROL_MESH_COMMAND_DF_TRANSIT_TO_PATH_MONITORING_STATE_SIGNAL ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6b )  /* Transit to Path Monitoring state signal command */
+#define HCI_CONTROL_MESH_COMMAND_DF_STATS_GET                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6c )  /* Send Directed Forwarding_Statistics Get message */
 
-#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x75 )  /* Scheduler Register Get command */
-#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_ACTION_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x76 )  /* Scheduler Action Get command */
-#define HCI_CONTROL_MESH_COMMAND_SCHEDULER_ACTION_SET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x77 )  /* Scheduler Action Set command */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_GET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6d )  /* an acknowledged message used to get the current Directed Control state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_SET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6e )  /* an acknowledged message used to set the Directed Control state of a subnet */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_METRIC_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x6f )  /* An acknowledged message used to get the current Path Metric state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_METRIC_SET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x70 )  /* an acknowledged message used to set the Path Metric state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DISCOVERY_TABLE_CAPABILITIES_GET        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x71 )  /* an acknowledged message used to get the current Discovery Table Capabilities state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DISCOVERY_TABLE_CAPABILITIES_SET        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x72 )  /* an acknowledged message used to set the Max Concurrent Init state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_ADD                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x73 )  /* an acknowledged message used to add a fixed path entry to the Forwarding Table state of a node or to update an existing fixed path entry */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_DELETE                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x74 )  /* an acknowledged message used to delete all the path entries from a specific Path Origin to a specific destination from the Forwarding Table state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_DEPENDENTS_ADD         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x75 )  /* an acknowledged message used to add entries to the Dependent_Origin_List field or to the Dependent_Target_List field of a fixed path entry in the Forwarding Table state of a node. */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_DEPENDENTS_DELETE      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x76 )  /* an acknowledged message used to delete dependent node entries from the Dependent_Origin_List field or the Dependent_Target_List field of a fixed path entry in the Forwarding Table state of a node. */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_DEPENDENTS_GET         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x77 )  /* an acknowledged message used to get the list of unicast address ranges of dependent nodes of the Path Origin or the Path Target of a Forwarding Table entry. */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_ENTRIES_COUNT_GET      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x78 )  /* an acknowledged message used to get the information about the Forwarding Table state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_FORWARDING_TABLE_ENTRIES_GET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x79 )  /* an acknowledged message used to get a filtered set of path entries in the Forwarding Table state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_WANTED_LANES_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7a )  /* an acknowledged message used to get the Wanted Lanes state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_WANTED_LANES_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7b )  /* an acknowledged message used to set the Wanted Lanes state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_TWO_WAY_PATH_GET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7c )  /* an acknowledged message used to get the current Two Way Path state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_TWO_WAY_PATH_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7d )  /* an acknowledged message used to set the Two Way Path state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_ECHO_INTERVAL_GET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7e )  /* an acknowledged message used to get the current Path Echo Interval state of a nod */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_ECHO_INTERVAL_SET                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7f )  /* an acknowledged message used to set the Path Echo Interval state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_NETWORK_TRANSMIT_GET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x80 )  /* an acknowledged message used to get the current Directed Network Transmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_NETWORK_TRANSMIT_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x81 )  /* an acknowledged message used to set the Directed Network Transmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_RELAY_RETRANSMIT_GET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x82 )  /* an acknowledged message used to get the current Directed Relay Retransmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_RELAY_RETRANSMIT_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x83 )  /* an acknowledged message used to set the Directed Relay Retransmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_RSSI_THRESHOLD_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x84 )  /* an acknowledged message used to get the current RSSI Threshold state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_RSSI_THRESHOLD_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x85 )  /* an acknowledged message used to set the RSSI Margin state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_PATHS_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x86 )  /* an acknowledged message used to get the Directed Paths state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_PUBLISH_POLICY_GET             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x87 )  /* an acknowledged message used to get the Directed Publish Policy state of a model of an element of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_PUBLISH_POLICY_SET             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x88 )  /* an acknowledged message used to set the Directed Publish Policy state of a model of an element of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_DISCOVERY_TIMING_CONTROL_GET       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x89 )  /* an acknowledged message used to get the Path Discovery Timing Control state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_PATH_DISCOVERY_TIMING_CONTROL_SET       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8a )  /* an acknowledged message used to set the Path Discovery Timing Control state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_NETWORK_TRANSMIT_GET   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8b )  /* an acknowledged message used to get the current Directed Control Network Transmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_NETWORK_TRANSMIT_SET   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8c )  /* an acknowledged message used to set the Directed Control Network Transmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_RELAY_RETRANSMIT_GET   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8d )  /* an acknowledged message used to get the current Directed Control Relay Retransmit state of a node */
+#define HCI_CONTROL_MESH_COMMAND_DF_DIRECTED_CONTROL_RELAY_RETRANSMIT_SET   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8e )  /* an acknowledged message used to set the Directed Control Relay Retransmit state of a node */
 
-#define HCI_CONTROL_MESH_COMMAND_TIME_GET                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x78 )  /* Time Get command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_SET                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x79 )  /* Time Set command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_ZONE_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7a )  /* Time Zone Get command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_ZONE_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7b )  /* Time Zone Set command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_TAI_UTC_DELTA_GET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7c )  /* Time TAI_UTC Delta Get command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_TAI_UTC_DELTA_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7d )  /* Time TAI_UTC Delta Set command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_ROLE_GET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7e )  /* Time Role Get command */
-#define HCI_CONTROL_MESH_COMMAND_TIME_ROLE_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x7f )  /* Time Role Set command */
-
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_RESET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x80 )  /* Node Reset */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_BEACON_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x81 )  /* Beacon State Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_BEACON_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x82 )  /* Beacon State Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_COMPOSITION_DATA_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x83 )  /* Composition Data Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_DEFAULT_TTL_GET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x84 )  /* Default TTL Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_DEFAULT_TTL_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x85 )  /* Default TTL Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_GATT_PROXY_GET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x86 )  /* GATT Proxy State Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_GATT_PROXY_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x87 )  /* GATT Proxy State Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_RELAY_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x88 )  /* Relay Configuration Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_RELAY_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x89 )  /* Relay Configuration Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_FRIEND_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8a )  /* Relay Configuration Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_FRIEND_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8b )  /* Relay Configuration Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_SUBSCRIPTION_GET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8c )  /* Hearbeat Subscription Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_SUBSCRIPTION_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8d )  /* Hearbeat Subscription Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_PUBLICATION_GET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8e )  /* Hearbeat Publication Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_HEARBEAT_PUBLICATION_SET            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8f )  /* Hearbeat Publication Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NETWORK_TRANSMIT_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x90 )  /* Network Transmit Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NETWORK_TRANSMIT_SET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x91 )  /* Network Transmit Set */
-
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_PUBLICATION_GET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x92 )  /* Model Publication Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_PUBLICATION_SET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x93 )  /* Model Publication Set */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_ADD              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x94 )  /* Model Subscription Add */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_DELETE           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x95 )  /* Model Subscription Delete */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_OVERWRITE        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x96 )  /* Model Subscription Overwrite */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_DELETE_ALL       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x97 )  /* Model Subscription Delete All */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_SUBSCRIPTION_GET              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x98 )  /* Model Subscription Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_ADD                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x99 )  /* NetKey Add */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_DELETE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9a )  /* NetKey Delete */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_UPDATE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9b )  /* NetKey Update */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NET_KEY_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9c )  /* NetKey Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_ADD                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9d )  /* AppKey Add */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_DELETE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9e )  /* AppKey Delete */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_UPDATE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x9f )  /* AppKey Update */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_APP_KEY_GET                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa0 )  /* AppKey Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_BIND                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa1 )  /* Model App Bind */
-
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_UNBIND                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa2 )  /* Model App Unind */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_APP_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa3 )  /* Model App Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_IDENTITY_GET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa4 )  /* Node Identity Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_NODE_IDENTITY_SET                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa5 )  /* Node Identity Get */
-
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_LPN_POLL_TIMEOUT_GET                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa6 )  /* LPN Poll Timeout Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_KEY_REFRESH_PHASE_GET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa7 )  /* Key Refresh Phase Get */
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_KEY_REFRESH_PHASE_SET               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa8 )  /* Key Refresh Phase Set */
-
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa9 )  /* Health Fault Get */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_CLEAR                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xaa )  /* Health Fault Clear */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_FAULT_TEST                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xab )  /* Health Fault Test */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_PERIOD_GET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xac )  /* Health Period Get */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_PERIOD_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xad )  /* Health Period Set */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_ATTENTION_GET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xae )  /* Health Attention Get */
-#define HCI_CONTROL_MESH_COMMAND_HEALTH_ATTENTION_SET                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xaf )  /* Health Attention Set */
-
-#define HCI_CONTROL_MESH_COMMAND_CONFIG_MODEL_ADD                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb0 )  /* Add Vendor Model */
-
-#define HCI_CONTROL_MESH_COMMAND_TRACE_CORE_SET                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb1 )  /* Set Level for Core Traces */
-#define HCI_CONTROL_MESH_COMMAND_TRACE_MODELS_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb2 )  /* Set Level for Models Traces */
-#define HCI_CONTROL_MESH_COMMAND_RSSI_TEST_START                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb3 )  /* Start RSSI test */
-#define HCI_CONTROL_MESH_COMMAND_SET_ADV_TX_POWER                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb4 )  /* Set Mesh Core ADV Tx Power */
-
-#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_START               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc0 )  /* Prepare Distribution Client for FW Upload */
-#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_DATA                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc1 )  /* FW Upload next data chunk */
-#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_FINISH              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc2 )  /* FW Upload completed */
-#define HCI_CONTROL_MESH_COMMAND_FW_DISTRIBUTION_UPLOAD_GET_STATUS          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc3 )  /* Get current status and phase */
-
-#define HCI_CONTROL_MESH_COMMAND_SET_LOCAL_DEVICE                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe0 )  /* Set Local Device. Application can set it once to make provisioner client. */
-#define HCI_CONTROL_MESH_COMMAND_SET_DEVICE_KEY                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe1 )  /* Setup device key.  Application can set it once and then send multiple configuration commands. */
-#define HCI_CONTROL_MESH_COMMAND_CORE_LOW_POWER_SEND_FRIEND_CLEAR           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe2 )  /* Terminate friendship with a Friend by sending a Friend Clear */
-#define HCI_CONTROL_MESH_COMMAND_CORE_PROVISION                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe3 )  /* Sends command to provision remote device */
-#define HCI_CONTROL_MESH_COMMAND_CORE_CLEAR_REPLAY_PROT_LIST                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe4 )  /* Sends command to clear replay protection list */
-#define HCI_CONTROL_MESH_COMMAND_CORE_SET_IV_UPDATE_TEST_MODE               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe5 )  /* Sends command to set or reset IV UPDATE test mode */
-#define HCI_CONTROL_MESH_COMMAND_CORE_SET_IV_RECOVERY_STATE                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe6 )  /* Sends command to set or reset IV RECOVERY mode */
-#define HCI_CONTROL_MESH_COMMAND_CORE_HEALTH_SET_FAULTS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe7 )  /* Sends command to set faults array */
-#define HCI_CONTROL_MESH_COMMAND_CORE_CFG_ADV_IDENTITY                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe9 )  /* Begin advertising with Node Identity, simulating user interaction */
-#define HCI_CONTROL_MESH_COMMAND_CORE_ACCESS_PDU                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xea )  /* Handle Access PDU */
-#define HCI_CONTROL_MESH_COMMAND_CORE_SEND_SUBS_UPDT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xeb )  /* Send Friend Subscription Add or Remove message */
-
-#define HCI_CONTROL_MESH_COMMAND_CORE_SET_SEQ                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xec )  /* Set Sequence Number Command */
-#define HCI_CONTROL_MESH_COMMAND_CORE_DEL_SEQ                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xed )  /* Delete Sequence Number from RPL list Command */
-
-#define HCI_CONTROL_MESH_COMMAND_APP_START                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xef )  /* Starts Mesh Application - calls mesh_application_init() and deletes all NVRAM chunks */
-
-#define HCI_CONTROL_MESH_COMMAND_PROVISION_SCAN_EXTENDED_START              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf0 )  /* Sends command to start extended scan */
-#define HCI_CONTROL_MESH_COMMAND_GATEWAY_CONN_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf1 )  /* Application sends connect proxy */
-#define HCI_CONTROL_MESH_COMMAND_SEND_PROXY_DATA                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf2 )  /* Mesh Application can send proxy data from MCU */
-#define HCI_CONTROL_MESH_COMMAND_SET_MODEL_LEVEL_ACCESS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf3 )  /* Mesh Application processes raw data access layer data */
-#define HCI_CONTROL_MESH_COMMAND_RAW_MODEL_DATA                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf4 )  /* Raw model data to be passed to access layer */
-#define HCI_CONTROL_MESH_COMMAND_VENDOR_DATA                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xff )  /* Vendor model data */
+#define HCI_CONTROL_MESH_COMMAND_CORE_CFG_BEACON                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8f )  /* Enable/disable beacon/private beacon */
 
 /* Battery Client Profile commands */
 #define HCI_CONTROL_BATT_CLIENT_COMMAND_CONNECT             ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x00 )    /* Battery Client connect */
@@ -641,6 +702,19 @@
 /* HCI TEST */
 #define HCI_CONTROL_HCITEST_COMMAND                         ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x0 ) /* Test start request */
 #define HCI_CONTROL_HCITEST_CONFIGURE                       ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x1 ) /* Test configure request */
+
+/* Connected Mesh Commands */
+#define HCI_CONTROL_CONN_MESH_COMMAND_BECOME_PROVISIONER    ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x01 )  /* Become Provisioner */
+#define HCI_CONTROL_CONN_MESH_COMMAND_END_PROVISIONING      ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x02 )  /* Become Provisioner */
+#define HCI_CONTROL_CONN_MESH_COMMAND_GET_NODE_LIST         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x03 )  /* Provisioner only - report list of all nodes */
+#define HCI_CONTROL_CONN_MESH_COMMAND_SEND_APP_DATA         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x04 )  /* Send Application Data */
+#define HCI_CONTROL_CONN_MESH_COMMAND_RESET					( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x05 )  /* Reset device */
+#define HCI_CONTROL_CONN_MESH_COMMAND_FACTORY_RESET         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x06 )  /* Factory reset the network */
+#define HCI_CONTROL_CONN_MESH_COMMAND_GET_CONN_STATUS       ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x07 )  /* Report connection status */
+#define HCI_CONTROL_CONN_MESH_COMMAND_PING_ALL_NODES        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x08 )  /* Provisioner only - ping all nodes */
+#define HCI_CONTROL_CONN_MESH_COMMAND_START_STOP_DATA       ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Start/Stop Data */
+#define HCI_CONTROL_CONN_MESH_COMMAND_GET_STATS				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0A )  /* Collect stats */
+#define HCI_CONTROL_CONN_MESH_COMMAND_IDENTIFY				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0B )  /* Identify node */
 
 /* General events that the controller can send */
 #define HCI_CONTROL_EVENT_COMMAND_STATUS                    ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x01 )    /* Command status event for the requested operation */
@@ -902,160 +976,192 @@
 #define HCI_CONTROL_LE_COC_EVENT_TX_COMPLETE                ( ( HCI_CONTROL_GROUP_LE_COC << 8 ) | 0x04)    /* Data Transmission successfull event */
 #define HCI_CONTROL_LE_COC_EVENT_ADV_STS                    ( ( HCI_CONTROL_GROUP_LE_COC << 8 ) | 0x05)    /* Advertising status event */
 
+/* Mesh models events */
+#define HCI_CONTROL_MESH_EVENT_ONOFF_SET                                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x01 )      /* ON/OFF Server Set */
+#define HCI_CONTROL_MESH_EVENT_ONOFF_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x02 )      /* ON/OFF Client status */
+
+#define HCI_CONTROL_MESH_EVENT_LEVEL_SET                                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x03 )      /* Level Server Set */
+#define HCI_CONTROL_MESH_EVENT_LEVEL_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x04 )      /* Level Client status */
+
+#define HCI_CONTROL_MESH_EVENT_LOCATION_GLOBAL_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x05 )      /* Set Global Location data */
+#define HCI_CONTROL_MESH_EVENT_LOCATION_LOCAL_SET                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x06 )      /* Set Local Location data */
+#define HCI_CONTROL_MESH_EVENT_LOCATION_GLOBAL_STATUS                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x07 )      /* Global Location data changed */
+#define HCI_CONTROL_MESH_EVENT_LOCATION_LOCAL_STATUS                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x08 )      /* Local Location data changed */
+
+#define HCI_CONTROL_MESH_EVENT_BATTERY_STATUS                               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x09 )      /* Battery status data */
+
+#define HCI_CONTROL_MESH_EVENT_DEF_TRANS_TIME_STATUS                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0a )      /* Default Transition Time Client Status */
+
+#define HCI_CONTROL_MESH_EVENT_POWER_ONOFF_STATUS                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0b )      /* Power ON/OFF Client status */
+
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_SET                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0c )      /* Power Level Server Set */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0d )      /* Power Level Server Set Default Power Level */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0e )      /* Power Level Server Set Min/Max Power Level range */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_STATUS                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x0f )      /* Power Level Client Status */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_LAST_STATUS                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x10 )      /* Last Power Level Client status */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_DEFAULT_STATUS                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x11 )      /* Default Power Level Client status */
+#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_RANGE_STATUS                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x12 )      /* Default Power Level Client status */
+
+#define HCI_CONTROL_MESH_EVENT_PROPERTY_SET                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x13 )      /* Set Value of the Property */
+#define HCI_CONTROL_MESH_EVENT_PROPERTIES_STATUS                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x14 )      /* List of Properties reported by the Server */
+#define HCI_CONTROL_MESH_EVENT_PROPERTY_STATUS                              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x15 )      /* Value of the Property Changed status*/
+
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x16 )      /* Light Lightness Server Set */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_STATUS                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x17 )      /* Light Lightness Client status */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_LINEAR_STATUS                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x18 )      /* Light Lightness Client status */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_LAST_STATUS                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x19 )      /* Last Light Lightness Client status */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_DEFAULT_STATUS               ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1a )      /* Default Light Lightness Client status */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_RANGE_STATUS                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1b )      /* Range Light Lightness Client status */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_RANGE_SET                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1c )      /* Light Lightness Server Range Set event */
+
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1d )  /* Client Light CTL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_STATUS                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1e )  /* Client Light CTL Temperature status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_RANGE_STATUS           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x1f )  /* Client Light CTL Temperature Range Statust event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x20 )  /* Client Light CTL Default status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_SET                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x21 )  /* Server Light CTL Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_SET                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x22 )  /* Server Light CTL Temperature Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_RANGE_SET              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x23 )  /* Server Light CTL Temperature Range Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x24 )  /* Server Light CTL Default Set event */
+
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SET                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x25 )  /* Server Light HSL Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x26 )  /* Client Light HSL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_TARGET_STATUS                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x27 )  /* Client Light HSL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_RANGE_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x28 )  /* Server Light HSL Temperature Range Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_RANGE_STATUS                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x29 )  /* Client Light HSL Default status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2a )  /* Server Light HSL Default Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2b )  /* Client Light HSL Default status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_HUE_SET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2c )  /* Server Light HSL Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_HUE_STATUS                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2d )  /* Client Light HSL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SATURATION_SET                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2e )  /* Server Light HSL Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SATURATION_STATUS                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x2f )  /* Client Light HSL status event */
+
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_SET                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x30 )  /* Server Light XYL Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x31 )  /* Client Light XYL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_TARGET_STATUS                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x32 )  /* Client Light XYL status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_RANGE_SET                          ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x33 )  /* Server Light XYL Temperature Range Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_RANGE_STATUS                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x34 )  /* Client Light XYL Default status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x35 )  /* Server Light XYL Default Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x36 )  /* Client Light XYL Default status event */
+
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_MODE_SERVER_SET                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x37 )  /* Light LC Server mode Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_MODE_CLIENT_STATUS                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x38 )  /* Light LC Client mode status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_OCCUPANCY_MODE_SERVER_SET           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x39 )  /* Light LC Server Occupancy mode Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_OCCUPANCY_MODE_CLIENT_STATUS        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3a )  /* Light LC Client Occupancy mode status Event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_ONOFF_SERVER_SET                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3b )  /* Light LC Server OnOff Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_ONOFF_CLIENT_STATUS                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3c )  /* Light LC Client OnOff status event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_PROPERTY_SERVER_SET                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3d )  /* Light LC Server Property Set event */
+#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_PROPERTY_CLIENT_STATUS              ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3e )  /* Light LC Client Property status event */
+
+#define HCI_CONTROL_MESH_EVENT_SENSOR_DESCRIPTOR_STATUS                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x3f )  /* Value of the Sensor Descriptor status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_STATUS                                ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x40 )  /* Value of the Sensor status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_COLUMN_STATUS                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x41 )  /* Value of the Sensor Column status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SERIES_STATUS                         ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x42 )  /* Value of the Sensor Series status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_STATUS                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x43 )  /* Value of the Sensor Cadence status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_STATUS                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x44 )  /* Value of the Sensor Setting status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTINGS_STATUS                       ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x45 )  /* Value of the Sensor Settings status*/
+#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_GET                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x46 )  /* Sensor Cadence Get */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_SET                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x47 )  /* Sensor Cadence Set */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_GET                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x48 )  /* Sensor Setting Get */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_GET                                   ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x49 )  /* Sensor Get */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_COLUMN_GET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4a )  /* Sensor Column Get */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SERIES_GET                            ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4b )  /* Sensor Series Get */
+#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_SET                           ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4c )  /* Sensor Setting Set */
+
+#define HCI_CONTROL_MESH_EVENT_SCENE_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4d )  /* Scene status event */
+#define HCI_CONTROL_MESH_EVENT_SCENE_REGISTER_STATUS                        ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4e )  /* Scene register status event */
+
+#define HCI_CONTROL_MESH_EVENT_SCHEDULER_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x4f )  /* Scheduler register status event */
+#define HCI_CONTROL_MESH_EVENT_SCHEDULER_ACTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x50 )  /* Scheduler action status event */
+
+#define HCI_CONTROL_MESH_EVENT_TIME_STATUS                                  ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x51 )  /* Time Status event */
+#define HCI_CONTROL_MESH_EVENT_TIME_ZONE_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x52 )  /* Time Zone status event */
+#define HCI_CONTROL_MESH_EVENT_TIME_TAI_UTC_DELTA_STATUS                    ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x53 )  /* Time TAI_UTC Delta status event */
+#define HCI_CONTROL_MESH_EVENT_TIME_ROLE_STATUS                             ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x54 )  /* Time Role status event */
+#define HCI_CONTROL_MESH_EVENT_TIME_SET                                     ( ( HCI_CONTROL_GROUP_MESH_MODELS << 8 ) | 0x55 )  /* Time Set event */
+
 /* Mesh events */
 #define HCI_CONTROL_MESH_EVENT_COMMAND_STATUS                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x00 )      /* Command status event */
 #define HCI_CONTROL_MESH_EVENT_TX_COMPLETE                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x01 )      /* Tx Complete event */
 
-#define HCI_CONTROL_MESH_EVENT_ONOFF_SET                                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x08 )      /* ON/OFF Server Set */
-#define HCI_CONTROL_MESH_EVENT_ONOFF_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x09 )      /* ON/OFF Client status */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_CAPABILITIES_STATUS           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x02 )  /* Remote Provisioning Scanning Server Information */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x03 )  /* Remote Provisioning Scan Parameters */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_REPORT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x04 )  /* Remote Provisioning Report the scanned Device UUID */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_EXTENDED_REPORT               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x05 )  /* Remote Provisioning report the Advertising data containing the defined AD Type */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_LINK_REPORT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x06 )  /* Provision link established or dropped */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_END                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x07 )  /* Provision end event */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABITIES                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x08 )  /* Provisioning device capabilities */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_OOB_DATA                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x09 )  /* Provisioning OOB data request */
+#define HCI_CONTROL_MESH_EVENT_PROXY_DEVICE_NETWORK_DATA                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0a )  /* Proxy device network data event */
+#define HCI_CONTROL_MESH_EVENT_PROXY_DATA                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0b )  /* Proxy device network data event */
 
-#define HCI_CONTROL_MESH_EVENT_LEVEL_SET                                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0c )      /* Level Server Set */
-#define HCI_CONTROL_MESH_EVENT_LEVEL_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0d )      /* Level Client status */
+#define HCI_CONTROL_MESH_EVENT_RAW_MODEL_DATA                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0c )  /* Raw model data from the access layer */
 
-#define HCI_CONTROL_MESH_EVENT_LOCATION_GLOBAL_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x10 )      /* Set Global Location data */
-#define HCI_CONTROL_MESH_EVENT_LOCATION_LOCAL_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x11 )      /* Set Local Location data */
-#define HCI_CONTROL_MESH_EVENT_LOCATION_GLOBAL_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x12 )      /* Global Location data changed */
-#define HCI_CONTROL_MESH_EVENT_LOCATION_LOCAL_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x13 )      /* Local Location data changed */
+#define HCI_CONTROL_MESH_EVENT_RSSI_TEST_RESULT                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0d )  /* RSSI test result */
+#define HCI_CONTROL_MESH_EVENT_PRIVATE_BEACON_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0e )  /* Private beacon status event */
+#define HCI_CONTROL_MESH_EVENT_PRIVATE_GATT_PROXY_STATUS                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0f )  /* Private GATT proxy status event */
+#define HCI_CONTROL_MESH_EVENT_ON_DEMAND_PRIVATE_PROXY_STATUS               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x10 )  /* On-demand private GATT proxy status event */
+#define HCI_CONTROL_MESH_EVENT_PRIVATE_NODE_IDENTITY_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x11 )  /* Private node identity status event */
+#define HCI_CONTROL_MESH_EVENT_SOLICITATION_PDU_RPL_ITEMS_STATUS            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x12 )  /* Solicitation PDU RPL items status event */
+#define HCI_CONTROL_MESH_EVENT_PRIVATE_BEACON                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x13 )  /* Private beacon received (for test only) */
+#define HCI_CONTROL_MESH_EVENT_PROXY_SERVICE_ADV                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x14 )  /* Proxy service advertisement received (for test only) */
 
-#define HCI_CONTROL_MESH_EVENT_BATTERY_STATUS                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x15 )      /* Battery status data */
+#define HCI_CONTROL_MESH_EVENT_PROXY_CONNECTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x15 )  /* Proxy connection status */
 
-#define HCI_CONTROL_MESH_EVENT_DEF_TRANS_TIME_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1b )      /* Default Transition Time Client Status */
+#define HCI_CONTROL_MESH_EVENT_NODE_RESET_STATUS                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x16 )  /* Config Node Reset status */
+#define HCI_CONTROL_MESH_EVENT_COMPOSITION_DATA_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x17 )  /* Config Composition Data status */
+#define HCI_CONTROL_MESH_EVENT_FRIEND_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x18 )  /* Config Friend status */
+#define HCI_CONTROL_MESH_EVENT_GATT_PROXY_STATUS                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x19 )  /* Config GATT Proxy status */
+#define HCI_CONTROL_MESH_EVENT_RELAY_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1a )  /* Config Relay status */
+#define HCI_CONTROL_MESH_EVENT_DEFAULT_TTL_STATUS                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1b )  /* Config Default TTL status */
+#define HCI_CONTROL_MESH_EVENT_BEACON_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1c )  /* Config Beacon status */
+#define HCI_CONTROL_MESH_EVENT_NODE_IDENTITY_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1d )  /* Config Node Identity status */
+#define HCI_CONTROL_MESH_EVENT_MODEL_PUBLICATION_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1e )  /* Config Model Publication status */
+#define HCI_CONTROL_MESH_EVENT_MODEL_SUBSCRIPTION_STATUS                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x1f )  /* Config Model Subscription status */
+#define HCI_CONTROL_MESH_EVENT_MODEL_SUBSCRIPTION_LIST                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x20 )  /* Config Model Subscription List */
+#define HCI_CONTROL_MESH_EVENT_NETKEY_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x21 )  /* Config NetKey status */
+#define HCI_CONTROL_MESH_EVENT_NETKEY_LIST                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x22 )  /* Config Netkey List */
+#define HCI_CONTROL_MESH_EVENT_APPKEY_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x23 )  /* Config AppKey status */
+#define HCI_CONTROL_MESH_EVENT_APPKEY_LIST                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x24 )  /* Config Appkey List */
+#define HCI_CONTROL_MESH_EVENT_MODEL_APP_BIND_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x25 )  /* Config Model App status */
+#define HCI_CONTROL_MESH_EVENT_MODEL_APP_LIST                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x26 )  /* Config Model App List */
+#define HCI_CONTROL_MESH_EVENT_HEARTBEAT_SUBSCRIPTION_STATUS                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x27 )  /* Config Heartbeat Subscription status */
+#define HCI_CONTROL_MESH_EVENT_HEARTBEAT_PUBLICATION_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x28 )  /* Config Heartbeat Publication status */
+#define HCI_CONTROL_MESH_EVENT_NETWORK_TRANSMIT_PARAMS_STATUS               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x29 )  /* Config Network Transmit status */
+#define HCI_CONTROL_MESH_EVENT_HEALTH_CURRENT_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2a )  /* Health Current status */
+#define HCI_CONTROL_MESH_EVENT_HEALTH_FAULT_STATUS                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2b )  /* Health Fault status */
+#define HCI_CONTROL_MESH_EVENT_HEALTH_PERIOD_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2c )  /* Health Period status */
+#define HCI_CONTROL_MESH_EVENT_HEALTH_ATTENTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2d )  /* Health Attention status */
+#define HCI_CONTROL_MESH_EVENT_LPN_POLL_TIMEOUT_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2e )  /* Low Power node Poll Timeout status */
+#define HCI_CONTROL_MESH_EVENT_KEY_REFRESH_PHASE_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2f )  /* Key Refresh Phase status */
+#define HCI_CONTROL_MESH_EVENT_PROXY_FILTER_STATUS                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x30 )  /* Proxy Filter status */
+#define HCI_CONTROL_MESH_EVENT_CORE_SEQ_CHANGED                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x31 )  /* New Sequence Number */
+#define HCI_CONTROL_MESH_EVENT_NVRAM_DATA                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x32 )  /*  */
+#define HCI_CONTROL_MESH_EVENT_VENDOR_DATA                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x33 )  /* Vendor model data */
 
-#define HCI_CONTROL_MESH_EVENT_POWER_ONOFF_STATUS                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x20 )      /* Power ON/OFF Client status */
+#define HCI_CONTROL_MESH_EVENT_FW_DISTRIBUTION_UPLOAD_STATUS                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x34 )  /* Prepare Distribution Client for FW Upload */
 
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_SET                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x25 )      /* Power Level Server Set */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_DEFAULT_SET                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x26 )      /* Power Level Server Set Default Power Level */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_RANGE_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x27 )      /* Power Level Server Set Min/Max Power Level range */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_STATUS                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x28 )      /* Power Level Client Status */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_LAST_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x29 )      /* Last Power Level Client status */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_DEFAULT_STATUS                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2a )      /* Default Power Level Client status */
-#define HCI_CONTROL_MESH_EVENT_POWER_LEVEL_RANGE_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x2b )      /* Default Power Level Client status */
+#define HCI_CONTROL_MESH_EVENT_DF_STATS_STATUS                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x35 )      /* Directed Forwarding Statistics Status event */
+#define HCI_CONTROL_MESH_EVENT_NETWORK_FILTER_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x36 )      /* Network Filter Status event */
 
-#define HCI_CONTROL_MESH_EVENT_PROPERTY_SET                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x30 )      /* Set Value of the Property */
-#define HCI_CONTROL_MESH_EVENT_PROPERTIES_STATUS                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x31 )      /* List of Properties reported by the Server */
-#define HCI_CONTROL_MESH_EVENT_PROPERTY_STATUS                              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x32 )      /* Value of the Property Changed status*/
-
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x38 )      /* Light Lightness Server Set */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x39 )      /* Light Lightness Client status */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_LINEAR_STATUS                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3a )      /* Light Lightness Client status */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_LAST_STATUS                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3b )      /* Last Light Lightness Client status */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_DEFAULT_STATUS               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3c )      /* Default Light Lightness Client status */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_RANGE_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3d )      /* Range Light Lightness Client status */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LIGHTNESS_RANGE_SET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3e )      /* Light Lightness Server Range Set event */
-
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x40 )  /* Client Light CTL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x41 )  /* Client Light CTL Temperature status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_RANGE_STATUS           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x42 )  /* Client Light CTL Temperature Range Statust event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x43 )  /* Client Light CTL Default status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_SET                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x44 )  /* Server Light CTL Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_SET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x45 )  /* Server Light CTL Temperature Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_TEMPERATURE_RANGE_SET              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x46 )  /* Server Light CTL Temperature Range Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_CTL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x47 )  /* Server Light CTL Default Set event */
-
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SET                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x50 )  /* Server Light HSL Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x51 )  /* Client Light HSL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_TARGET_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x52 )  /* Client Light HSL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_RANGE_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x53 )  /* Server Light HSL Temperature Range Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_RANGE_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x54 )  /* Client Light HSL Default status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x55 )  /* Server Light HSL Default Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x56 )  /* Client Light HSL Default status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_HUE_SET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x57 )  /* Server Light HSL Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_HUE_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x58 )  /* Client Light HSL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SATURATION_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x59 )  /* Server Light HSL Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_HSL_SATURATION_STATUS                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x5a )  /* Client Light HSL status event */
-
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_SET                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x60 )  /* Server Light XYL Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x61 )  /* Client Light XYL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_TARGET_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x62 )  /* Client Light XYL status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_RANGE_SET                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x63 )  /* Server Light XYL Temperature Range Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_RANGE_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x64 )  /* Client Light XYL Default status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_DEFAULT_SET                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x65 )  /* Server Light XYL Default Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_XYL_DEFAULT_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x66 )  /* Client Light XYL Default status event */
-
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_MODE_SERVER_SET                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x70 )  /* Light LC Server mode Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_MODE_CLIENT_STATUS                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x71 )  /* Light LC Client mode status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_OCCUPANCY_MODE_SERVER_SET           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x72 )  /* Light LC Server Occupancy mode Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_OCCUPANCY_MODE_CLIENT_STATUS        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x73 )  /* Light LC Client Occupancy mode status Event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_ONOFF_SERVER_SET                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x74 )  /* Light LC Server OnOff Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_ONOFF_CLIENT_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x75 )  /* Light LC Client OnOff status event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_PROPERTY_SERVER_SET                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x76 )  /* Light LC Server Property Set event */
-#define HCI_CONTROL_MESH_EVENT_LIGHT_LC_PROPERTY_CLIENT_STATUS              ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x77 )  /* Light LC Client Property status event */
-
-#define HCI_CONTROL_MESH_EVENT_SENSOR_DESCRIPTOR_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x80 )  /* Value of the Sensor Descriptor status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x81 )  /* Value of the Sensor status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_COLUMN_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x82 )  /* Value of the Sensor Column status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SERIES_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x83 )  /* Value of the Sensor Series status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x84 )  /* Value of the Sensor Cadence status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x85 )  /* Value of the Sensor Setting status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTINGS_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x86 )  /* Value of the Sensor Settings status*/
-#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x87 )  /* Sensor Cadence Get */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_CADENCE_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x88 )  /* Sensor Cadence Set */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_GET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x89 )  /* Sensor Setting Get */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_GET                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8a )  /* Sensor Get */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_COLUMN_GET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8b )  /* Sensor Column Get */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SERIES_GET                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8c )  /* Sensor Series Get */
-#define HCI_CONTROL_MESH_EVENT_SENSOR_SETTING_SET                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8d )  /* Sensor Setting Set */
-
-#define HCI_CONTROL_MESH_EVENT_SCENE_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x90 )  /* Scene status event */
-#define HCI_CONTROL_MESH_EVENT_SCENE_REGISTER_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x91 )  /* Scene register status event */
-
-#define HCI_CONTROL_MESH_EVENT_SCHEDULER_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x98 )  /* Scheduler register status event */
-#define HCI_CONTROL_MESH_EVENT_SCHEDULER_ACTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x99 )  /* Scheduler action status event */
-
-#define HCI_CONTROL_MESH_EVENT_TIME_STATUS                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa0 )  /* Time Status event */
-#define HCI_CONTROL_MESH_EVENT_TIME_ZONE_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa1 )  /* Time Zone status event */
-#define HCI_CONTROL_MESH_EVENT_TIME_TAI_UTC_DELTA_STATUS                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa2 )  /* Time TAI_UTC Delta status event */
-#define HCI_CONTROL_MESH_EVENT_TIME_ROLE_STATUS                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa3 )  /* Time Role status event */
-#define HCI_CONTROL_MESH_EVENT_TIME_SET                                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xa4 )  /* Time Set event */
-
-#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_CAPABILITIES_STATUS           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb0 )  /* Remote Provisioning Scanning Server Information */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb1 )  /* Remote Provisioning Scan Parameters */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_REPORT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb2 )  /* Remote Provisioning Report the scanned Device UUID */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_EXTENDED_REPORT               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb3 )  /* Remote Provisioning report the Advertising data containing the defined AD Type */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_LINK_REPORT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb4 )  /* Provision link established or dropped */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_END                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb5 )  /* Provision end event */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABITIES                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb6 )  /* Provisioning device capabilities */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_OOB_DATA                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb7 )  /* Provisioning OOB data request */
-#define HCI_CONTROL_MESH_EVENT_PROXY_DEVICE_NETWORK_DATA                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb8 )  /* Proxy device network data event */
-#define HCI_CONTROL_MESH_EVENT_PROXY_DATA                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xb9 )  /* Proxy device network data event */
-
-#define HCI_CONTROL_MESH_EVENT_RAW_MODEL_DATA                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xbf )  /* Raw model data from the access layer */
-
-#define HCI_CONTROL_MESH_EVENT_FW_DISTRIBUTION_UPLOAD_STATUS                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc0 )  /* Prepare Distribution Client for FW Upload */
-#define HCI_CONTROL_MESH_EVENT_RSSI_TEST_RESULT                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xc1 )  /* RSSI test result */
-
-#define HCI_CONTROL_MESH_EVENT_PROXY_CONNECTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe0 )  /* Proxy connection status */
-
-#define HCI_CONTROL_MESH_EVENT_NODE_RESET_STATUS                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe1 )  /* Config Node Reset status */
-#define HCI_CONTROL_MESH_EVENT_COMPOSITION_DATA_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe2 )  /* Config Composition Data status */
-#define HCI_CONTROL_MESH_EVENT_FRIEND_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe3 )  /* Config Friend status */
-#define HCI_CONTROL_MESH_EVENT_GATT_PROXY_STATUS                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe4 )  /* Config GATT Proxy status */
-#define HCI_CONTROL_MESH_EVENT_RELAY_STATUS                                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe5 )  /* Config Relay status */
-#define HCI_CONTROL_MESH_EVENT_DEFAULT_TTL_STATUS                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe6 )  /* Config Default TTL status */
-#define HCI_CONTROL_MESH_EVENT_BEACON_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe7 )  /* Config Beacon status */
-#define HCI_CONTROL_MESH_EVENT_NODE_IDENTITY_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe8 )  /* Config Node Identity status */
-#define HCI_CONTROL_MESH_EVENT_MODEL_PUBLICATION_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xe9 )  /* Config Model Publication status */
-#define HCI_CONTROL_MESH_EVENT_MODEL_SUBSCRIPTION_STATUS                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xea )  /* Config Model Subscription status */
-#define HCI_CONTROL_MESH_EVENT_MODEL_SUBSCRIPTION_LIST                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xeb )  /* Config Model Subscription List */
-#define HCI_CONTROL_MESH_EVENT_NETKEY_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xec )  /* Config NetKey status */
-#define HCI_CONTROL_MESH_EVENT_NETKEY_LIST                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xed )  /* Config Netkey List */
-#define HCI_CONTROL_MESH_EVENT_APPKEY_STATUS                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xee )  /* Config AppKey status */
-#define HCI_CONTROL_MESH_EVENT_APPKEY_LIST                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xef )  /* Config Appkey List */
-#define HCI_CONTROL_MESH_EVENT_MODEL_APP_BIND_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf0 )  /* Config Model App status */
-#define HCI_CONTROL_MESH_EVENT_MODEL_APP_LIST                               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf1 )  /* Config Model App List */
-#define HCI_CONTROL_MESH_EVENT_HEARTBEAT_SUBSCRIPTION_STATUS                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf2 )  /* Config Heartbeat Subscription status */
-#define HCI_CONTROL_MESH_EVENT_HEARTBEAT_PUBLICATION_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf3 )  /* Config Heartbeat Publication status */
-#define HCI_CONTROL_MESH_EVENT_NETWORK_TRANSMIT_PARAMS_STATUS               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf4 )  /* Config Network Transmit status */
-#define HCI_CONTROL_MESH_EVENT_HEALTH_CURRENT_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf5 )  /* Health Current status */
-#define HCI_CONTROL_MESH_EVENT_HEALTH_FAULT_STATUS                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf6 )  /* Health Fault status */
-#define HCI_CONTROL_MESH_EVENT_HEALTH_PERIOD_STATUS                         ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf7 )  /* Health Period status */
-#define HCI_CONTROL_MESH_EVENT_HEALTH_ATTENTION_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf8 )  /* Health Attention status */
-#define HCI_CONTROL_MESH_EVENT_LPN_POLL_TIMEOUT_STATUS                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xf9 )  /* Low Power node Poll Timeout status */
-#define HCI_CONTROL_MESH_EVENT_KEY_REFRESH_PHASE_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xfa )  /* Key Refresh Phase status */
-#define HCI_CONTROL_MESH_EVENT_PROXY_FILTER_STATUS                          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xfb )  /* Proxy Filter status */
-#define HCI_CONTROL_MESH_EVENT_CORE_SEQ_CHANGED                             ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xfc )  /* New Sequence Number */
-#define HCI_CONTROL_MESH_EVENT_NVRAM_DATA                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xfe )  /*  */
-#define HCI_CONTROL_MESH_EVENT_VENDOR_DATA                                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0xff )  /* Vendor model data */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_CONTROL_STATUS                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x37 )      /* an unacknowledged message used to report the current Directed Control state of a subnet */
+#define HCI_CONTROL_MESH_EVENT_DF_PATH_METRIC_STATUS                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x38 )      /* an unacknowledged message used to report the current Path Metric state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DISCOVERY_TABLE_CAPABILITIES_STATUS       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x39 )      /* an unacknowledged message used to report the current Discovery Table Capabilities state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_FORWARDING_TABLE_STATUS                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3a )      /* an unacknowledged message used to report the status of the most recent operation performed on the Forwarding Table state of a n */
+#define HCI_CONTROL_MESH_EVENT_DF_FORWARDING_TABLE_DEPENDENTS_STATUS        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3b )      /* an unacknowledged message used to report the status of the most recent operation performed on the Dependent_Origin_List field or the Dependent_Target_List field of a fixed path entry in the Forwarding Table state of a node. */
+#define HCI_CONTROL_MESH_EVENT_DF_FORWARDING_TABLE_DEPENDENTS_GET_STATUS    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3c )      /* an unacknowledged message used to report status information for a filtered list of unicast address ranges of dependent nodes of the Path Origin or the Path Target of a Forwarding Table entry */
+#define HCI_CONTROL_MESH_EVENT_DF_FORWARDING_TABLE_ENTRIES_COUNT_STATUS     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3d )      /* an unacknowledged message used to report the information about the Forwarding Table state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_FORWARDING_TABLE_ENTRIES_STATUS           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3e )      /* an unacknowledged message used to report status information for a filtered set of path entries in the Forwarding Table state of a node (see Section 4.2.29), optionally including a list of path entries. */
+#define HCI_CONTROL_MESH_EVENT_DF_WANTED_LANES_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x3f )      /* an unacknowledged message used to report the current Wanted Lanes state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_TWO_WAY_PATH_STATUS                       ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x40 )      /* an unacknowledged message used to report the current Two Way Path state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_PATH_ECHO_INTERVAL_STATUS                 ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x41 )      /* an unacknowledged message used to report the current Path Echo Interval state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_NETWORK_TRANSMIT_STATUS          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x42 )      /* an unacknowledged message used to report the current Directed Network Transmit state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_RELAY_RETRANSMIT_STATUS          ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x43 )      /* an unacknowledged message used to report the current Directed Relay Retransmit state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_RSSI_THRESHOLD_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x44 )      /* an unacknowledged message used to report the current RSSI Threshold state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_PATHS_STATUS                     ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x45 )      /* an unacknowledged message used to report the Directed Paths state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_PUBLISH_POLICY_STATUS            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x46 )      /* an unacknowledged message used to report the current Directed Publish Policy state of a model of an element of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_PATH_DISCOVERY_TIMING_CONTROL_STATUS      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x47 )      /* an unacknowledged message used to report the current Path Discovery Timing Control state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_CONTROL_NETWORK_TRANSMIT_STATUS  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x48 )      /* an unacknowledged message used to report the current Directed Control Network Transmit state of a node */
+#define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_CONTROL_RELAY_RETRANSMIT_STATUS  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x49 )      /* an unacknowledged message used to report the current Directed Control Relay Retransmit state of a node */
 
 /* Events for the Battery Client profile */
 #define HCI_CONTROL_BATT_CLIENT_EVENT_CONNECTED             ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x00 )    /* Battery Client connected */
@@ -1145,6 +1251,19 @@
 /* HCI TEST events */
 #define HCI_CONTROL_HCITEST_EVENT_STATUS                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x01 ) /* test status */
 #define HCI_CONTROL_HCITEST_EVENT_PACKET                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x02 ) /* test packet (for loopback) */
+
+/* Connected Mesh Events */
+#define HCI_CONTROL_CONN_MESH_EVENT_NODE_PROVISIONED        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x01 )  /* Node addr */
+#define HCI_CONTROL_CONN_MESH_EVENT_GET_DATA                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x02 )  /* Application Data Received */
+#define HCI_CONTROL_CONN_MESH_EVENT_APP_DATA                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x03 )  /* Application Data Received */
+#define HCI_CONTROL_CONN_MESH_EVENT_NODE_LIST               ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x04 )  /* Node List report */
+#define HCI_CONTROL_CONN_MESH_EVENT_CONN_STATUS             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x05 )  /* Connection Status update */
+#define HCI_CONTROL_CONN_MESH_EVENT_PING_RESULT             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x06 )  /* Ping Result */
+#define HCI_CONTROL_CONN_MESH_EVENT_DATA_STATS              ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x07 )  /* Stats */
+#define HCI_CONTROL_CONN_MESH_EVENT_CONN_UP                 ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x08 )  /* Node addr */
+#define HCI_CONTROL_CONN_MESH_EVENT_CONN_DOWN               ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Node addr */
+#define HCI_CONTROL_CONN_MESH_EVENT_OP_STATE_CHANGED        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0a )  /* Node addr */
+#define HCI_CONTROL_CONN_MESH_EVENT_RESET_COMPLETE          ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0b )  /* Node addr */
 
 /* Status codes returned in HCI_CONTROL_EVENT_COMMAND_STATUS the event */
 #define HCI_CONTROL_STATUS_SUCCESS                          0
@@ -1241,6 +1360,7 @@
 #define HCI_CONTROL_MCE_PARAM_NOTIF_STATUS                  16  /* Notification status (1:ON, 0:OFF), 1 byte */
 #define HCI_CONTROL_MCE_PARAM_MAX_LIST_COUNT                17  /* Maximum number of items listed, 2 bytes */
 #define HCI_CONTROL_MCE_PARAM_LIST_START_OFFSET             18  /* Offset of the first item in list, 2 bytes */
+#define HCI_CONTROL_MCE_PARAM_SRMP_ENABLE                   19  /* SRMP Enable, 1 byte */
 
 /* HomeKit software token data flags */
 #define HCI_TOKEN_DATA_FLAG_START                           0x01

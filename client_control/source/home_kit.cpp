@@ -576,15 +576,3 @@ void MainWindow::HandleHkEvent(DWORD opcode, LPBYTE p_data, DWORD len)
     }
 }
 
-void MainWindow::on_btnHelpHK_clicked()
-{
-    onClear();
-    Log("HomeKit help topic:");
-    Log("");
-    Log("Apps : homekit_lightbulb and homekit_lock (MFI licensees only)");
-    Log("Peer device : iOS 'My Home' app");
-    Log("");
-    Log("The apps simluates light bulb and lock devices that can be controlled by the iOS");
-
-    ScrollToTop();
-}

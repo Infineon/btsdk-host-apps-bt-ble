@@ -451,7 +451,6 @@ void MainWindow::on_btniAPRead_clicked()
 #define TX_RETRY_TIMEOUT      2 // in seconds
 DWORD MainWindow::SendFileThreadiAP2()
 {
-    int retry_tx_attempts = 0;
     FILE *fp = NULL;
     char buf[1030] = { 0 };
     QString strfile = ui->lineEditiAP2SendFile->text();
@@ -535,25 +534,3 @@ void Worker::process_iap2()
     emit finished();
 }
 
-void MainWindow::on_btnHelpIAP2_clicked()
-{
-    onClear();
-    Log("iAP2 profile help topic:");
-    Log("");
-    Log("Apps : hci_iap2_spp (MFI licensees only)");
-    Log("Peer device - iOS device");
-#if 0 // todo - design the usages of buttons
-    Log("");
-    Log("- Connect");
-    Log("  Connect to an IAP2 server");
-    Log("- Disconnect");
-    Log("  Disconnect from an IAP2 server");
-#endif
-    Log("- Send");
-    Log("  Send characters typed in the edit control, or a file, to the peer device");
-    Log("- Receive");
-    Log("  Receive data in the edit control (first 50 bytes) or receive and save data");
-    Log("  to a file");
-
-    ScrollToTop();
-}

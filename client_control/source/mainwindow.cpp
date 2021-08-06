@@ -42,6 +42,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTimer>
+#include <QTextStream>
 
 extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index,int iSpyInstance);
 
@@ -102,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scripting(false),
     ui(new Ui::MainWindow)
 {
+    m_b_app_init = false;
     iSpyInstance = 0;
     app_host_init();
     ui->setupUi(this);
@@ -159,24 +161,25 @@ MainWindow::MainWindow(QWidget *parent) :
     InitMAPClient();
     InitHciLoopbackTest();
 
-    ListClear();
+    processClear();
 
-    Log("Instructions:");
-    Log("1.  Plug the WICED Evaluation Board into the computer using a USB cable.");
-    Log("2.  Build and download an embedded application to the WICED evaluation board.");
-    Log("3.  Select the serial (COM) port for the WICED Evaluation Board and open the port.");
-    Log("    This is usually enumerated 'WICED HCI UART' on Windows or Linux PCs.");
-    Log("    The UI will be enabled when the Client Control app is able to communicate with the embedded BT app.");
-    Log("4.  For more information on application tabs, select a tab and click on the help (?) icon.");
+    ui->lstTrace->addItem("Instructions:");
+    ui->lstTrace->addItem("1.  Plug the WICED Evaluation Board into the computer using a USB cable.");
+    ui->lstTrace->addItem("2.  Build and download an embedded application to the WICED evaluation board.");
+    ui->lstTrace->addItem("3.  Select the serial (COM) port for the WICED Evaluation Board and open the port.");
+    ui->lstTrace->addItem("    This is usually enumerated 'WICED HCI UART' on Windows or Linux PCs.");
+    ui->lstTrace->addItem("    The UI will be enabled when the Client Control app is able to communicate with the embedded BT app.");
+    ui->lstTrace->addItem("4.  For more information about this application, click on the help (?) icon.");
 
-    ScrollToTop();
+   processScrollToTop();
 
-    // Tab index 18 and higher are not used currently, remove then from UI
-    for(int i = 0; i < 8; i++)
-        ui->tabMain->removeTab(18);
+    // Tab index 17 and higher are not used currently, remove then from UI
+    for(int i = 0; i < 10; i++)
+        ui->tabMain->removeTab(17);
 
     EventFilter *evtFilter = new EventFilter();
     ui->tabDualA2DP->installEventFilter(evtFilter);
+    m_b_app_init = true;
 }
 
 MainWindow::~MainWindow()
@@ -291,6 +294,10 @@ void MainWindow::processClear()
 // common Log method to send traces to app UI
 void MainWindow::Log(const char * fmt, ...)
 {
+    // discard spurios traces in clientcontrol start up
+    if(!m_b_app_init)
+        return;
+
     va_list cur_arg;
     va_start(cur_arg, fmt);
     char trace[1000];
@@ -604,68 +611,25 @@ void MainWindow::HandleHidHAudioRxData(LPBYTE p_data, DWORD len) {}
 
 void MainWindow::on_btnHelpTab_clicked()
 {
-    if(ui->tabAG->isVisible())
-        on_btnHelpAG_clicked();
+    onClear();
+    QFile inputFile("../README.txt");
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       while (!in.atEnd())
+       {
+          QString line = in.readLine();
+          ui->lstTrace->addItem(line);
+       }
+       inputFile.close();
+       processScrollToTop();
+    }
+    else
+    {
+        ui->lstTrace->addItem("See README.txt file in ClientControl folder.");
+    }
 
-    if(ui->tabHF->isVisible())
-        on_btnHelpHF_clicked();
 
-    if(ui->tabAVSRC->isVisible())
-        on_btnHelpAVSRC_clicked();
-
-    if(ui->tabAVRCCT->isVisible())
-        on_btnHelpAVRC_CT_clicked();
-
-    if(ui->tabAVRCTG->isVisible())
-        on_btnHelpAVRC_TG_clicked();
-
-    if(ui->tabHIDD->isVisible())
-        on_btnHelpHIDD_clicked();
-
-    if(ui->tabHIDH->isVisible())
-        on_btnHelpHIDH_clicked();
-
-    if(ui->tabSPP->isVisible())
-        on_btnHelpSPP_clicked();
-
-    if(ui->tabIAP2->isVisible())
-        on_btnHelpIAP2_clicked();
-
-    if(ui->tabHK->isVisible())
-        on_btnHelpHK_clicked();
-
-    if(ui->tabGATT->isVisible())
-        on_btnHelpGATT_clicked();
-
-    if(ui->tabAVSink->isVisible())
-        on_btnHelpAVK_clicked();
-
-    if(ui->tabBSG->isVisible())
-        on_btnHelpBSG_clicked();
-
-    if(ui->tabPBC->isVisible())
-        on_btnHelpPBC_clicked();
-
-    if(ui->tabGATT_DB->isVisible())
-        on_btnHelpGATT_DB_clicked();
-
-    if(ui->tabBATTC->isVisible())
-        on_btnHelpBATTC_clicked();
-
-    if(ui->tabFINDMEL->isVisible())
-        on_btnHelpFindMe_clicked();
-
-    if(ui->tabOPS->isVisible())
-        on_btnHelpOPPS_clicked();
-
-    if(ui->tabDemo->isVisible())
-        on_btnHelpDemo_clicked();
-
-    if(ui->tabAlertNotfn->isVisible())
-        on_btnHelpANP_clicked();
-
-    if(ui->tabTest->isVisible())
-        on_btnHelpLoopBack_clicked();
 }
 
 

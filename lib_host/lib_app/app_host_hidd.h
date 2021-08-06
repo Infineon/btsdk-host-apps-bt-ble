@@ -50,7 +50,7 @@ enum {
 bool app_host_hidd_connect();
 bool app_host_hidd_disconnect();
 bool app_host_hidd_pairing_mode(uint8_t m_pairing_mode_active);
-bool app_host_hidd_send_report(uint8_t channel, uint8_t report_id, uint8_t *report, uint8_t report_len);
+bool app_host_hidd_send_report(uint8_t channel, uint8_t report_type, uint8_t *report, uint8_t report_len);
 bool app_host_hidd_send_key(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key, char * buffer, uint8_t btn_up);
 bool app_host_hidd_cap_lock(uint8_t cap_lock, uint8_t ctrl_key, uint8_t alt_key);
 bool app_host_hidd_virtual_unplug();

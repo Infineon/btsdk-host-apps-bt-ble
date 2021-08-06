@@ -620,6 +620,25 @@ CBtDevice * MainWindow::GetSelectedLEDevice()
     return var.value<CBtDevice *>();
 }
 
+// get selected device
+CBtDevice * MainWindow::GetDevice()
+{
+    CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
+    if(pDev)
+        return pDev;
+    else
+    {
+        pDev =(CBtDevice *)GetSelectedLEDevice();
+        if(pDev)
+            return pDev;
+        else
+        {
+            Log("No selected device got.");
+            return NULL;
+        }
+    }
+}
+
 // unpair a BR-EDR device
 void MainWindow::OnBnClickedBREDRUnbond()
 {
@@ -1890,9 +1909,9 @@ void MainWindow::CloseCommPort()
         m_bClosing = true;
         if (m_CommPort && m_CommPort->isOpen())
             m_CommPort->indicate_close();
-
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_MACOS)
         serial_read_wait.wakeAll();
-
+#endif
         if(m_port_read_thread)
         {
             m_port_read_thread->exit();
@@ -2235,16 +2254,23 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
         if(m_bClosing)
             return 0;
 
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+        dwRead = m_pParent->m_CommPort->read( (char *)p, Length);
+        if(dwRead < 0)
+        {
+            m_pParent->Log("Error in port read");
+            return 0;
+        }
+        else if(dwRead == 0)
+        {
+            QThread::msleep(5);
+            continue;
+        }
+#else
         dwRead = 0;
         char buff_temp[1030];
         memset(buff_temp, 0, 1030);
 
-#if 0 // defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-        m_pParent->m_CommPort->waitForReadyRead(10);
-        dwRead = m_pParent->m_CommPort->read(buff_temp, static_cast<qint64>(Length));
-        if (dwRead > 0)
-            memcpy(p, buff_temp, dwRead);
-#else
         dwRead = m_pParent->m_CommPort->read(buff_temp,static_cast<qint64>(Length));
         if(dwRead <= 0)
         {
@@ -2281,13 +2307,13 @@ DWORD Worker::Read(BYTE *lpBytes, DWORD dwLen)
             retry_cnt = 0;
         }
 #endif
-
         if (dwRead > static_cast<int64_t>(Length))
             break;
         p += dwRead;
         Length -= dwRead;
         dwTotalRead += dwRead;
     }
+
     return dwTotalRead;
 }
 

@@ -42,6 +42,10 @@ extern "C"
 #include "app_host.h"
 }
 
+#define AT_MIC_VOLUME_EVT_STR    "AT+VGM="
+#define AT_SPK_VOLUME_EVT_STR    "AT+VGS="
+static bool skip_vol_update = FALSE;
+
 // Initialize app
 void MainWindow::InitAG()
 {
@@ -157,6 +161,32 @@ void MainWindow::onHandleWicedEventAG(unsigned int opcode, unsigned char *p_data
     }
 }
 
+int MainWindow::ag_get_volume(char *str, int len)
+{
+    int volume = 0;
+    int index=0;
+    char   trace[1024];
+    if (len > 2)
+    {
+        sprintf(trace,"[ag_get_volume] Invalid Length %d",len);
+        Log(trace);
+        return -1;
+    }
+    while(len--)
+    {
+        volume = (volume*10) + (str[index]-'0');
+        index++;
+    }
+
+    if (volume > 15)
+    {
+        sprintf(trace,"[ag_get_volume] Invalid volume %d",volume);
+        Log(trace);
+        return -1;
+    }
+    return volume;
+}
+
 // Handle WICED HCI events for AG
 void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
 {
@@ -230,7 +260,10 @@ void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
     // AG audio connected with peer
     case HCI_CONTROL_AG_EVENT_AUDIO_OPEN:
         handle   = p_data[0] | (p_data[1] << 8);
-        sprintf(trace, "[Handle: %u] Rcvd Event 0x14 - HCI_CONTROL_AG_EVENT_AUDIO_OPEN", handle);
+        sprintf(trace, "[Handle: %u, wbs_supported: %d, wbs_used: %d] Rcvd Event 0x14 - HCI_CONTROL_AG_EVENT_AUDIO_OPEN",
+                handle,
+                p_data[2],
+                p_data[3]);
         Log(trace);
         ui->btnAGAudioConnect->setText("Audio Disconnect");
         m_audio_connection_active = true;
@@ -248,6 +281,34 @@ void MainWindow::HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len)
         handle   = p_data[0] | (p_data[1] << 8);
         sprintf(trace, "[Handle: %u] Rcvd Event 0x15 - HCI_CONTROL_AG_EVENT_AT_CMD %s", handle, (char *)&p_data[2]);
         Log(trace);
+
+        if (strncmp((char *)&p_data[2],AT_SPK_VOLUME_EVT_STR,strlen(AT_SPK_VOLUME_EVT_STR)) == 0)
+        {
+            int spk_evt_len = strlen(AT_SPK_VOLUME_EVT_STR);
+            int volume = ag_get_volume((char *)&p_data[2+spk_evt_len],len-spk_evt_len-3);
+            if (volume != -1)
+            {
+                if ( ui->comboBoxAGCallSpkVol->currentIndex() != volume )
+                {
+                    skip_vol_update = TRUE;
+                    ui->comboBoxAGCallSpkVol->setCurrentIndex(volume);
+                }
+            }
+        }
+        if (strncmp((char *)&p_data[2],AT_MIC_VOLUME_EVT_STR,strlen(AT_MIC_VOLUME_EVT_STR)) == 0)
+        {
+            int mic_evt_len = strlen(AT_MIC_VOLUME_EVT_STR);
+            int volume = ag_get_volume((char *)&p_data[2+mic_evt_len],len-mic_evt_len-3);
+            if (volume != -1)
+            {
+                if ( ui->comboBoxAGCallMicVol->currentIndex() != volume )
+                {
+                    skip_vol_update = TRUE;
+                    ui->comboBoxAGCallMicVol->setCurrentIndex(volume);
+                }
+            }
+        }
+
         break;
     // CLCC Request from HF
     case HCI_CONTROL_AG_EVENT_CLCC_REQ:
@@ -287,24 +348,6 @@ CBtDevice* MainWindow::GetConnectedAGDevice()
     return pDev;
 }
 
-
-void MainWindow::on_btnHelpAG_clicked()
-{
-    onClear();
-    Log("Audio Gateway help topic:");
-    Log("Apps : audio_gateway");
-    Log("");
-
-    Log("Peer device - headset, speaker, car-kit supporting hands-free profile");
-    Log("- Connect");
-    Log("  Connect to a peer device supporting the HF profile");
-    Log("- Disconnect");
-    Log("  Disconnect with a peer device");
-    Log("- Audio Connect");
-    Log("  Open a SCO audio channel with a peer device");
-
-    ScrollToTop();
-}
 
 void MainWindow::on_comboBoxAGCallID_1_currentIndexChanged(int index)
 {
@@ -390,7 +433,11 @@ void MainWindow::on_comboBoxAGCallSpkVol_currentIndexChanged(int index)
     CBtDevice * pDev = GetConnectedAGDevice();
     if (pDev == NULL)
         return;
-
+    if (skip_vol_update == TRUE)
+    {
+        skip_vol_update = FALSE;
+        return;
+    }
     app_host_ag_send_spk_vol_cmd(pDev->m_address, index);
 }
 
@@ -400,5 +447,12 @@ void MainWindow::on_comboBoxAGCallMicVol_currentIndexChanged(int index)
     if (pDev == NULL)
         return;
 
+    if (skip_vol_update == TRUE)
+    {
+        skip_vol_update = FALSE;
+        return;
+    }
+
+    skip_vol_update = FALSE;
     app_host_ag_send_mic_vol_cmd(pDev->m_address, index);
 }

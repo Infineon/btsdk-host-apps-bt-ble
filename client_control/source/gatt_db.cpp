@@ -544,24 +544,3 @@ void MainWindow::on_btnInitGATTDB_clicked()
     Log("Send HCI_CONTROL_GATT_COMMAND_DB_INIT");
 
 }
-
-
-void MainWindow::on_btnHelpGATT_DB_clicked()
-{
-    onClear();
-    Log("GATT DB help topic:");
-    Log("");
-    Log(" * Apps : gatt_db");
-    Log("");
-    Log(" * Download snip.ble.gatt_db application on your WICED device.");
-    Log(" * Click on 'Init Database' button to initialize GATT database.");
-    Log(" * Add the desired services, characteristics and descriptors to");
-    Log("   populate GATT database. Use the + button to add.");
-    Log(" * The UUID field can be 2 byte hex, represented as 0xXX or byte array is formatted as five hex");
-    Log("   fields separated by '-' and enclosed in curly braces, i.e., {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}");
-    Log("   where 'x' is a hex digit. The Property and Permission fields are single 1 hex represented as 0xX.");
-    Log("   All other fields are 2 byte hex represented as 0xXX.");
-    Log(" * Add advertizement data (max 31 bytes) and click on 'Start Advert' button to start advertisment.");
-    Log(" * Using a peer BLE device or app such as LightBlue, disover the GATT device and services");
-    ScrollToTop();
-}

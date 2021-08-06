@@ -221,16 +221,3 @@ CBtDevice* MainWindow::GetConnectedFINDMELDevice(void)
 
     return pDev;
 }
-
-
-void MainWindow::on_btnHelpFindMe_clicked()
-{
-    onClear();
-    Log("Findme Locator (client) help topic:");
-    Log("");
-    Log("WICED Platforms : 20706-A2, 43012-C0");
-    Log("Apps : hci_ble_hid_host");
-    Log("");
-    Log("Connect to a BLE remote control or mouse that supports Findme service and set Alert levels");
-    ScrollToTop();
-}

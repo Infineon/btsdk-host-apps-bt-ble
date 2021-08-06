@@ -229,6 +229,7 @@ public:
     QIcon m_paired_icon;
     QSettings m_settings;
     FILE * m_fp_logfile;
+    bool m_b_app_init;
     void VirtualUnplug(CBtDevice *pDev);
     void Startup();
 
@@ -254,6 +255,7 @@ public:
     void SelectDevice(QComboBox* cb, BYTE * bda);
     CBtDevice * GetSelectedDevice();
     CBtDevice * GetSelectedLEDevice();
+    CBtDevice * GetDevice();
     void ResetDeviceList(QComboBox *cb);
     void onHandleWicedEventDm(unsigned int opcode, unsigned char*p_data, unsigned int len);
     void SetDevicePaired(BYTE * info, int len=6);
@@ -381,6 +383,7 @@ public:
     void InitAG();
     void onHandleWicedEventAG(unsigned int opcode, unsigned char *p_data, unsigned int len);
     void HandleAgEvents(DWORD opcode, LPBYTE p_data, DWORD len);
+    int ag_get_volume(char *str, int len);
     bool m_ag_connection_active;
     CBtDevice* GetConnectedAGDevice();
 
@@ -642,6 +645,7 @@ public:
     void onHandleMceMessageStatusSet(unsigned char *p_data, unsigned int len);
     void onHandleMceNotifReg(unsigned char *p_data, unsigned int len);
     void onHandleMceNotif(unsigned char *p_data, unsigned int len);
+    void HelperRegisterNotification(bool reg);
 
     QString m_mce_set_folder;
     QString m_mce_cur_folder;
@@ -712,7 +716,6 @@ public slots:
     void onAudioSrcI2S(bool);
     void onAudioFileFormatWav(bool);
     void onAudioFileFormatMp3(bool);
-    void on_btnHelpAVSRC_clicked();
 
     // AV source dual A2DP
     void onDisconnectAudioSrc_DualA2DP();
@@ -725,7 +728,6 @@ public slots:
     void onAudioSrcI2S_DualA2DP(bool);
     void onAudioFileFormatWav_DualA2DP(bool);
     void onAudioFileFormatMp3_DualA2DP(bool);
-    void on_btnHelpAVSRC_clicked_DualA2DP();
 
     // Hands-free
     void on_btnConnectHF_clicked();
@@ -743,7 +745,6 @@ public slots:
     void on_btnHFBtnPress_clicked();
     void on_btnHFLongBtnPress_clicked();
     void on_btnHFActiveCalls_clicked();
-    void on_btnHelpHF_clicked();
     void on_btnHFNREC_clicked();
     void on_btnHFCNUM_clicked();
     void on_btnHFBINP_clicked();
@@ -759,13 +760,11 @@ public slots:
     void on_cbSPPSendFile_clicked(bool checked);
     void on_cbSPPReceiveFile_clicked(bool checked);
     void on_cbSPPThreadComplete();
-    void on_btnHelpSPP_clicked();
 
     // AG
     void on_btnAGConnect_clicked();
     void on_btnAGDisconnect_clicked();
     void on_btnAGAudioConnect_clicked();
-    void on_btnHelpAG_clicked();
     void on_comboBoxAGCallID_1_currentIndexChanged(int index);
     void on_comboBoxAGCallID_2_currentIndexChanged(int index);
     void on_comboBoxAGHeldCall_currentIndexChanged(int index);
@@ -791,7 +790,6 @@ public slots:
     void on_cbBLEHIDCapLock_clicked();
     void on_cbBLEHIDCtrl_clicked();
     void on_cbBLEHIDAlt_clicked();
-    void on_btnHelpHIDD_clicked();
 
     // HID Host
     void on_btnHIDHConnect_clicked();
@@ -804,7 +802,6 @@ public slots:
     void on_radioHIDHBREDR_clicked();
     void on_btnHIDHGetReport_clicked();
     void on_btnHIDHSetReport_clicked();
-    void on_btnHelpHIDH_clicked();
 
     //AVRCP CT
     void onCTPlay();
@@ -829,7 +826,6 @@ public slots:
     void on_cbTGVolume_currentIndexChanged(int index);
     void on_btnAVRCTBtnPress_clicked();
     void on_btnAVRCTLongBtnPress_clicked();
-    void on_btnHelpAVRC_CT_clicked();
 
     // AVRCP TG
     void onTGPlay();
@@ -844,7 +840,6 @@ public slots:
     void onTGRegisterNotification();
     void oncbTGShuffleCurrentIndexChanged(int index);
     void oncbTGRepeatCurrentIndexChanged(int index);
-    void on_btnHelpAVRC_TG_clicked();
     void onTGMute();
     void on_btnTGDeselectTrack_clicked();
 
@@ -866,7 +861,6 @@ public slots:
     void OnBnClickedCharacteristicRead();
     void OnBnClickedCharacteristicWrite();
     void OnBnClickedCharacteristicWriteWithoutResponse();
-    void on_btnHelpGATT_clicked();
 
     //BSG
     void on_btnBSGSend_clicked();
@@ -875,7 +869,6 @@ public slots:
     void on_cbBSGSendFile_clicked(bool checked);
     void on_cbBSGReceiveFile_clicked(bool checked);
     void on_cbBSGThreadComplete();
-    void on_btnHelpBSG_clicked();
 
     // PBC
     void on_btnPBCConnect_clicked();
@@ -887,7 +880,6 @@ public slots:
     void on_btnPBCOCCalls_clicked();
     void on_btnPBCMissedCalls_clicked();
     void on_ShowPhonebookData();
-    void on_btnHelpPBC_clicked();
 
     // HomeKit
     void on_btnHKRead_clicked();
@@ -901,7 +893,6 @@ public slots:
     void on_timer();
     void on_btnHKFactoryReset_clicked();
     void on_btnHKGetToken_clicked();
-    void on_btnHelpHK_clicked();
 
     // iAP2
     void on_btniAPConnect_clicked();
@@ -915,30 +906,25 @@ public slots:
     void on_cbiAP2ThreadComplete();
     void on_btniAP2ReadCert_clicked();
     void on_btniAP2GenSign_clicked();
-    void on_btnHelpIAP2_clicked();
 
     // audio sink
     void on_btnAVSinkConnect_clicked();
     void on_btnAvSinkDisconnect_clicked();
     void on_btnAvSinkStart_clicked();
     void on_btnAvSinkSuspend_clicked();
-    void on_btnHelpAVK_clicked();
 
     // Battery Client
     void on_btnBATTCConnect_clicked(void);
     void on_btnBATTCDisconnect_clicked(void);
     void on_btnBATTCReadLevel_clicked(void);
-    void on_btnHelpBATTC_clicked(void);
 
     // FindMe Locator
     void on_btnFINDMELConnect_clicked(void);
     void on_btnFINDMELDisconnect_clicked(void);
     void on_cbFINDMELLevel_currentIndexChanged(int index);
-    void on_btnHelpFindMe_clicked();
 
     // OPS
     void on_btnOPSDisconnect_clicked();
-    void on_btnHelpOPPS_clicked();
 
     // GATT DB
     void on_btnAddPrimarySvc_clicked();
@@ -948,7 +934,6 @@ public slots:
     void on_btnAddDesc_clicked();
     void on_btnStartAdvertGATTDB_clicked();
     void on_btnInitGATTDB_clicked();
-    void on_btnHelpGATT_DB_clicked();
 
     // ANP (ANS)
     void on_btnANSSetAlert_clicked();
@@ -965,10 +950,8 @@ public slots:
     void on_btnANCControlAlerts_clicked();
     void on_btnANCEnableNewAlerts_clicked();
     void on_btnANCUnreadAlerts_clicked();
-    void on_btnHelpANP_clicked();
 
     // Demo
-    void on_btnHelpDemo_clicked();
 
     //LE COC
     void on_btnLecocConnect_clicked();
@@ -1003,6 +986,8 @@ public slots:
     void on_btnMceDelete_clicked();
     void on_btnMceReply_clicked();
     void on_btnMceSend_clicked();
+    void on_btnMceRegNotif_clicked();
+    void on_btnMceMsgList_clicked();
 
     UINT16 MapAddTlv(UINT8 *buf, UINT8 type, UINT8 *value, UINT8 value_len);
     UINT8 *MapFindTlv(UINT8 *buf, UINT8 data_len, UINT8 type);
@@ -1012,7 +997,6 @@ public slots:
 
     // Test
     void on_btnTest_clicked();
-    void on_btnHelpLoopBack_clicked();
 
 public:
     Ui::MainWindow *ui;

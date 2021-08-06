@@ -52,7 +52,7 @@ bool wiced_hci_hidd_send_report(wiced_hci_bt_hidd_report_t * data)
 	uint8_t cmd[60];
 
 	cmd[0] = data->channel;
-	cmd[1] = data->report_id;
+	cmd[1] = data->report_type;
 	memcpy(&(cmd[2]), data->report, data->report_len);
 
 	return wiced_hci_send_command(HCI_CONTROL_HIDD_COMMAND_SEND_REPORT, cmd, 2 + data->report_len);

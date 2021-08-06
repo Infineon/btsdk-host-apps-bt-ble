@@ -585,21 +585,3 @@ void MainWindow::on_btnHFBIA_clicked()
     SendAtCmd(HCI_CONTROL_HF_AT_COMMAND_BIA, 0, cmd);
 }
 
-void MainWindow::on_btnHelpHF_clicked()
-{
-    onClear();
-    Log("Hands-free device help topic:");
-    Log("");
-    Log("Apps : hci_handsfree");
-    Log("Peer device - phone or device supporting the Audio Gateway profile");
-    Log("");
-    Log("- Connect");
-    Log("  Connect to a peer device supporting the AG profile");
-    Log("- Disconnect");
-    Log("  Disconnect with a peer device");
-    Log("- Connect Audio");
-    Log("  Open a SCO audio channel with a peer device");
-    Log("- Hangup, Answer, Redial, etc.");
-    Log("  These controls send the HF profile AT commands for various operations.");
-    ScrollToTop();
-}

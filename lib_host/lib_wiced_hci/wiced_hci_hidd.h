@@ -49,7 +49,7 @@ bool wiced_hci_send_command(uint16_t command, uint8_t * payload, uint32_t len);
 typedef struct
 {
 	uint8_t channel;
-	uint8_t report_id;
+	uint8_t report_type;
 	uint8_t * report;
 	uint8_t report_len;
 } wiced_hci_bt_hidd_report_t;

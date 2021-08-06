@@ -304,9 +304,3 @@ CBtDevice* MainWindow::GetConnectedAudioSnkDevice()
     return pDev;
 }
 
-
-void MainWindow::on_btnHelpAVK_clicked()
-{
-    onClear();
-    Log("Not supported");
-}

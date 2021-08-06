@@ -450,7 +450,7 @@ void MainWindow::on_btnBLEHIDSendReport_clicked()
    uint8_t channel = static_cast<BYTE> (v1.toUInt());
 
    QVariant v2 = ui->cbBLEHIDReport->currentData();
-   uint8_t report_id = static_cast<BYTE>(v2.toUInt());
+   uint8_t report_type = static_cast<BYTE>(v2.toUInt());
 
    QString str = ui->lineEditBLEHIDSendText->text();
 
@@ -459,8 +459,8 @@ void MainWindow::on_btnBLEHIDSendReport_clicked()
    for (int i = 0; i < report_len; i++)
        sprintf(&szLog[strlen(szLog)], "%02x ", report[i]);
 
-   Log("Sending HID Report: channel %d, report %d, %s",  channel, report_id, szLog);
-   app_host_hidd_send_report(channel, report_id, report, report_len);
+   Log("Sending HID Report: channel %d, type %d, %s",  channel, report_type, szLog);
+   app_host_hidd_send_report(channel, report_type, report, report_len);
 }
 
 // Enter pairing mode
@@ -589,32 +589,3 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
     }
 }
 
-
-void MainWindow::on_btnHelpHIDD_clicked()
-{
-    onClear();
-    Log("V1.5 HID Device:");
-    Log("");
-
-    Log("Apps : use HID apps such as remote, keyboard, mouse.");
-    Log("Peer device : Windows PC or any HID host");
-    Log("");
-
-    Log("Note: The TESTING_USING_HCI compile flag in the app must be set to support Client Control");
-    Log("");
-
-    Log("- V1.0");
-    Log("   Initial version MTB ClientControl HIDD");
-    Log("- V1.1");
-    Log("   Added media, such as audio, buttons");
-    Log("- V1.2");
-    Log("   Reversed Left and Right botton location");
-    Log("- V1.3");
-    Log("   Update Unbond button status upon successful pairing");
-    Log("- V1.4");
-    Log("   Remove discovery list upon virtual cable unplug");
-    Log("- V1.5");
-    Log("   Update BR/EDR discovery list upon successful pairing");
-    ScrollToTop();
-
-}

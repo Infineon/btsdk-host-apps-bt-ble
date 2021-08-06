@@ -40,6 +40,9 @@
 
 #define MCE_MAX_LIST_COUNT      50
 
+// TO Restrict number of read
+#define MCE_MAX_MSG_READ_COUNT  500
+
 void MainWindow::InitMAPClient()
 {
 }
@@ -174,6 +177,7 @@ void MainWindow::on_listMceMessages_currentItemChanged(QListWidgetItem *item, QL
 
     m_mce_rcvd_text.clear();
     SendWicedCommand(HCI_CONTROL_MCE_COMMAND_GET_MESSAGE, buf, p - buf);
+    UNUSED(previous);
 }
 
 void MainWindow::on_btnMceDelete_clicked()
@@ -254,11 +258,11 @@ QString MapTypeToString(int type)
 {
     QString str;
 
-    if (type & 1)
+    if (type == 0)
         str = QString("EMAIL");
-    else if (type & 2)
+    else if (type == 1)
         str = QString("SMS_GSM");
-    else if (type & 4)
+    else if (type == 2)
         str = QString("SMS_CDMA");
     else
         str = QString("MMS");
@@ -284,7 +288,13 @@ void MainWindow::on_btnMceSend_clicked()
     }
 
     QString content = ui->edtMceCompose->toPlainText();
-    if (m_mce_msg_type & 1)     // is Email
+    int msg_index = ui->comboBoxMceMsgType->currentIndex();
+    if ( !((1<<msg_index) & m_mce_msg_type))
+    {
+        Log("Selected MSG Type %d is not supported ",msg_index);
+        return;
+    }
+    if (msg_index == 0)
     {
         QString temp = "Subject: " + ui->edMceToSubject->text() + "\r\n\r\n";
         content.prepend(temp);
@@ -306,20 +316,27 @@ void MainWindow::on_btnMceSend_clicked()
 
     int size = content.size() + 22;
 
-    m_mce_push_message = QString::asprintf(MAP_SEND_MESSAGE_TEMPLATE, MapTypeToString(m_mce_msg_type).toLocal8Bit().data(), recipient.toLocal8Bit().data(), size, content.toLocal8Bit().data());
+    m_mce_push_message = QString::asprintf(MAP_SEND_MESSAGE_TEMPLATE, MapTypeToString(msg_index).toLocal8Bit().data(), recipient.toLocal8Bit().data(), size, content.toLocal8Bit().data());
 
-    // Change to outbox
-    UINT8 buf[20];
-    UINT8 *p = buf;
+    if (m_mce_cur_folder != "outbox")
+    {
+        // Change to outbox
+        UINT8 buf[20];
+        UINT8 *p = buf;
 
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
+        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
 
-    UINT8 nav_flag = 3; // Up one level
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NAV_FLAG, &nav_flag, 1);
+        UINT8 nav_flag = 3; // Up one level
+        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NAV_FLAG, &nav_flag, 1);
 
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)"outbox", 6);
+        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)"outbox", 6);
 
-    SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
+        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
+    }
+    else
+    {
+        MceSendMessageData(pDev->m_mce_handle);
+    }
 }
 
 void MainWindow::onHandleWicedEventMAPClient(unsigned int opcode, unsigned char *p_data, unsigned int len)
@@ -461,6 +478,7 @@ void MainWindow::onHandleMceConnected(unsigned char *p_data, unsigned int len)
         }
 
         m_mce_notif_registered = FALSE;
+        ui->btnMceRegNotif->setText("Register Notification");
 
         // Set telecom folder
         UINT8 buf[20];
@@ -513,9 +531,9 @@ UINT16 MainWindow::MceSendMessageData(UINT16 mce_handle)
 
     UINT16 send_len = m_mce_push_message.size();
     QByteArray array = m_mce_push_message.toLocal8Bit();
-    if (send_len > 194)
+    if (send_len > 150)
     {
-        send_len = 194;
+        send_len = 150;
         p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_DATA, (UINT8 *)array.data(), send_len);
         m_mce_push_message.remove(0, send_len);
     }
@@ -563,9 +581,31 @@ void MainWindow::onHandleMceFolderSet(unsigned char *p_data, unsigned int len)
         }
         else if (m_mce_cur_folder == "msg")
         {
-            // Get folder listing
+            if (ui->checkBoxMceSetInbox->isChecked())
+            {
+                // Set msg folder
+                UINT8 nav_flag = 2; // Down one level
+                p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NAV_FLAG, &nav_flag, 1);
+
+                m_mce_set_folder = "inbox";
+                p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)"inbox", m_mce_set_folder.size());
+
+                SendWicedCommand(HCI_CONTROL_MCE_COMMAND_SET_FOLDER, buf, p - buf);
+            }
+            else
+            {
+                // Get folder listing
+                m_mce_rcvd_text.clear();
+
+                SendWicedCommand(HCI_CONTROL_MCE_COMMAND_LIST_FOLDERS, buf, p - buf);
+            }
+        }
+        else if ( (m_mce_cur_folder == "inbox") && ui->checkBoxMceSetInbox->isChecked())
+        {
+            ui->checkBoxMceSetInbox->setCheckState(Qt::Unchecked);
+            // Get message listing
             m_mce_rcvd_text.clear();
-            SendWicedCommand(HCI_CONTROL_MCE_COMMAND_LIST_FOLDERS, buf, p - buf);
+            MceSendGetMessageListing(pDev->m_mce_handle, 0, MCE_MAX_LIST_COUNT);
         }
         else
         {
@@ -597,12 +637,15 @@ void MainWindow::onHandleMceFolderSet(unsigned char *p_data, unsigned int len)
 
 void MainWindow::MceSendGetMessageListing(UINT16 mce_handle, UINT16 start_offset, UINT16 max_count)
 {
-    UINT8 buf[20];
+    UINT8 buf[100];
     UINT8 *p = buf;
+    UINT8  srmp = ui->comboBoxMceSrmp->currentIndex();
 
     p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&mce_handle, 2);
-    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_LIST_START_OFFSET, (UINT8 *)&start_offset, 2);
+    //p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_FOLDER, (UINT8 *)m_mce_set_folder.toStdString().data(), m_mce_set_folder.size());
     p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_MAX_LIST_COUNT, (UINT8 *)&max_count, 2);
+    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_LIST_START_OFFSET, (UINT8 *)&start_offset, 2);
+    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SRMP_ENABLE, (UINT8 *)&srmp, 1);
 
     m_mce_list_offset = start_offset;
 
@@ -667,6 +710,28 @@ void MainWindow::onHandleMceFolderList(unsigned char *p_data, unsigned int len)
         Log("MAP Client failed to list folder");
 }
 
+void MainWindow::HelperRegisterNotification(bool reg)
+{
+    CBtDevice *pDev =(CBtDevice *)GetSelectedDevice();
+    UINT8 buf[20];
+    UINT8 notif_status = (reg == TRUE)? 1 : 0;
+    UINT8 *p;
+
+    if (NULL == pDev)
+        return;
+
+    if (reg == m_mce_notif_registered)
+       return;
+    Log ("Register notification (Enable (1)/Disable(0)) %d",reg);
+
+    p = buf;
+    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
+
+    p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NOTIF_STATUS, &notif_status, 1);
+
+    SendWicedCommand(HCI_CONTROL_MCE_COMMAND_NOTIF_REG, buf, p - buf);
+}
+
 void MainWindow::onHandleMceMessageList(unsigned char *p_data, unsigned int len)
 {
     CBtDevice * pDev =(CBtDevice *)GetSelectedDevice();
@@ -717,25 +782,12 @@ void MainWindow::onHandleMceMessageList(unsigned char *p_data, unsigned int len)
                 }
                 m_mce_rcvd_text.clear();
 
-                if (count == MCE_MAX_LIST_COUNT)
+                if ( (count == MCE_MAX_LIST_COUNT) && (m_mce_list_offset < MCE_MAX_MSG_READ_COUNT))
                     MceSendGetMessageListing(pDev->m_mce_handle, m_mce_list_offset + MCE_MAX_LIST_COUNT, MCE_MAX_LIST_COUNT);
                 else
                 {
                     Log("MAP Client %d messages listed", m_mce_list_offset + count);
-
-                    if (!m_mce_notif_registered)
-                    {
-                        // Enable notification
-                        UINT8 buf[20];
-
-                        p = buf;
-                        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_SESS_HANDLE, (UINT8 *)&pDev->m_mce_handle, 2);
-
-                        UINT8 notif_status = 1;
-                        p += MapAddTlv(p, HCI_CONTROL_MCE_PARAM_NOTIF_STATUS, &notif_status, 1);
-
-                        SendWicedCommand(HCI_CONTROL_MCE_COMMAND_NOTIF_REG, buf, p - buf);
-                    }
+                    HelperRegisterNotification(TRUE);
                 }
             }
         }
@@ -743,6 +795,22 @@ void MainWindow::onHandleMceMessageList(unsigned char *p_data, unsigned int len)
     else
         Log("MAP Client failed to list message");
 }
+
+void MainWindow::on_btnMceRegNotif_clicked()
+{
+    HelperRegisterNotification(!m_mce_notif_registered);
+}
+
+void MainWindow::on_btnMceMsgList_clicked()
+{
+    CBtDevice *pDev =(CBtDevice *)GetSelectedDevice();
+
+    if (NULL == pDev)
+        return;
+
+    MceSendGetMessageListing(pDev->m_mce_handle, 0, MCE_MAX_LIST_COUNT);
+}
+
 
 QString BMsgFindTag(QString input, QString tag)
 {
@@ -985,7 +1053,15 @@ void MainWindow::onHandleMceNotifReg(unsigned char *p_data, unsigned int len)
     Log("MAP Client notification registration status %d", p[2]);
 
     if (p[2] == 0)
-        m_mce_notif_registered = TRUE;
+        m_mce_notif_registered = (!m_mce_notif_registered);
+    if (m_mce_notif_registered)
+    {
+        ui->btnMceRegNotif->setText("DeRegister Notification");
+    }
+    else
+    {
+        ui->btnMceRegNotif->setText("Register Notification");
+    }
 }
 
 QString MceGetEventAttribute(QString notif, QString attr)

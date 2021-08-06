@@ -601,19 +601,3 @@ void MainWindow::on_btnANCUnreadAlerts_clicked()
 
 
 /***********************************************************/
-
-void MainWindow::on_btnHelpANP_clicked()
-{
-    onClear();
-    Log("Alert Notification Profile help topic:");
-    Log("");
-    Log("Apps : anc (Client), ans (Service)");
-    Log("");
-    Log("The ans or anc app should be compiled after enabling flag TEST_HCI_CONTROL in the app makefile.mk ");
-    Log("Download ANS app on one WICED Platform and ANC app on another WICED Platform.");
-    Log("The app should automatically connect.");
-    Log("From Client Control tab of ANP/ANS, configure the required alerts or generate alerts.");
-    Log("From Client Control tab of ANP/ANC, query the server supported alerts and control them.");
-
-    ScrollToTop();
-}

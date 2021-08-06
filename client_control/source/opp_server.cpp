@@ -274,19 +274,3 @@ CBtDevice* MainWindow::GetConnectedOPSDevice()
     return pDev;
 }
 
-
-void MainWindow::on_btnHelpOPPS_clicked()
-{
-    onClear();
-    Log("OPP Server help topic:");
-    Log("");
-    Log("Apps : hci_opp_server");
-    Log("Peer device : PC, Android phone, etc supporting OPP Client profile.");
-    Log("");
-    Log("From peer device, find the 'OPP server' device, pair and send file.");
-    Log("");
-    Log("- Disconnect");
-    Log("  Disconnects from OPP client");
-
-    ScrollToTop();
-}

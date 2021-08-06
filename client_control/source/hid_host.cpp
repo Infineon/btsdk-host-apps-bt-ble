@@ -839,23 +839,3 @@ void MainWindow::HandleHidHAudioRxData(LPBYTE p_data, DWORD len)
     WaveOutBufferNb += payload_len;
 }
 #endif
-
-void MainWindow::on_btnHelpHIDH_clicked()
-{
-    onClear();
-    Log("HID Host help topic:");
-    Log("");
-    Log("Apps : hci_hid_host for BR-EDR or 'hci_ble_hid_host' for BLE HOGP");
-    Log("Peer device - BT/BLE keyboard or mouse");
-    Log("");
-    Log("- Connect");
-    Log("  Connect to a HID device such as a keyboard or mouse. After connection, the");
-    Log("  input from the HID device will be displayed in BTSpy.exe");
-    Log("- Disconnect");
-    Log("  Disconnect from a peer device");
-    Log("- Get Desc");
-    Log("  Get Descriptor from the peer device. The output is displayed in BTSpy.exe.");
-    Log("- HID Protocol");
-    Log("  Set the protocol as Report mode or Boot mode");
-    ScrollToTop();
-}

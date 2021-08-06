@@ -211,14 +211,3 @@ CBtDevice* MainWindow::GetConnectedBATTCDevice(void)
 
     return pDev;
 }
-
-void MainWindow::on_btnHelpBATTC_clicked()
-{
-    onClear();
-    Log("Battery Client help topic:");
-    Log("");
-    Log("Apps : hci_ble_hid_host");
-    Log("");
-    Log("Connect to a BLE remote control or mouse that supports Battery service read battery level");
-    ScrollToTop();
-}
