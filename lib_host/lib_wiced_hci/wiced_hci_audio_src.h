@@ -82,6 +82,7 @@ typedef struct
 typedef struct
 {
     uint8_t format;
+    uint8_t audio_route;
 } wiced_hci_bt_audio_source_audio_data_format_t;
 
 #define AUDIO_SRC_FEATURE_I2S_INPUT (1 << 0)

@@ -120,7 +120,7 @@ bool app_host_audio_src_audio_data(uint16_t handle, uint8_t *p_data, uint16_t le
     return wiced_hci_audio_src_audio_data(&audio_data);
 }
 
-bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format)
+bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format, uint8_t audio_route)
 {
     wiced_hci_bt_audio_source_audio_data_format_t payload;
     wiced_hci_bt_device_t* p_dev = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_AUDIO, handle);
@@ -132,6 +132,7 @@ bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format)
     }
 
     payload.format = format;
+    payload.audio_route = audio_route;
     return wiced_hci_audio_src_audio_data_format(&payload);
 }
 

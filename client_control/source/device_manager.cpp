@@ -93,6 +93,7 @@ CBtDevice::CBtDevice (bool paired) :
     m_battc_handle = NULL_HANDLE;
     m_findmel_handle = NULL_HANDLE;
     m_mce_handle = NULL_HANDLE;
+    m_panu_handle = NULL_HANDLE;
     m_conn_type = 0;
     m_bIsLEDevice = false;
     role = 0;
@@ -389,6 +390,11 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             ui->tabMain->setCurrentWidget(ui->tabTest);
             Log("Test");
             break;
+        case HCI_CONTROL_GROUP_PANU:
+            ui->tabPANU->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabPANU);
+            Log("PANU");
+            break;
         }
     }
     else
@@ -420,6 +426,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
         ui->tabDemo->setEnabled(bEnable);
         ui->tabMAPClient->setEnabled(bEnable);
         ui->tabTest->setEnabled(bEnable);
+        ui->tabPANU->setEnabled(bEnable);
     }
 }
 
@@ -1844,7 +1851,7 @@ bool MainWindow::SetupCommPort()
     bool bFlow = ui->btnFlowCntrl->isChecked();
     if (ui->cbCommport->itemData(ui->cbCommport->currentIndex()).toString().compare("0") == 0)
     {
-        m_CommPort = new WicedSerialPortHostmode();
+        m_CommPort = new WicedSerialPortHostmode(str_cmd_ip_addr);
         serialPortName = "host-mode";
     }
     else
@@ -2419,6 +2426,7 @@ void MainWindow::CreateScriptThread()
     g_parent = this;
 
 #ifdef WIN32
+    m_script_read_worker->set_ip_addr(str_cmd_ip_addr);
     connect(m_script_read_thread, SIGNAL(started()), m_script_read_worker, SLOT(read_script_thread()));
 #endif
 

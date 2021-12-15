@@ -42,7 +42,7 @@ bool app_host_audio_src_disconnect(uint8_t bda[BDA_LEN]);
 bool app_host_audio_src_start(uint8_t bda[BDA_LEN], uint8_t sample_freq, uint8_t audio_mode);
 bool app_host_audio_src_stop(uint8_t bda[BDA_LEN]);
 bool app_host_audio_src_audio_data(uint16_t handle, uint8_t *data, uint16_t len);
-bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format);
+bool app_host_audio_src_audio_data_format(uint16_t handle, uint8_t format, uint8_t audio_route);
 
 // Audio Src event
 void app_host_audio_src_event(uint16_t opcode, uint8_t * p_data, uint32_t len);

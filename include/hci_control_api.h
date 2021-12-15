@@ -35,8 +35,8 @@
 *	HCI Control Protocol Definitions
 *
 * \brief
-* 	This file provides definitions for the WICED HCI Control Interface between an MCU
-* 	and an embedded application running on a Cypress BT SoC. Please refer to the WICED
+* 	This file provides definitions for the AIROC HCI Control Interface between an MCU
+* 	and an embedded application running on an Infineon Bluetooth SoC. Please refer to the AIROC
 * 	HCI Control Protocol Software User Manual (002-16618) for additional details.
 *
 * Packets exchanged over the UART between MCU and hci_control applications contain a 5-byte header.
@@ -93,6 +93,7 @@
 #define HCI_CONTROL_GROUP_HCITEST                             0x2c
 #define HCI_CONTROL_GROUP_MESH_MODELS                         0x2d
 #define HCI_CONTROL_GROUP_CONN_MESH                           0x2e
+#define HCI_CONTROL_GROUP_PANU                                0x2f
 #define HCI_CONTROL_GROUP_MISC                                0xFF
 
 #define HCI_CONTROL_GROUP(x) ((((x) >> 8)) & 0xff)
@@ -715,6 +716,10 @@
 #define HCI_CONTROL_CONN_MESH_COMMAND_START_STOP_DATA       ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Start/Stop Data */
 #define HCI_CONTROL_CONN_MESH_COMMAND_GET_STATS				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0A )  /* Collect stats */
 #define HCI_CONTROL_CONN_MESH_COMMAND_IDENTIFY				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0B )  /* Identify node */
+#define HCI_CONTROL_CONN_MESH_COMMAND_GET_RSSI 				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0C )  /* Collect RSSI values */
+
+#define HCI_CONTROL_PANU_COMMAND_CONNECT                    ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x01 )
+#define HCI_CONTROL_PANU_COMMAND_DISCONNECT                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x02 )
 
 /* General events that the controller can send */
 #define HCI_CONTROL_EVENT_COMMAND_STATUS                    ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x01 )    /* Command status event for the requested operation */
@@ -1089,7 +1094,7 @@
 #define HCI_CONTROL_MESH_EVENT_PROVISION_SCAN_EXTENDED_REPORT               ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x05 )  /* Remote Provisioning report the Advertising data containing the defined AD Type */
 #define HCI_CONTROL_MESH_EVENT_PROVISION_LINK_REPORT                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x06 )  /* Provision link established or dropped */
 #define HCI_CONTROL_MESH_EVENT_PROVISION_END                                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x07 )  /* Provision end event */
-#define HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABITIES                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x08 )  /* Provisioning device capabilities */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABILITIES                ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x08 )  /* Provisioning device capabilities */
 #define HCI_CONTROL_MESH_EVENT_PROVISION_OOB_DATA                           ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x09 )  /* Provisioning OOB data request */
 #define HCI_CONTROL_MESH_EVENT_PROXY_DEVICE_NETWORK_DATA                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0a )  /* Proxy device network data event */
 #define HCI_CONTROL_MESH_EVENT_PROXY_DATA                                   ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x0b )  /* Proxy device network data event */
@@ -1264,6 +1269,15 @@
 #define HCI_CONTROL_CONN_MESH_EVENT_CONN_DOWN               ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Node addr */
 #define HCI_CONTROL_CONN_MESH_EVENT_OP_STATE_CHANGED        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0a )  /* Node addr */
 #define HCI_CONTROL_CONN_MESH_EVENT_RESET_COMPLETE          ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0b )  /* Node addr */
+#define HCI_CONTROL_CONN_MESH_EVENT_RSSI_VALUES             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0c )  /* [Src Node] [Peer addr][RSSI] ... */
+
+#define HCI_CONTROL_PANU_EVENT_OPEN                         ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x01 )
+#define HCI_CONTROL_PANU_EVENT_CLOSE                        ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x02 )
+#define HCI_CONTROL_PANU_EVENT_CONNECTED                    ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x03 )
+#define HCI_CONTROL_PANU_EVENT_SERVICE_NOT_FOUND            ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x04 )
+#define HCI_CONTROL_PANU_EVENT_CONNECTION_FAILED            ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x05 )
+#define HCI_CONTROL_PANU_EVENT_DISCONNECTED                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x06 )
+
 
 /* Status codes returned in HCI_CONTROL_EVENT_COMMAND_STATUS the event */
 #define HCI_CONTROL_STATUS_SUCCESS                          0
@@ -1366,5 +1380,11 @@
 #define HCI_TOKEN_DATA_FLAG_START                           0x01
 #define HCI_TOKEN_DATA_FLAG_END                             0x02
 #define HCI_TOKEN_DATA_FLAG_UUID                            0x04
+
+
+#define HCI_CONTROL_PANU_STATUS_SUCCESS                       0   /* Connection successfully opened */
+#define HCI_CONTROL_PANU_STATUS_FAIL_SDP                      1   /* Open failed due to SDP */
+#define HCI_CONTROL_PANU_STATUS_FAIL_RFCOMM                   2   /* Open failed due to RFCOMM */
+#define HCI_CONTROL_PANU_STATUS_FAIL_CONN_TOUT                3   /* Link loss occured due to connection timeout */
 
 #endif /* HCI_CONTROL_API.H_ */

@@ -54,6 +54,7 @@
 #define WICED_CONNECTION_TYPE_BATTC   0x0400
 #define WICED_CONNECTION_TYPE_FINDMEL 0x0800
 #define WICED_CONNECTION_TYPE_OPS     0x1000
+#define WICED_CONNECTION_TYPE_PANU    0x2000
 
 #define WICED_NULL_HANDLE             0xFFFF
 
@@ -129,6 +130,7 @@ typedef struct
     uint16_t m_battc_handle;
     uint16_t m_findmel_handle;
     uint16_t m_ops_handle;
+    uint16_t m_panu_handle;
 
     wiced_device_state_t m_device_state;
 

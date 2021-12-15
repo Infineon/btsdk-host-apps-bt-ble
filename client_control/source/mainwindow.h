@@ -103,6 +103,7 @@ typedef unsigned long DWORD_PTR;
 #define CONNECTION_TYPE_BATTC   0x0400
 #define CONNECTION_TYPE_FINDMEL  0x0800
 #define CONNECTION_TYPE_OPS     0x1000
+#define CONNECTION_TYPE_PANU    0x2000
 
 #define NULL_HANDLE             0xFF
 #define LE_DWORD(p) (((DWORD)(p)[0]) + (((DWORD)(p)[1])<<8) + (((DWORD)(p)[2])<<16) + (((DWORD)(p)[3])<<24))
@@ -151,7 +152,7 @@ public:
     UINT16 m_battc_handle;
     UINT16 m_findmel_handle;
     UINT16 m_mce_handle;
-
+    UINT16 m_panu_handle;
     UINT8  role;
 
     char m_name[100];
@@ -282,6 +283,7 @@ public:
     QString str_cmd_port;
     QString str_cmd_baud;
     int iSpyInstance;
+    QString str_cmd_ip_addr;
 
     // Scripting support
     bool scripting;
@@ -481,6 +483,12 @@ public:
     void  UpdateGattButtons(CBtDevice *pDevice);
     BOOL  m_advertisments_active;
     ULONG m_notification_uid;
+#define EVENT_ID_NOTIFICATION_ADDED     0
+#define EVENT_ID_NOTIFICATION_MODIFIED  1
+#define EVENT_ID_NOTIFICATION_REMOVED   2
+
+#define EVENT_FLAG_IMPORTANT            (1 << 1)
+    ULONG m_notification_flags;
 
     // BSG
     void InitBSG();
@@ -646,6 +654,12 @@ public:
     void onHandleMceNotifReg(unsigned char *p_data, unsigned int len);
     void onHandleMceNotif(unsigned char *p_data, unsigned int len);
     void HelperRegisterNotification(bool reg);
+
+    //PANU
+    void InitPANU();
+    CBtDevice* GetConnectedPANUDevice();
+    void onHandleWicedEventPANU(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    void HandlePANUEvents(DWORD opcode, LPBYTE p_data, DWORD len);
 
     QString m_mce_set_folder;
     QString m_mce_cur_folder;
@@ -995,6 +1009,11 @@ public slots:
     void MceResizeMessageWindows(bool larger);
     void MceSendGetMessageListing(UINT16 mce_handle, UINT16 start_offset, UINT16 max_count);
 
+    //PANU
+    void on_btnPANUConnect_clicked();
+    void on_btnPANUDisconnect_clicked();
+
+
     // Test
     void on_btnTest_clicked();
 
@@ -1052,6 +1071,10 @@ public:
     DWORD Read(BYTE * lpBytes, DWORD dwLen);
     DWORD ReadNewHciPacket(BYTE * pu8Buffer, int bufLen, int * pOffset);
     MainWindow * m_pParent;
+#ifdef WIN32
+    QString str_ip_addr;
+    void set_ip_addr(QString str_cmd_ip_Addr);
+#endif
 
  public slots:
      void process_spp();

@@ -5,7 +5,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>CFBundleIconFile</key>
-	<string>CY_Logo.icns</string>
+	<string>bt.icns</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleGetInfoString</key>

@@ -86,7 +86,10 @@ SOURCES += main.cpp\
     nanopb/wiced_hci_gatt_db_rpc.c \
     nanopb/wiced_hci_spp_rpc.c \
     nanopb/protobuf_rpc.c \
-    map_client.cpp
+    map_client.cpp \
+    panu.cpp \
+    ../../lib_host/lib_app/app_host_panu.c \
+    ../../lib_host/lib_wiced_hci/wiced_hci_panu.c
 
 unix {
     SOURCES += serial_port_linux.cpp
@@ -146,7 +149,9 @@ HEADERS  += mainwindow.h \
     nanopb/pb_encode.h \
     nanopb/rpc.pb.h \
     nanopb/wiced_hci_gatt_db.pb.h \
-    protobuf_rpc.h
+    protobuf_rpc.h \
+    ../../lib_host/lib_app/app_host_panu.h \
+    ../../lib_host/lib_wiced_hci/wiced_hci_panu.h
 
 FORMS    += mainwindow.ui
 
@@ -170,9 +175,9 @@ DEFINES += PCM_ALSA
 
 RESOURCES     = resources.qrc
 
-RC_ICONS = CY_Logo.ico
+RC_ICONS = bt.ico
 
-ICON = CY_Logo.icns
+ICON = bt.icns
 
 DISTFILES += \
     ../README.txt

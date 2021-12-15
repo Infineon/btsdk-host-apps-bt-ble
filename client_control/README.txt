@@ -1,15 +1,15 @@
 ClientControl
 =============
 
-This application is used to control applications running on the AIROC BT devices via AIROC HCI protocol over the AIROC HCI UART interface.
-This application emulates an MCU application. For more information on WICED HCI, see the "WICED HCI UART Control Protocol" document.
+This application is used to control applications running on the AIROC(TM) Bluetooth(r) devices via AIROC(TM) HCI protocol over the "WICED HCI" UART interface.
+This application emulates an MCU application. For more information on the AIROC(TM) HCI protocol, see the "AIROC(TM) HCI UART Control Protocol" document.
 The ClientControl application runs on Windows, Linux, and macOS. This application was developed using QT IDE (QT version 5.9.1).
 
 User Interface
 ==============
 The UI is divided into three sections:
 1. Device manager UI (area above the tabs) is for controlling the local device settings as well as discovering peer devices.
-2. The tabs are Bluetooth profiles or features that provide specific functions as suggested by the tab name.
+2. The tabs are Bluetooth(r) profiles or features that provide specific functions as suggested by the tab name.
    Each tab is usable only with certain embedded applications and peer devices as mentioned in the 'Setup' description below for each tab.
 3. The tracing UI (area below the tabs) shows ClientControl application traces. It also can log traces to a file.
    Use the 'Browse' button to select the file to log to and enable the 'Log traces to file' checkbox.
@@ -18,8 +18,8 @@ The UI is divided into three sections:
 Device Manager
 ++++++++++++++
 - Open port:
-  This button is used to open or close the serial port used by the AIROC Eval board.
-  Opening the serial port is the first step for using the application downloaded to the board by AIROC SDK.
+  This button is used to open or close the serial port used by the AIROC(TM) Eval board.
+  Opening the serial port is the first step for using the application downloaded to the board.
   Select the "Baud rate" and "Flow Control" options as appropriate to match the settings for the embedded app.
 - Pairable:
   This option enables or disables pairing from a peer device.
@@ -29,8 +29,8 @@ Device Manager
   This option enables or disables discoverability from a peer device.
 - Reset Device:
   Close the serial port and reset the device. The embedded application may need to be downloaded again.
-- BLE Discovery:
-  Search for BLE devices.
+- LE Discovery:
+  Search for LE devices.
 - BR/EDR Discovery:
   Search for BR/EDR devices.
 - Unbond:
@@ -59,7 +59,7 @@ See the readme in the watch app.
 Dual A2DP
 +++++++++
 This tab allows executing the functions of the A2DP Source profile.
-This is similar to the A2DP source with the AIROC device connects and streams to two A2DP sink devices.
+This is similar to the A2DP source with the AIROC(TM) device connects and streams to two A2DP sink devices.
 Setup: app - watch_dual_a2dp
 Peer device - headset, speaker, car-kit
 
@@ -150,7 +150,7 @@ GATT
 ++++
 This tab allows executing the functions of the GATT profile.
 Setup: app - watch
-Peer device - BLE device or iPhone Light Blue app, Android BLE app, etc.
+Peer device - LE device or iPhone Light Blue app, Android LE app, etc.
 
 GATT controls are provided for:
 Advertisements, discovering services, connecting to a GATT server, reading/writing values of handles, discovering characteristics and descriptors of handles.
@@ -222,7 +222,7 @@ See the readme in the MAP client app.
 HID Device
 ++++++++++
 This tab allows executing the functions of HID applications.
-Setup: app - dual_mode_keyboard for BR-EDR or BLE remote/mouse for BLE HOGP
+Setup: app - dual_mode_keyboard for BR-EDR or LE remote/mouse for LE HOGP
 Peer device - Windows PC or any HID host
 - Enter Pairing Mode
   Sets the local device to pairable
@@ -233,11 +233,11 @@ Peer device - Windows PC or any HID host
 - Send Report
   Send report for Interrupt or Control channel.
 
-See the readme in the dual_mode_keyboard, BLE remote, or BLE remote app.
+See the readme in the dual_mode_keyboard, LE remote, or LE remote app.
 
 LE COC
 ++++++
-This tab allows executing the functions of the BLE LE Connection-Oriented Channel application.
+This tab allows executing the functions of the LE LE Connection-Oriented Channel application.
 Setup: app - LE COC app
 Peer device - LE COC app
 
@@ -253,7 +253,7 @@ See the readme in the LE COC app.
 
 Alert
 +++++
-This tab allows executing the functions of BLE Alert Notification Client and Server profiles.
+This tab allows executing the functions of LE Alert Notification Client and Server profiles.
 Setup: app - ANC app
 Peer device - ANS app
 
@@ -275,37 +275,37 @@ macOS: Sierra version 10.12.1 and above. See note for macOS below.
 Running the ClientControl application
 =====================================
 To run the ClientControl sample application, follow these steps:
-1. Plug in the AIROC BT kit into the computer using a USB cable.
+1. Plug in the AIROC(TM) Bluetooth(r) kit into the computer using a USB cable.
 2. On Linux PC, additional steps may be required to enable serial port access, see "Note for Linux" below.
-3. Build and download the application to the AIROC BT kit.
-4. If you are using ModusToolbox, the ClientControl application is available under Quick Panel -> Tools.
+3. Build and download the application to the AIROC(TM) kit.
+4. If you are using ModusToolbox(TM), the ClientControl application is available under Quick Panel -> Tools.
 5. To run it manually on, browse to the folder:
    mtb_shared/wiced_btsdk/tools/btsdk-host-apps-bt-ble/(version)/client_control
    Windows PC: Double click "ClientControl.exe" in the 'Windows' folder.
    Linux PC: Execute the script "RunClientControl.sh" in the Linux folder.
-   macOS: Execute "ClientControl.dmg" in OSX folder. See "Note for macOS" below.
-6. In the ClientControl UI, select the serial port for the AIROC BT kit and open the port. (See note below.)
-7. Once the "ClientControl" app can communicate with the embedded Bluetooth application, the application UI will be enabled.
-   Then use the UI to perform Bluetooth operations.
-8. Bluetooth application and protocol traces will be displayed in the BTSpy application.
+   macOS: Execute "ClientControl.app" in OSX folder. See "Note for macOS" below.
+6. In the ClientControl UI, select the serial port for the AIROC(TM) kit and open the port. (See note below.)
+7. Once the "ClientControl" app can communicate with the embedded Bluetooth(r) application, the application UI will be enabled.
+   Then use the UI to perform Bluetooth(r) operations.
+8. Bluetooth(r) application and protocol traces will be displayed in the BTSpy application.
 
 Note for selecting the serial port
 ==============================
-1. The serial port on Windows OS corresponds to the AIROC HCI UART COM port.
-   On Linux, it corresponds to /dev/ttyWICED_HCI_UARTx. On macOS, the AIROC HCI UART port is usually the lower-numbered of the two
+1. The serial port on Windows OS corresponds to the "WICED HCI UART" COM port.
+   On Linux, it corresponds to /dev/ttyWICED_HCI_UARTx. On macOS, the "WICED HCI UART" port is usually the lower-numbered of the two
    /dev/tty-usbserial* ports.
 2. If after opening the serial port the UI is not enabled, check if:
    - The correct serial port is selected
-   - The embedded application (running on AIROC BT kit) supports AIROC HCI transport
+   - The embedded application (running on the kit) supports AIROC(TM) HCI transport
    - The baud rate selected in the UI matches the baud rate specified in the embedded application.
      See the baud rate specified in the wiced_transport_cfg_t structure of the embedded application.
 
 Note for Linux
 ==============
-An additional step is required when connecting a AIROC board to a computer running Linux.
+An additional step is required when connecting a AIROC(TM) board to a computer running Linux.
 On common Linux distributions, the serial UART ports belong to the root user and the dialout group.
 Standard users are not allowed to access these devices.
-(ex. /dev/ttySx or /dev/ttyUSBx devices, including the /dev/ttyWICED* devices installed by ModusToolbox)
+(ex. /dev/ttySx or /dev/ttyUSBx devices, including the /dev/ttyWICED* devices installed by ModusToolbox(TM))
 An easy way to allow the current user access to Linux's serial ports is by adding the user to the dialout group.
 This can be done using the following command:
 $sudo usermod -a -G dialout $USER
@@ -314,20 +314,18 @@ Note: For this command to take effect, the user must log out and then log back i
 Note for macOS
 ==============
 1. The highest baud rate supported in macOS is 3,000,000.
-   All WICED apps that want to communicate with the macOS ClientControl app must be built to use a max baud rate of 3,000,000.
+   All AIROC(TM) apps that want to communicate with the macOS ClientControl app must be built to use a max baud rate of 3,000,000.
    (See the baud rate specified in the wiced_transport_cfg_t structure of the embedded application.)
 2. Opening multiple instances of the app on macOS is not as easy as it is in Windows, you cannot simply double click on the app like in Windows.
    This is a limitation of the macOS, not the ClientControl app.
    However, it is possible to run multiple instances on macOS using one of these two methods:
    Method 1:
-      1.  Open the .dmg, drag the ClientControl application to the Desktop or any folder.
-      2.  Open a terminal window, go to the location of the ClientControl.app.
+      1.  Open a terminal window, go to the location of the ClientControl.app.
           Repeat the command below for each new instance of the ClientControl application.
-      3.  $open -n ClientControl.app
+      2.  $open -n ClientControl.app
    Method 2:
-      1.  Open the .dmg, drag the ClientControl application to the Desktop or any folder.
-      2.  Right-click on the app and select "Duplicate".
-      3.  Open the duplicated app.
+      1.  Right-click on the ClientControl.app and select "Duplicate".
+      2.  Open the duplicated app.
 3. If you see an error message when executing ClientControl saying it is damaged and cannot be opened, perform the following step to workaround:
    Open an xterm window and execute:
       xattr -cr mtb_shared/wiced_btsdk/tools/btsdk-host-apps-bt-ble/(version)/client_control/OSX/ClientControl.app

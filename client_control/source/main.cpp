@@ -78,7 +78,13 @@ int main(int argc, char *argv[])
         {
             w.iSpyInstance = args.at(i+1).toInt();
         }
-
+        if(str == "-ip")
+        {
+            if(args.at(i+1) != NULL && num_args > 2)
+                w.str_cmd_ip_addr = args.at(i+1);
+            else
+                w.str_cmd_ip_addr = "127.0.0.1";
+        }
     }
 
     w.show();

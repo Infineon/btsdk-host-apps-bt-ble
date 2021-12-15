@@ -2,6 +2,6 @@
 <qresource>
     <file>red.png</file>
     <file>paired.png</file>
-    <file>wiced.png</file>
+    <file>bt.png</file>
 </qresource>
 </RCC>

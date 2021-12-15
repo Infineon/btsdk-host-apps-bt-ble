@@ -56,6 +56,7 @@ void app_host_init_device_handles(wiced_hci_bt_device_t *p_dev)
     p_dev->m_battc_handle = WICED_NULL_HANDLE;
     p_dev->m_findmel_handle = WICED_NULL_HANDLE;
     p_dev->m_ops_handle = WICED_NULL_HANDLE;
+    p_dev->m_panu_handle = WICED_NULL_HANDLE;
 }
 
 // add device to list
@@ -221,6 +222,10 @@ wiced_hci_bt_device_t *app_host_find_device_by_connection(uint16_t conn_type, ui
                 break;
             case WICED_CONNECTION_TYPE_OPS:
                 if(handle == p_dev_list->m_ops_handle)
+                    return p_dev_list;
+                break;
+            case WICED_CONNECTION_TYPE_PANU:
+                if(handle == p_dev_list->m_panu_handle)
                     return p_dev_list;
                 break;
             }

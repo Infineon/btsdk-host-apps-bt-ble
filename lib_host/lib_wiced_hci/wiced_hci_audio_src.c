@@ -92,5 +92,6 @@ bool wiced_hci_audio_src_audio_data_format(wiced_hci_bt_audio_source_audio_data_
     uint8_t     *p_cmd = cmd;
 
     UINT8_TO_STREAM(p_cmd, p_data->format);
+    UINT8_TO_STREAM(p_cmd, p_data->audio_route);
     return wiced_hci_send_command(HCI_CONTROL_AUDIO_DATA_FORMAT, cmd, (uint32_t)(p_cmd - cmd));
 }

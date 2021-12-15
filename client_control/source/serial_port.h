@@ -75,7 +75,7 @@ public:
 class WicedSerialPortHostmode : public WicedSerialPort
 {
 public:
-WicedSerialPortHostmode ();
+WicedSerialPortHostmode (QString str_cmd_ip_addr);
     ~WicedSerialPortHostmode (){}
 
 
@@ -95,6 +95,7 @@ WicedSerialPortHostmode ();
 
     int m_ClientSocket;
     bool OpenSocket();
+    QString str_ip_addr;
 };
 
 #endif // SERIAL_PORT_H

@@ -259,11 +259,11 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
 
         setAudioSrcUI();
 
+        uint8_t format = AUDIO_SRC_AUDIO_DATA_FORMAT_PCM;
+        uint8_t audio_route = AUDIO_SRC_ROUTE_UART;
+
         if (ui->rbAudioSrcFile->isChecked())
         {
-            // send audio data format to device
-            uint8_t format;
-
             if (ui->rbAudioFileFormatMp3->isChecked())
             {
                 format = AUDIO_SRC_AUDIO_DATA_FORMAT_MP3;
@@ -272,9 +272,19 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
             {
                 format = AUDIO_SRC_AUDIO_DATA_FORMAT_PCM;
             }
-
-            app_host_audio_src_audio_data_format(handle, format);
+            audio_route = AUDIO_SRC_ROUTE_UART;
         }
+        else if (ui->rbAudioSrcI2S->isChecked())
+        {
+            audio_route = AUDIO_SRC_ROUTE_I2S;
+        }
+        else
+        {
+            audio_route = AUDIO_SRC_ROUTE_SINE_WAVE;
+        }
+
+        // send audio data format and audio route to device
+        app_host_audio_src_audio_data_format(handle, format, audio_route);
     }
         break;
 

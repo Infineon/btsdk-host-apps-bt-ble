@@ -544,10 +544,11 @@ int ms_snprintf ( char * s, size_t n, const char * fmt, ... )
 }
 
 
-WicedSerialPortHostmode::WicedSerialPortHostmode()
+WicedSerialPortHostmode::WicedSerialPortHostmode(QString str_cmd_ip_addr)
     : WicedSerialPort(true)
 {
-        m_ClientSocket  = INVALID_SOCKET;
+    str_ip_addr = str_cmd_ip_addr;
+    m_ClientSocket  = INVALID_SOCKET;
 }
 
 qint64 WicedSerialPortHostmode::read(char *data, qint64 maxlen)
@@ -622,10 +623,12 @@ bool WicedSerialPortHostmode::OpenSocket()
     }
 
     struct sockaddr_in service;
+    QByteArray ipAddr = str_ip_addr.toLocal8Bit();
 
     service.sin_family = AF_INET;
-    service.sin_addr.s_addr = inet_addr("127.0.0.1");
+    service.sin_addr.s_addr = inet_addr(ipAddr.data());
     service.sin_port = htons(SOCK_PORT_NUM);
+    memset(service.sin_zero, 0, sizeof(service.sin_zero));
 
     // Connect to server.
    if (SOCKET_ERROR == connect( m_ClientSocket, (const sockaddr*) & service, sizeof (service)))
@@ -777,6 +780,11 @@ int read_script_pct(char *pPkt)
     return (1 + hdrLen + dataLen);
 }
 
+void Worker::set_ip_addr(QString str_cmd_ip_Addr)
+{
+    str_ip_addr = str_cmd_ip_Addr;
+}
+
 // Script read thread
 void Worker::read_script_thread()
 {
@@ -794,8 +802,10 @@ void Worker::read_script_thread()
         return;
     }
 
+    QByteArray ipAddr = str_ip_addr.toLocal8Bit();
+
     service.sin_family = AF_INET;
-    service.sin_addr.s_addr = inet_addr("127.0.0.1");
+    service.sin_addr.s_addr = inet_addr(ipAddr.data());
     service.sin_port = htons(11012);
 
     if (SOCKET_ERROR == (iResult = bind(m_ListenScriptSocket, (SOCKADDR *)& service, sizeof(service))))

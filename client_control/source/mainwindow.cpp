@@ -105,6 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_b_app_init = false;
     iSpyInstance = 0;
+    str_cmd_ip_addr = "127.0.0.1";
     app_host_init();
     ui->setupUi(this);
 
@@ -126,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->setStyleSheet("QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px;}");
 
     QIcon icon;
-    icon.addFile(":/wiced.png");
+    icon.addFile(":/bt.png");
     if(!icon.isNull())
     {
         QApplication::setWindowIcon(icon);
@@ -160,22 +161,23 @@ MainWindow::MainWindow(QWidget *parent) :
     InitOTPClient();
     InitMAPClient();
     InitHciLoopbackTest();
+    InitPANU();
 
     processClear();
 
     ui->lstTrace->addItem("Instructions:");
-    ui->lstTrace->addItem("1.  Plug the WICED Evaluation Board into the computer using a USB cable.");
-    ui->lstTrace->addItem("2.  Build and download an embedded application to the WICED evaluation board.");
-    ui->lstTrace->addItem("3.  Select the serial (COM) port for the WICED Evaluation Board and open the port.");
+    ui->lstTrace->addItem("1.  Plug the AIROC(tm) Evaluation Board into the computer using a USB cable.");
+    ui->lstTrace->addItem("2.  Build and download an embedded application to the evaluation board.");
+    ui->lstTrace->addItem("3.  Select the serial (COM) port for the Evaluation Board and open the port.");
     ui->lstTrace->addItem("    This is usually enumerated 'WICED HCI UART' on Windows or Linux PCs.");
     ui->lstTrace->addItem("    The UI will be enabled when the Client Control app is able to communicate with the embedded BT app.");
     ui->lstTrace->addItem("4.  For more information about this application, click on the help (?) icon.");
 
    processScrollToTop();
 
-    // Tab index 17 and higher are not used currently, remove then from UI
+    // Tab index 18 and higher are not used currently, remove then from UI
     for(int i = 0; i < 10; i++)
-        ui->tabMain->removeTab(17);
+        ui->tabMain->removeTab(18);
 
     EventFilter *evtFilter = new EventFilter();
     ui->tabDualA2DP->installEventFilter(evtFilter);
@@ -244,6 +246,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventMAPClient(opcode, p_data, len);
     onHandleWicedEventHciDfu(opcode, p_data, len);
     onHandleWicedEventHciLoopback(opcode, p_data, len);
+    onHandleWicedEventPANU(opcode, p_data, len);
     // free event data, allocated in Dm module when event arrives
     if (p_data)
         free(p_data);

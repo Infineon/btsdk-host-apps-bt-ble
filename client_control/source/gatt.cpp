@@ -454,6 +454,7 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
     CHAR   trace[1024];
     BYTE    bda[6];
     CBtDevice *device;
+    ULONG notification_uid;
 
     switch (identifier)
     {
@@ -554,33 +555,45 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         break;
 
     case HCI_CONTROL_ANCS_EVENT_NOTIFICATION:
-        m_notification_uid = p_data[0] + (p_data[1] << 8) + (p_data[2] << 16), (p_data[3] << 24);
-        sprintf (trace, "(ANCS) %04lu Command:%u Category:%u Flags:%u", m_notification_uid, p_data[4], p_data[5], p_data[6]);
+        notification_uid = p_data[0] + (p_data[1] << 8) + (p_data[2] << 16), (p_data[3] << 24);
+        sprintf (trace, "(ANCS) %04lu Command:%u Category:%u Flags:%u", notification_uid, p_data[4], p_data[5], p_data[6]);
         Log(trace);
 
         // notification Added or Modified
-        if ((p_data[4] == 0) || (p_data[4] == 1))
+        if ((p_data[4] == EVENT_ID_NOTIFICATION_ADDED) || (p_data[4] == EVENT_ID_NOTIFICATION_MODIFIED))
         {
-            int len_int = 7;
-            ui->lblCTMessage->setText((char*)&p_data[len_int]);
+            // if currently displayed notification is more important than new one, do not overwrite
+            if (((p_data[6] & EVENT_FLAG_IMPORTANT) != 0) || ((m_notification_flags & EVENT_FLAG_IMPORTANT) == 0))
+            {
+                m_notification_uid = notification_uid;
+                m_notification_flags = p_data[6];
 
-            len_int += (int)strlen((char *)&p_data[len_int]) + 1;
-            ui->lblCTTitle->setText((char*)&p_data[len_int]);
+                int len_int = 7;
+                ui->lblCTMessage->setText((char*)&p_data[len_int]);
 
-            len_int += (int)strlen((char *)&p_data[len_int]) + 1;
-            ui->btnCTANCSPositive->setText((char*)&p_data[len_int]);
+                len_int += (int)strlen((char *)&p_data[len_int]) + 1;
+                ui->lblCTTitle->setText((char*)&p_data[len_int]);
 
-            len_int += (int)strlen((char *)&p_data[len_int]) + 1;
-            ui->btnCTANCSNegative->setText((char*)&p_data[len_int]);
+                len_int += (int)strlen((char *)&p_data[len_int]) + 1;
+                ui->btnCTANCSPositive->setText((char*)&p_data[len_int]);
+
+                len_int += (int)strlen((char *)&p_data[len_int]) + 1;
+                ui->btnCTANCSNegative->setText((char*)&p_data[len_int]);
+            }
         }
         else // removed
         {
-            ui->lblCTMessage->setText("Message");
-            ui->lblCTTitle->setText("Tile");
-            ui->btnCTANCSPositive->setText("ANCS Positive");
-            ui->btnCTANCSNegative->setText("ANCS Negative");
+            // ignore remove event if it is not for the currently shown notification
+            if (m_notification_uid == notification_uid)
+            {
+                m_notification_uid = 0;
+                m_notification_flags = 0;
+                ui->lblCTMessage->setText("Message");
+                ui->lblCTTitle->setText("Tile");
+                ui->btnCTANCSPositive->setText("ANCS Positive");
+                ui->btnCTANCSNegative->setText("ANCS Negative");
+            }
         }
-
         break;
 
     case HCI_CONTROL_EVENT_COMMAND_STATUS:

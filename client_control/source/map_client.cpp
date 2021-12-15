@@ -1109,7 +1109,7 @@ QString MceNotifToString(QString notif)
         folder.remove(0, folder.lastIndexOf("/"));
         old_folder.remove(0, old_folder.lastIndexOf("/"));
         st = msg_type + QString(" message ") + handle + QString(" moved from ") +
-                old_folder + QString(" to ") + folder;
+                old_folder.toLower() + QString(" to ") + folder.toLower();
     }
     else if (type == "DeliverySuccess")
     {
@@ -1179,12 +1179,17 @@ void MainWindow::onHandleMceNotif(unsigned char *p_data, unsigned int len)
                 Log("MAP notification received: %s", MceNotifToString(m_mce_rcvd_text).toLocal8Bit().data());
 
                 QString type = MceGetEventAttribute(m_mce_rcvd_text, "type");
-                if (type == "NewMessage" && ui->cbMceFolderList->currentText() == "inbox")
+                if (type == "NewMessage")
                 {
-                    QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
-                    ui->listMceMessages->insertItem(0, handle);
+                    QString folder = MceGetEventAttribute(m_mce_rcvd_text, "folder");
+                    folder.remove(0, folder.lastIndexOf("/") + 1);
+                    if (ui->cbMceFolderList->currentText() == folder.toLower())
+                    {
+                        QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
+                        ui->listMceMessages->insertItem(0, handle);
+                    }
                 }
-                else if (type == "MessageDeleted" || type == "MessageShift")
+                else if (type == "MessageDeleted")
                 {
                     QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
                     QList<QListWidgetItem *> widgetItems = ui->listMceMessages->findItems(handle, 0);
@@ -1192,6 +1197,27 @@ void MainWindow::onHandleMceNotif(unsigned char *p_data, unsigned int len)
                     {
                         ui->listMceMessages->takeItem(ui->listMceMessages->row(widgetItems.first()));
                         ui->listMceMessages->removeItemWidget(widgetItems.first());
+                    }
+                }
+                else if (type == "MessageShift")
+                {
+                    QString handle = MceGetEventAttribute(m_mce_rcvd_text, "handle");
+                    QString folder = MceGetEventAttribute(m_mce_rcvd_text, "folder");
+                    QString old_folder = MceGetEventAttribute(m_mce_rcvd_text, "old_folder");
+                    folder.remove(0, folder.lastIndexOf("/") + 1);
+                    old_folder.remove(0, old_folder.lastIndexOf("/") + 1);
+                    if (ui->cbMceFolderList->currentText() == folder.toLower())
+                    {
+                        ui->listMceMessages->insertItem(0, handle);
+                    }
+                    else if (ui->cbMceFolderList->currentText() == old_folder.toLower())
+                    {
+                        QList<QListWidgetItem *> widgetItems = ui->listMceMessages->findItems(handle, 0);
+                        if (widgetItems.count() > 0)
+                        {
+                            ui->listMceMessages->takeItem(ui->listMceMessages->row(widgetItems.first()));
+                            ui->listMceMessages->removeItemWidget(widgetItems.first());
+                        }
                     }
                 }
 

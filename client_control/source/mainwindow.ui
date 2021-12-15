@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>WICED Client Control</string>
+   <string>AIROC Client Control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -203,7 +203,7 @@
            <item row="1" column="0">
             <widget class="QGroupBox" name="groupBox_2">
              <property name="title">
-              <string>BLE Discovery</string>
+              <string>LE Discovery</string>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
@@ -2804,6 +2804,67 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="tabPANU">
+           <attribute name="title">
+            <string>PANU</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_27">
+            <property name="verticalSpacing">
+             <number>10</number>
+            </property>
+            <item row="0" column="0" colspan="3">
+             <layout class="QHBoxLayout" name="horizontalLayout_33">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Personal Access Network</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_29">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="1">
+             <spacer name="verticalSpacer_19">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btnPANUConnect">
+              <property name="text">
+               <string>Connect</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="btnPANUDisconnect">
+              <property name="text">
+               <string>Disconnect</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
           <widget class="QWidget" name="tabIAP2">
            <attribute name="title">
             <string>iAP2</string>
@@ -5107,7 +5168,7 @@
               <item>
                <widget class="QLabel" name="label_46">
                 <property name="text">
-                 <string>WICED Demo</string>
+                 <string>AIROC Demo</string>
                 </property>
                </widget>
               </item>
@@ -6463,6 +6524,8 @@
   <tabstop>cbSPPReceiveFile</tabstop>
   <tabstop>lineEditSPPReceiveFile</tabstop>
   <tabstop>btnSPPBrowseReceive</tabstop>
+  <tabstop>btnPANUConnect</tabstop>
+  <tabstop>btnPANUDisconnect</tabstop>
   <tabstop>btnHIDHConnect</tabstop>
   <tabstop>btnHIDHDisconnect</tabstop>
   <tabstop>btnHIDHSetReport</tabstop>

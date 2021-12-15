@@ -62,7 +62,6 @@
 #endif
 #include "wiced_types.h"
 
-
 #if USE_QT_SERIAL_PORT
 static QSerialPort * p_qt_serial_port;
 extern DWORD qtmin(DWORD len, DWORD bufLen);
@@ -399,9 +398,10 @@ extern void LogMsgX(const char *fmt_str, ... );
 #define TRUE    true
 #define FALSE   false
 
-WicedSerialPortHostmode::WicedSerialPortHostmode()
+WicedSerialPortHostmode::WicedSerialPortHostmode(QString str_cmd_ip_addr)
     : WicedSerialPort(true)
 {
+    str_ip_addr = str_cmd_ip_addr;
     m_ClientSocket  = INVALID_SOCKET;
 }
 
@@ -456,10 +456,12 @@ bool WicedSerialPortHostmode::OpenSocket()
     }
 
     struct sockaddr_in service;
+    QByteArray ipAddr = str_ip_addr.toLocal8Bit();
 
     service.sin_family = AF_INET;
-    service.sin_addr.s_addr = inet_addr("127.0.0.1");
+    service.sin_addr.s_addr = inet_addr(ipAddr.data());
     service.sin_port = htons(SOCK_PORT_NUM);
+    memset(service.sin_zero, 0, sizeof(service.sin_zero));
 
     // Connect to server.
    if (SOCKET_ERROR == connect( m_ClientSocket, (const sockaddr*) & service, sizeof (service)))

@@ -86,7 +86,7 @@ void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_inde
     memset(&socket_addr, 0, sizeof(socket_addr));
     socket_addr.sin_family = AF_INET;
     socket_addr.sin_addr.s_addr = ntohl(0x7f000001);
-    socket_addr.sin_port = 9876 + iSpyInstance;
+    socket_addr.sin_port = htons(9876 + iSpyInstance);
 
     if ((char)type == -1)
     {
