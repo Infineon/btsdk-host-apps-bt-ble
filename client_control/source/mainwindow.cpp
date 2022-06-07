@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -162,7 +162,7 @@ MainWindow::MainWindow(QWidget *parent) :
     InitMAPClient();
     InitHciLoopbackTest();
     InitPANU();
-
+    InitUnicastSink();
     processClear();
 
     ui->lstTrace->addItem("Instructions:");
@@ -175,9 +175,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
    processScrollToTop();
 
-    // Tab index 18 and higher are not used currently, remove then from UI
+    // Tab index 21 and higher are not used currently, remove then from UI
     for(int i = 0; i < 10; i++)
-        ui->tabMain->removeTab(18);
+        ui->tabMain->removeTab(21);
 
     EventFilter *evtFilter = new EventFilter();
     ui->tabDualA2DP->installEventFilter(evtFilter);
@@ -247,6 +247,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventHciDfu(opcode, p_data, len);
     onHandleWicedEventHciLoopback(opcode, p_data, len);
     onHandleWicedEventPANU(opcode, p_data, len);
+    onHandleWicedEventLeAudio(opcode, p_data, len);
     // free event data, allocated in Dm module when event arrives
     if (p_data)
         free(p_data);

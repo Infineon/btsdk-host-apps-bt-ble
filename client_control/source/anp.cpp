@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -543,32 +543,40 @@ void MainWindow::on_listAlertCategoriesANC_itemClicked(QListWidgetItem *item)
 // ANP_ALERT_CATEGORY_ID_ALL_CONFIGURED categories
 void MainWindow::on_btnANCControlAlerts_clicked()
 {
-    wiced_hci_bt_anc_control_alert_data_t data;
-    uint8_t category = 0;
-    uint8_t num_of_selected = 0;
+   wiced_hci_bt_anc_control_alert_data_t data;
+   uint8_t category = 0;
+   uint8_t num_of_selected = 0;
 
-    if (g_app.m_anc_selected_alerts == 0)
-    {
-        Log("No Alert Type Selected");
-        return;
-    }
+   g_app.m_anc_selected_alerts = 0;
 
-    /* Allow only Either Single Alert Type or All supported Alert Types */
-    for (int i = 0; i < ANP_NOTIFY_CATEGORY_COUNT; i++)
+    for(int i = 0; i < ANP_NOTIFY_CATEGORY_COUNT; i++)
     {
-        if (g_app.m_anc_selected_alerts & (1 << i))
+        QListWidgetItem *item = ui->listAlertCategoriesANC->item(i);
+        if(item->checkState() == Qt::Checked)
         {
-           num_of_selected++;
-           category = i;
+            num_of_selected++;
+            category = i;
+            g_app.m_anc_selected_alerts |= (1 << category);
         }
     }
 
-    if ((g_app.m_anc_selected_alerts == g_app.m_anc_server_supported_new_alerts) ||
+    /* Allow only Either Single Alert Type or All supported Alert Types */
+    if (num_of_selected == 0)
+    {
+        Log("No Alert Type Selected");
+        return;
+
+    } else if (num_of_selected == 1)
+    {
+        // no op, already captured the category of the
+        // one selected item from above
+
+    } else if ((g_app.m_anc_selected_alerts == g_app.m_anc_server_supported_new_alerts) ||
         (g_app.m_anc_selected_alerts == g_app.m_anc_server_supported_unread_alerts))
     {
         category = ANP_ALERT_CATEGORY_ID_ALL_CONFIGURED;
-    }
-    else if (num_of_selected != 1)
+
+    } else
     {
         Log("Either Select Single Alert Type or All supported Alert Types");
         return;

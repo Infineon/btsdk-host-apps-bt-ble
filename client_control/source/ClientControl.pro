@@ -45,13 +45,16 @@ SOURCES += main.cpp\
         findme_locator.cpp \
         demo.cpp \
         opp_server.cpp \
+        unicast_snk.cpp \
     gatt_db.cpp \
     ../../lib_host/lib_app/app_host.c \
     ../../lib_host/lib_app/app_host_ag.c \
+    ../../lib_host/lib_app/app_host_le_audio.c \
+    ../../lib_host/lib_wiced_hci/wiced_hci_le_audio.c \
     ../../lib_host/lib_wiced_hci/wiced_hci.c \
     ../../lib_host/lib_wiced_hci/wiced_hci_ag.c \
     ../../lib_host/lib_wiced_hci/wiced_hci_audio_src.c \
-	../../lib_host/lib_app/app_host_spp.c \
+    ../../lib_host/lib_app/app_host_spp.c \
     ../../lib_host/lib_app/app_host_hidh.c \
     ../../lib_host/lib_app/app_host_hidd.c \
     ../../lib_host/lib_app/app_host_hf.c \
@@ -104,6 +107,7 @@ win32|win64 {
 
 
 HEADERS  += mainwindow.h \
+    ../../lib_host/lib_app/app_host_le_audio.h \
             avrc.h \
     hci_loopback.h \
             serial_port.h \
@@ -111,11 +115,12 @@ HEADERS  += mainwindow.h \
     usb_kb_usage.h \
     wiced_bt_defs.h \
     btle_homekit2_lightbulb.h \
-    include/hci_control_api.h \
     ../../lib_host/lib_app/app_host.h \
     ../../lib_host/lib_wiced_hci/wiced_hci.h \
     ../../lib_host/lib_wiced_hci/wiced_types.h \
+    ../../lib_host/lib_wiced_hci/wiced_hci_le_audio.h\
     ../../lib_host/lib_app/app_host_spp.h \
+    ../../lib_host/lib_app/app_host_le_audio.h \
     ../../lib_host/lib_app/app_host_otp_client.h \
     ../../lib_host/lib_app/app_host_le_coc.h \
     ../../lib_host/lib_app/app_host_hidh.h \
@@ -143,6 +148,7 @@ HEADERS  += mainwindow.h \
     ../../lib_host/lib_wiced_hci/wiced_hci_anp_ans.h \
     ../../lib_host/lib_wiced_hci/wiced_hci_ag.h \
     ../../lib_host/lib_wiced_hci/wiced_hci.h \
+    ../../lib_host/lib_wiced_hci/wiced_hci_le_audio.h \
     nanopb/pb.h \
     nanopb/pb_common.h \
     nanopb/pb_decode.h \

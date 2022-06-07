@@ -1,7 +1,7 @@
 /***************************************************************************//**
 * \file <hci_control_api.h>
 *
-* Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -94,6 +94,7 @@
 #define HCI_CONTROL_GROUP_MESH_MODELS                         0x2d
 #define HCI_CONTROL_GROUP_CONN_MESH                           0x2e
 #define HCI_CONTROL_GROUP_PANU                                0x2f
+#define HCI_CONTROL_GROUP_LE_AUDIO                            0x30
 #define HCI_CONTROL_GROUP_MISC                                0xFF
 
 #define HCI_CONTROL_GROUP(x) ((((x) >> 8)) & 0xff)
@@ -634,12 +635,40 @@
 
 #define HCI_CONTROL_MESH_COMMAND_CORE_CFG_BEACON                            ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x8f )  /* Enable/disable beacon/private beacon */
 
+#define HCI_CONTROL_MESH_COMMAND_PROVISION_SEND_INVITE                      ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x90 )  /* Send provisioning invite PDU to the device */
+#define HCI_CONTROL_MESH_COMMAND_PROVISION_RETRIEVE_RECORD                  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x91 )  /* Request fragment of the provisioning record from the device */
+
+
 /* Battery Client Profile commands */
 #define HCI_CONTROL_BATT_CLIENT_COMMAND_CONNECT             ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x00 )    /* Battery Client connect */
 #define HCI_CONTROL_BATT_CLIENT_COMMAND_DISCONNECT          ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x01 )    /* Battery Client disconnect */
 #define HCI_CONTROL_BATT_CLIENT_COMMAND_ADD                 ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x02 )    /* Battery Client Add */
 #define HCI_CONTROL_BATT_CLIENT_COMMAND_REMOVE              ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x03 )    /* Battery Client Remove */
-#define HCI_CONTROL_BATT_CLIENT_COMMAND_READ                ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x04 )    /* Battery Client Read Level */
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_BAS_READ            ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x04 )    /* Battery Client Read Level */
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_ENABLE_BROADCAST    ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x05 )    /* Battery Client turn-on broadcast on the server */
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_DISABLE_BROADCAST   ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x06 )    /* Battery Client turn-on broadcast on the server */
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_LEVEL_STATUS_MODIFY  ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x07 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_LEVEL_STATUS_SIGNAL  ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x08 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_SERVICE_DATE_MODIFY  ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x09 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_SERVICE_DATE_SIGNAL  ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x10 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_CRITICAL_STATUS_MODIFY   ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x11 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_CRITICAL_STATUS_SIGNAL   ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x12 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_ENERGY_STATUS_MODIFY ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x13 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_ENERGY_STATUS_SIGNAL ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x14 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_TIME_STATUS_MODIFY   ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x15 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_TIME_STATUS_SIGNAL   ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x16 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_STATUS_MODIFY ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x17 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_STATUS_SIGNAL ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x18 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_INFO_MODIFY ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x19 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_INFO_SIGNAL ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1A )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_BATTERY_INFO_MODIFY ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1B )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_BATTERY_INFO_SIGNAL ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1C )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_NAME_MODIFY         ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1D )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_NAME_SIGNAL         ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1E )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_MODEL_MODIFY        ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x1F )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_MODEL_SIGNAL        ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x20 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_NUMBER_MODIFY       ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x21 )
+#define HCI_CONTROL_BATT_CLIENT_COMMAND_NUMBER_SIGNAL       ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x22 )
 
 /* FindMe Locator Client Profile commands */
 #define HCI_CONTROL_FINDME_LOCATOR_COMMAND_CONNECT          ( ( HCI_CONTROL_GROUP_FINDME_LOCATOR << 8 ) | 0x00 )    /* FindMe Target connect */
@@ -750,6 +779,14 @@
 #define HCI_CONTROL_HF_EVENT_AUDIO_CLOSE                    ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x05 )    /* Audio connection closed */
 #define HCI_CONTROL_HF_EVENT_AUDIO_CONN_REQ                 ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x06 )    /* Audio connection request event */
 #define HCI_CONTROL_HF_EVENT_PROFILE_TYPE                   ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x07 )    /* To check the Profile Selected HSP/HFP */
+#define HCI_CONTROL_HF_EVENT_CALL_SETUP_STATUS              ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x08 )    /* To check the call status */
+#define HCI_CONTROL_HF_EVENT_INBAND_RING_STATUS             ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x09 )    /* To check the inband ringtone is audible */
+#define HCI_CONTROL_HF_EVENT_VOLUME_CHANGE                  ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x0A )    /* volume change event */
+#define HCI_CONTROL_HF_EVENT_VOLUME_UP                      ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x0B )    /* volume change event */
+#define HCI_CONTROL_HF_EVENT_VOLUME_DOWN                    ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x0C )    /* volume change event */
+#define HCI_CONTROL_HF_EVENT_CALL_ALERT                     ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x0D )    /* call alert event */
+#define HCI_CONTROL_HF_EVENT_VOICE_RECOG_EVENT              ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x0E )    /* voice recognition status event */
+
 
 /* Sub-commands AT events defined with AT Commands */
 #define HCI_CONTROL_HF_AT_EVENT_BASE                        ( ( HCI_CONTROL_GROUP_HF << 8 ) | 0x20 )
@@ -929,8 +966,7 @@
 #define HCI_CONTROL_AG_EVENT_AT_CMD                         ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x06 )
 #define HCI_CONTROL_AG_EVENT_CLCC_REQ                       ( ( HCI_CONTROL_GROUP_AG << 8 ) | 0x07 )
 
-
-/* Events for the Broadcom Serial over GATT profile */
+/* Events for the Cypress Bluetooth Serial over GATT profile */
 #define HCI_CONTROL_BSG_EVENT_CONNECTED                     ( ( HCI_CONTROL_GROUP_BSG << 8 ) | 0x01 )    /* BSG Connected */
 #define HCI_CONTROL_BSG_EVENT_DISCONNECTED                  ( ( HCI_CONTROL_GROUP_BSG << 8 ) | 0x02 )    /* BSG Disconnected */
 #define HCI_CONTROL_BSG_EVENT_TX_COMPLETE                   ( ( HCI_CONTROL_GROUP_BSG << 8 ) | 0x03 )    /* Data packet has been queued for transmission */
@@ -963,6 +999,7 @@
 #define HCI_CONTROL_AUDIO_SINK_EVENT_CODEC_CONFIGURED       ( ( HCI_CONTROL_GROUP_AUDIO_SINK << 8 ) | 0x08 )    /* Peer codec configured event*/
 #define HCI_CONTROL_AUDIO_SINK_EVENT_START_IND              ( ( HCI_CONTROL_GROUP_AUDIO_SINK << 8 ) | 0x09 )    /* A2DP Start indication event, received A2DP Start request */
 #define HCI_CONTROL_AUDIO_SINK_EVENT_AUDIO_DATA             ( ( HCI_CONTROL_GROUP_AUDIO_SINK << 8 ) | 0x0a )    /* Received audio data. Encoded for AAC, decoded for SBC. */
+#define HCI_CONTROL_AUDIO_SINK_EVENT_SUSPEND                ( ( HCI_CONTROL_GROUP_AUDIO_SINK << 8 ) | 0x0b )    /* A2DP event suspend received  */
 
 /* PBAP Client events */
 #define HCI_CONTROL_PBC_EVENT_CONNECTED                     ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x01 )      /* PBC Connected */
@@ -1168,6 +1205,11 @@
 #define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_CONTROL_NETWORK_TRANSMIT_STATUS  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x48 )      /* an unacknowledged message used to report the current Directed Control Network Transmit state of a node */
 #define HCI_CONTROL_MESH_EVENT_DF_DIRECTED_CONTROL_RELAY_RETRANSMIT_STATUS  ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x49 )      /* an unacknowledged message used to report the current Directed Control Relay Retransmit state of a node */
 
+#define HCI_CONTROL_MESH_EVENT_PROVISION_RECORD_LIST                        ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4a )      /* an unacknowledged message used to report the current Directed Control Network Transmit state of a node */
+#define HCI_CONTROL_MESH_EVENT_PROVISION_RECORD_RESPONSE                    ( ( HCI_CONTROL_GROUP_MESH << 8 ) | 0x4b )      /* an unacknowledged message used to report the current Directed Control Relay Retransmit state of a node */
+
+#define HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABITIES   HCI_CONTROL_MESH_EVENT_PROVISION_DEVICE_CAPABILITIES           /* Deprecated, retained for backward compatibility */
+
 /* Events for the Battery Client profile */
 #define HCI_CONTROL_BATT_CLIENT_EVENT_CONNECTED             ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x00 )    /* Battery Client connected */
 #define HCI_CONTROL_BATT_CLIENT_EVENT_DISCONNECTED          ( ( HCI_CONTROL_GROUP_BATT_CLIENT << 8 ) | 0x01 )    /* Battery Client disconnected */
@@ -1202,6 +1244,7 @@
 #define HCI_CONTROL_SCRIPT_EVENT_RET_CODE                   ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x01 )   /* Script command return code */
 #define HCI_CONTROL_SCRIPT_EVENT_UNKNOWN_CMD                ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x02 )   /* Unknown Script command */
 #define HCI_CONTROL_SCRIPT_EVENT_CALLBACK                   ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x03 )   /* Async script callback */
+#define HCI_CONTROL_SCRIPT_TRACE                            ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0xF0 )   /* Trace message (low nibble has type) */
 
 /* Demo events */
 #define HCI_CONTROL_DEMO_EVENT_SSID_PASSWD                  ( ( HCI_CONTROL_GROUP_DEMO << 8 ) | 0x01 )    /* SSID and Password */
@@ -1278,6 +1321,31 @@
 #define HCI_CONTROL_PANU_EVENT_CONNECTION_FAILED            ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x05 )
 #define HCI_CONTROL_PANU_EVENT_DISCONNECTED                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x06 )
 
+/* LE AUDIO Commands */
+#define HCI_CONTROL_LE_AUDIO_COMMAND_GET_MEDIA_PLAYERS      ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_SET_MEDIA_PLAYER       ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_PLAY                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_PAUSE                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_UP                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_DOWN               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_ABS_VOL                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_MUTE                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x08 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x09 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_UP          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0A )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_DOWN        ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0B )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_CALL                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0C )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_ACCEPT_CALL            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0D )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_REJECT_CALL            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0E )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_TERMIANTE_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0F )
+
+/* LE Audio Events */
+#define HCI_CONTROL_LE_AUDIO_MEDIA_PLAYER_EVT               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
+#define HCI_CONTROL_LE_AUDIO_PLAY_STATUS_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )
+#define HCI_CONTROL_LE_AUDIO_VOLUME_STATUS_EVT              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )
+#define HCI_CONTROL_LE_AUDIO_MUTE_STATUS_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )
+#define HCI_CONTROL_LE_AUDIO_DEVICE_ROLE_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )
+#define HCI_CONTROL_LE_AUDIO_INCOMING_CALL_EVT              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )
+#define HCI_CONTROL_LE_AUDIO_CALL_TERMINATED_EVT            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )
 
 /* Status codes returned in HCI_CONTROL_EVENT_COMMAND_STATUS the event */
 #define HCI_CONTROL_STATUS_SUCCESS                          0
@@ -1354,6 +1422,25 @@
 #define HCI_CONTROL_MESH_STATUS_SUCCESS                     0   /* Command executed successfully */
 #define HCI_CONTROL_MESH_STATUS_ERROR                       1   /* Command start failed */
 #define HCI_CONTROL_MESH_STATUS_CONNECT_FAILED              2
+
+// HCI definitions for script application.
+//
+#define HCI_CONTROL_GROUP_SCRIPT                              0x25
+#define HCI_CONTROL_SCRIPT_COMMAND_EXECUTE                  ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x01 )    /* Execute a function */
+#define HCI_CONTROL_SCRIPT_EVENT_RET_CODE                   ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x01 )   /* Script command return code */
+#define HCI_CONTROL_SCRIPT_EVENT_UNKNOWN_CMD                ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x02 )   /* Unknown Script command */
+#define HCI_CONTROL_SCRIPT_EVENT_CALLBACK                   ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0x03 )   /* Async script callback */
+#define HCI_CONTROL_SCRIPT_TRACE                            ( ( HCI_CONTROL_GROUP_SCRIPT << 8 ) | 0xF0 )   /* Trace message (low nibble has type) */
+
+#define HCI_CONTROL_HCI_AUDIO_COMMAND_BUTTON                ( ( HCI_CONTROL_GROUP_HCI_AUDIO << 8 ) | 0x30 ) /* Button event */
+
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SOURCE        0
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SINK          1
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SOURCE      2
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SINK        3
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_ASSISTANT   4
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_SERVER   5
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_CLIENT   6
 
 /* MCE command/event parameter types */
 #define HCI_CONTROL_MCE_PARAM_BDA                           1   /* BD address, 6 bytes */

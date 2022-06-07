@@ -1,7 +1,8 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>red.png</file>
-    <file>paired.png</file>
-    <file>bt.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>red.png</file>
+        <file>paired.png</file>
+        <file>bt.png</file>
+        <file>IconCall.png</file>
+    </qresource>
 </RCC>

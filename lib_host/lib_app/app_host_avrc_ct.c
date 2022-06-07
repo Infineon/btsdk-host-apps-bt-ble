@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -73,14 +73,19 @@ bool app_host_avrc_ct_disconnect(uint8_t bda[6])
 }
 
 
-bool app_host_avrc_ct_command(uint8_t bda[6], uint8_t cmd)
+bool app_host_avrc_ct_command(uint8_t bda[6], uint16_t handle, uint8_t cmd)
 {
     wiced_bt_avrc_ct_cmd_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_cmd_data_t));
 
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        app_host_log("Sending ANCS cmd %d", cmd);
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         app_host_log("Sending AVRC CT cmd %d", cmd);
         data.handle = p_dev->m_avrc_handle;
@@ -118,48 +123,61 @@ bool app_host_avrc_ct_command(uint8_t bda[6], uint8_t cmd)
     return false;
 }
 
-
-bool app_host_avrc_ct_repeat(uint8_t bda[6], uint8_t setting)
+bool app_host_avrc_ct_repeat(uint8_t bda[6], uint16_t handle, uint8_t setting)
 {
     wiced_bt_avrc_ct_settings_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_settings_data_t));
 
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         data.handle = p_dev->m_avrc_handle;
     }
+
     app_host_log("Sending AVRC CT repeat setting %d", setting);
     data.setting = setting;
     return wiced_hci_avrc_ct_repeat(&data);
 }
 
-bool app_host_avrc_ct_shuffle(uint8_t bda[6], uint8_t setting)
+bool app_host_avrc_ct_shuffle(uint8_t bda[6], uint16_t handle, uint8_t setting)
 {
     wiced_bt_avrc_ct_settings_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_settings_data_t));
 
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         data.handle = p_dev->m_avrc_handle;
     }
+
     app_host_log("Sending AVRC CT shuffle setting %d", setting);
     data.setting = setting;
 
     return wiced_hci_avrc_ct_shuffle(&data);
 }
 
-bool app_host_avrc_ct_volume_level(uint8_t bda[6], uint8_t vol_level)
+bool app_host_avrc_ct_volume_level(uint8_t bda[6], uint16_t handle, uint8_t vol_level)
 {
     wiced_bt_avrc_ct_volume_level_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_volume_level_data_t));
 
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         data.handle = p_dev->m_avrc_handle;
     }
@@ -170,14 +188,18 @@ bool app_host_avrc_ct_volume_level(uint8_t bda[6], uint8_t vol_level)
     return wiced_hci_avrc_ct_volume_level(&data);
 }
 
-bool app_host_avrc_unit_info(uint8_t bda[BDA_LEN])
+bool app_host_avrc_unit_info(uint8_t bda[BDA_LEN], uint16_t handle)
 {
     wiced_bt_avrc_ct_cmd_unit_info_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_cmd_unit_info_data_t));
 
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         data.handle = p_dev->m_avrc_handle;
     }
@@ -185,22 +207,25 @@ bool app_host_avrc_unit_info(uint8_t bda[BDA_LEN])
     return wiced_hci_avrc_unit_info(&data);
 }
 
-bool app_host_avrc_sub_unit_info(uint8_t bda[BDA_LEN])
+bool app_host_avrc_sub_unit_info(uint8_t bda[BDA_LEN], uint16_t handle)
 {
     wiced_bt_avrc_ct_cmd_sub_unit_info_data_t data;
     wiced_hci_bt_device_t* p_dev = app_host_find_device(bda);
 
     memset(&data, 0, sizeof(wiced_bt_avrc_ct_cmd_sub_unit_info_data_t));
 
-
-    if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
+    if (handle != WICED_NULL_HANDLE)
+    {
+        data.handle = handle;
+    }
+    else if(p_dev && (p_dev->m_avrc_handle != WICED_NULL_HANDLE))
     {
         data.handle = p_dev->m_avrc_handle;
     }
+
     app_host_log("Sending sub-unit info cmd");
     return wiced_hci_avrc_sub_unit_info(&data);
 }
-
 
 void app_host_avrc_ct_event(uint16_t opcode, uint8_t * p_data, uint16_t len)
 {

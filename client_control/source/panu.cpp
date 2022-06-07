@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -123,22 +123,42 @@ void MainWindow::HandlePANUEvents(DWORD opcode, LPBYTE p_data, DWORD len)
         ui->btnPANUDisconnect->setEnabled(true);
         break;
     case HCI_CONTROL_PANU_EVENT_SERVICE_NOT_FOUND:
-        Log("PANU Service not found");
+        handle = p_data[0] | (p_data[1] << 8);
+        Log("PANU Service not found, Handle: 0x%04x", handle);
+        device = FindInList(CONNECTION_TYPE_PANU, handle, ui->cbDeviceList);
+        if (device && (device->m_panu_handle == handle))
+        {
+            device->m_panu_handle = NULL_HANDLE;
+            device->m_conn_type &= ~CONNECTION_TYPE_PANU;
+        }
+        ui->btnPANUConnect->setEnabled(true);
+        ui->btnPANUDisconnect->setEnabled(false);
         break;
     case HCI_CONTROL_PANU_EVENT_CONNECTION_FAILED:
-        Log("PANU Connection Failed");
+        handle = p_data[0] | (p_data[1] << 8);
+        Log("PANU Connection Failed, Handle: 0x%04x", handle);
+        device = FindInList(CONNECTION_TYPE_PANU, handle, ui->cbDeviceList);
+        if (device && (device->m_panu_handle == handle))
+        {
+            device->m_panu_handle = NULL_HANDLE;
+            device->m_conn_type &= ~CONNECTION_TYPE_PANU;
+        }
+        ui->btnPANUConnect->setEnabled(true);
+        ui->btnPANUDisconnect->setEnabled(false);
         break;
     case HCI_CONTROL_PANU_EVENT_DISCONNECTED:
         handle = p_data[0] | (p_data[1] << 8);
         Log("PANU disconnected, Handle: 0x%04x", handle);
-        CBtDevice * pDev = FindInList(CONNECTION_TYPE_PANU, handle, ui->cbDeviceList);
-        if (pDev && (pDev->m_panu_handle == handle))
+        device = FindInList(CONNECTION_TYPE_PANU, handle, ui->cbDeviceList);
+        if (device && (device->m_panu_handle == handle))
         {
-            pDev->m_panu_handle = NULL_HANDLE;
-            pDev->m_conn_type &= ~CONNECTION_TYPE_PANU;
+            device->m_panu_handle = NULL_HANDLE;
+            device->m_conn_type &= ~CONNECTION_TYPE_PANU;
         }
         ui->btnPANUConnect->setEnabled(true);
         ui->btnPANUDisconnect->setEnabled(false);
+        break;
+    default:
         break;
     }
 }

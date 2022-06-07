@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -75,7 +75,7 @@ public:
 class WicedSerialPortHostmode : public WicedSerialPort
 {
 public:
-WicedSerialPortHostmode (QString str_cmd_ip_addr);
+WicedSerialPortHostmode (QString str_cmd_ip_addr , int iSpyInstance);
     ~WicedSerialPortHostmode (){}
 
 
@@ -96,6 +96,7 @@ WicedSerialPortHostmode (QString str_cmd_ip_addr);
     int m_ClientSocket;
     bool OpenSocket();
     QString str_ip_addr;
+    int SpyInstance;
 };
 
 #endif // SERIAL_PORT_H

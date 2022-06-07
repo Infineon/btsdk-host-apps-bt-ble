@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -39,8 +39,8 @@
 // AVRCP
 bool app_host_avrc_ct_connect(uint8_t bda[BDA_LEN]);
 bool app_host_avrc_ct_disconnect(uint8_t bda[BDA_LEN]);
-bool app_host_avrc_unit_info(uint8_t bda[BDA_LEN]);
-bool app_host_avrc_sub_unit_info(uint8_t bda[BDA_LEN]);
+bool app_host_avrc_unit_info(uint8_t bda[BDA_LEN], uint16_t handle);
+bool app_host_avrc_sub_unit_info(uint8_t bda[BDA_LEN], uint16_t handle);
 
 #define WICED_AVRCP_CT_PLAY_CMD        1
 #define WICED_AVRCP_CT_STOP_CMD        2
@@ -72,10 +72,10 @@ bool app_host_avrc_sub_unit_info(uint8_t bda[BDA_LEN]);
 #define WICED_AVRC_PLAYER_VAL_ALL_SCAN                0x02
 #define WICED_AVRC_PLAYER_VAL_GROUP_SCAN              0x03
 
-bool app_host_avrc_ct_command(uint8_t bda[BDA_LEN], uint8_t cmd);
-bool app_host_avrc_ct_repeat(uint8_t bda[BDA_LEN], uint8_t setting);
-bool app_host_avrc_ct_shuffle(uint8_t bda[BDA_LEN], uint8_t setting);
-bool app_host_avrc_ct_volume_level(uint8_t bda[BDA_LEN], uint8_t vol_level);
+bool app_host_avrc_ct_command(uint8_t bda[BDA_LEN], uint16_t handle, uint8_t cmd);
+bool app_host_avrc_ct_repeat(uint8_t bda[BDA_LEN], uint16_t handle, uint8_t setting);
+bool app_host_avrc_ct_shuffle(uint8_t bda[BDA_LEN], uint16_t handle, uint8_t setting);
+bool app_host_avrc_ct_volume_level(uint8_t bda[BDA_LEN], uint16_t handle, uint8_t vol_level);
 
 void app_host_avrc_ct_event(uint16_t opcode, uint8_t * p_data, uint16_t len);
 

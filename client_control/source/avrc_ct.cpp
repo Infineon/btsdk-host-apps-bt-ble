@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -162,82 +162,191 @@ void MainWindow::onCTDisconnect()
 void MainWindow::onCTPlay()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PLAY_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PLAY_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_PLAY_CMD);
+    }
+    else
+    {
+        Log("onCTPlay device not exist");
+    }
 }
 
 // Send stop command
 void MainWindow::onCTStop()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_STOP_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_STOP_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_STOP_CMD);
+    }
+    else
+    {
+        Log("onCTStop device not exist");
+    }
 }
 
 // Send pause command
 void MainWindow::onCTPause()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PAUSE_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PAUSE_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_PAUSE_CMD);
+    }
+    else
+    {
+        Log("onCTPause device not exist");
+    }
 }
 
 // Send UnitInfo command
 void MainWindow::onCTUnitInfo()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_unit_info(pDev->m_address);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_unit_info(pDev->m_address, pDev->con_handle);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_unit_info(pDev->m_address, WICED_NULL_HANDLE);
+    }
+    else
+    {
+        Log("onCTUnitInfo device not exist");
+    }
 }
 
 // Send UnitInfo command
 void MainWindow::onCTSubUnitInfo()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_sub_unit_info(pDev->m_address);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_sub_unit_info(pDev->m_address, pDev->con_handle);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_sub_unit_info(pDev->m_address, WICED_NULL_HANDLE);
+    }
+    else
+    {
+        Log("onCTSubUnitInfo device not exist");
+    }
 }
 
 // Send next command
 void MainWindow::onCTNext()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_NEXT_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_NEXT_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_NEXT_CMD);
+    }
+    else
+    {
+        Log("onCTNext device not exist");
+    }
 }
 
 // Send previous command
 void MainWindow::onCTPrevious()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_PREVIOUS_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PREVIOUS_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_PREVIOUS_CMD);
+    }
+    else
+    {
+        Log("onCTPrevious device not exist");
+    }
 }
 
 // Send vol up command
 void MainWindow::onCTVolumeUp()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_VOL_UP_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_VOL_UP_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_VOL_UP_CMD);
+    }
+    else
+    {
+        Log("onCTVolumeUp device not exist");
+    }
 }
 
 // Send vol down command
 void MainWindow::onCTVolumeDown()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_VOL_DOWN_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_VOL_DOWN_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_VOL_DOWN_CMD);
+    }
+    else
+    {
+        Log("onCTVolumeDown device not exist");
+    }
 }
 
 // Send mute command
 void MainWindow::onCTMute()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_MUTE_CMD);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_MUTE_CMD);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_MUTE_CMD);
+    }
     else
+    {
+        Log("onCTMute device not exist");
         return;
+    }
 
     m_volMute = !m_volMute;
 
@@ -255,8 +364,18 @@ void MainWindow::onCTRepeatMode(int index)
     QVariant val = ui->cbCTRepeat->itemData(index);
     repeat_ct.curr_value = val.toUInt();
 
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_repeat(pDev->m_address, repeat_ct.curr_value);
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_repeat(pDev->m_address, pDev->con_handle, repeat_ct.curr_value);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_repeat(pDev->m_address, WICED_NULL_HANDLE, repeat_ct.curr_value);
+    }
+    else
+    {
+        Log("onCTRepeatMode device not exist");
+    }
 }
 
 // Change shuffle option
@@ -270,8 +389,18 @@ void MainWindow::onCTShuffleMode(int index)
     QVariant val = ui->cbCTShuffle->itemData(index);
     shuffle_ct.curr_value = val.toUInt();
 
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_shuffle(pDev->m_address, shuffle_ct.curr_value);
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_shuffle(pDev->m_address, pDev->con_handle, shuffle_ct.curr_value);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_shuffle(pDev->m_address, WICED_NULL_HANDLE, shuffle_ct.curr_value);
+    }
+    else
+    {
+        Log("onCTShuffleMode device not exist");
+    }
 }
 
 // Change volume
@@ -284,40 +413,94 @@ void MainWindow::cbCTVolumeChanged(int index)
 
     m_current_volume_pct = index;
 
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_volume_level(pDev->m_address, m_current_volume_pct);
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_volume_level(pDev->m_address, pDev->con_handle, m_current_volume_pct);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_volume_level(pDev->m_address, WICED_NULL_HANDLE, m_current_volume_pct);
+    }
+    else
+    {
+        Log("cbCTVolumeChanged device not exist");
+    }
 }
 
 // Send skip forward press command
 void MainWindow::onCTSkipForwardPressed()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_FF_CMD_PRESS);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_FF_CMD_PRESS);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_FF_CMD_PRESS);
+    }
+    else
+    {
+        Log("onCTSkipForwardPressed device not exist");
+    }
 }
 
 // Send skip forward release command
 void MainWindow::onCTSkipForwardReleased()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_FF_CMD_RELEASE);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_FF_CMD_RELEASE);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_FF_CMD_RELEASE);
+    }
+    else
+    {
+        Log("onCTSkipForwardReleased device not exist");
+    }
 }
 
 // Send skip backward press command
 void MainWindow::onCTSkipBackwardPressed()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_PRESS);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_REV_CMD_PRESS);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_REV_CMD_PRESS);
+    }
+    else
+    {
+        Log("onCTSkipBackwardPressed device not exist");
+    }
 }
 
 // Send skip backward release command
 void MainWindow::onCTSkipBackwardReleased()
 {
     CBtDevice * pDev = NULL;
-    if((pDev=GetDevice()))
-        app_host_avrc_ct_command(pDev->m_address, WICED_AVRCP_CT_REV_CMD_RELEASE);
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
+    {
+        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_REV_CMD_RELEASE);
+    }
+    else if (pDev = GetSelectedDevice())
+    {
+        app_host_avrc_ct_command(pDev->m_address, WICED_NULL_HANDLE, WICED_AVRCP_CT_REV_CMD_RELEASE);
+    }
+    else
+    {
+        Log("onCTSkipBackwardReleased device not exist");
+    }
 }
 
 // Handle WICED HCI events
@@ -536,28 +719,59 @@ void MainWindow::HandleAVRCControllerEvents(DWORD opcode, BYTE *p_data, DWORD le
 // Send ANCS action command for acknowledgement
 void MainWindow::OnBnClickedAncsPositive()
 {
-    BYTE command[5] = { 0, 0, 0, 0, 0 };
-    command[0] = m_notification_uid & 0xff;
-    command[1] = (m_notification_uid >> 8) & 0xff;
-    command[2] = (m_notification_uid >> 16) & 0xff;
-    command[3] = (m_notification_uid >> 24) & 0xff;
+    BYTE command[7] = { 0, 0, 0, 0, 0, 0, 0 };
+    CBtDevice * pDev = NULL;
+    UINT16 handle = 0;
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAncsConnected))
+    {
+        handle = pDev->con_handle;
+    }
+    else
+    {
+        Log("OnBnClickedAncsPositive device not exist");
+        return;
+    }
+    command[0] = handle & 0xff;
+    command[1] = (handle >> 8) & 0xff;
+
+    command[2] = m_notification_uid & 0xff;
+    command[3] = (m_notification_uid >> 8) & 0xff;
+    command[4] = (m_notification_uid >> 16) & 0xff;
+    command[5] = (m_notification_uid >> 24) & 0xff;
     Log("Sent command %d for notification uid %ld", 0, m_notification_uid);
 
-    SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 5);
+    SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 7);
 }
 
 // Send ANCS action command for rejection
 void MainWindow::OnBnClickedAncsNegative()
 {
-    BYTE command[5] = { 0, 0, 0, 0, 1 };
-    command[0] = m_notification_uid & 0xff;
-    command[1] = (m_notification_uid >> 8) & 0xff;
-    command[2] = (m_notification_uid >> 16) & 0xff;
-    command[3] = (m_notification_uid >> 24) & 0xff;
+    BYTE command[7] = { 0, 0, 0, 0, 0, 0, 1 };
+    CBtDevice * pDev = NULL;
+    UINT16 handle = 0;
+
+    if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAncsConnected))
+    {
+        handle = pDev->con_handle;
+    }
+    else
+    {
+        Log("OnBnClickedAncsNegative device not exist");
+        return;
+    }
+
+    command[0] = handle & 0xff;
+    command[1] = (handle >> 8) & 0xff;
+
+    command[2] = m_notification_uid & 0xff;
+    command[3] = (m_notification_uid >> 8) & 0xff;
+    command[4] = (m_notification_uid >> 16) & 0xff;
+    command[5] = (m_notification_uid >> 24) & 0xff;
 
     Log("Sent command %d for notification uid %ld", 1, m_notification_uid);
 
-    SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 5);
+    SendWicedCommand(HCI_CONTROL_ANCS_COMMAND_ACTION, command, 7);
 }
 
 // Simulate button press on stero headphone

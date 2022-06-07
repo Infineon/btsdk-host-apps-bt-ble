@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -439,6 +439,7 @@ void MainWindow::onHandleWicedEventGATT(unsigned int opcode, unsigned char *p_da
     {
     case HCI_CONTROL_GROUP_LE:
     case HCI_CONTROL_GROUP_ANCS:
+    case HCI_CONTROL_GROUP_AMS:
     case HCI_CONTROL_GROUP_ALERT:
         HandleLEEvents(opcode, p_data, len);
         break;
@@ -455,6 +456,7 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
     BYTE    bda[6];
     CBtDevice *device;
     ULONG notification_uid;
+    UINT16 handle;
 
     switch (identifier)
     {
@@ -473,8 +475,6 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
     case HCI_CONTROL_LE_EVENT_ADVERTISEMENT_REPORT:
     {
         char bd_name[50] = {0};
-
-
 
         for (int i = 0; i < 6; i++)
             bda[5 - i] = p_data[2 + i];
@@ -541,34 +541,73 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         SetRole(device, p_data[9]);     // Save LE role
         SelectDevice(ui->cbBLEDeviceList, bda);
         UpdateGattButtons(device);
+        UpdateLEAudioDevice(TRUE, bda, device->con_handle);
         break;
 
     case HCI_CONTROL_LE_EVENT_DISCONNECTED:
         sprintf (trace, "Connection down:connection handle:%04x reason:0x%x",
             p_data[0] + (p_data[1] << 8), p_data[2]);
         Log(trace);
+
+        handle = p_data[0] + (p_data[1] << 8);
+        device = FindInList(CONNECTION_TYPE_LE, handle, ui->cbBLEDeviceList);
+        if (device)
+        {
+            Log("set m_bIsAncsConnected false");
+            Log("set m_bIsAmsConnected false");
+            Log("set con_handle 0");
+            device->m_bIsAncsConnected = false;
+            device->m_bIsAmsConnected = false;
+            device->con_handle = 0;
+        }
         ui->lblCTMessage->setText("");
         ui->lblCTTitle->setText("");
         ui->btnCTANCSPositive->setText("");
         ui->btnCTANCSNegative->setText("");
         setHIDD_linkChange(nullptr, FALSE);
+        UpdateLEAudioDevice(FALSE, NULL, 0);
+        break;
+
+    case HCI_CONTROL_AMS_EVENT_CONNECTED:
+        handle = p_data[0] + (p_data[1] << 8);
+        Log("HCI_CONTROL_AMS_EVENT_CONNECTED handle = 0x%x", handle);
+
+        device = FindInList(CONNECTION_TYPE_LE, handle, ui->cbBLEDeviceList);
+        if (device)
+        {
+            Log("set m_bIsAmsConnected true");
+            device->m_bIsAmsConnected = true;
+        }
+        break;
+
+    case HCI_CONTROL_ANCS_EVENT_CONNECTED:
+        handle = p_data[0] + (p_data[1] << 8);
+        Log("HCI_CONTROL_ANCS_EVENT_CONNECTED handle = 0x%x", handle);
+        device = FindInList(CONNECTION_TYPE_LE, handle, ui->cbBLEDeviceList);
+        if (device)
+        {
+            Log("set m_bIsAncsConnected true");
+            device->m_bIsAncsConnected = true;
+        }
         break;
 
     case HCI_CONTROL_ANCS_EVENT_NOTIFICATION:
-        notification_uid = p_data[0] + (p_data[1] << 8) + (p_data[2] << 16), (p_data[3] << 24);
-        sprintf (trace, "(ANCS) %04lu Command:%u Category:%u Flags:%u", notification_uid, p_data[4], p_data[5], p_data[6]);
+        handle = p_data[0] + (p_data[1] << 8);
+
+        notification_uid = p_data[2] + (p_data[3] << 8) + (p_data[4] << 16), (p_data[5] << 24);
+        sprintf (trace, "(ANCS) %04lu Command:%u Category:%u Flags:%u", notification_uid, p_data[6], p_data[7], p_data[8]);
         Log(trace);
 
         // notification Added or Modified
-        if ((p_data[4] == EVENT_ID_NOTIFICATION_ADDED) || (p_data[4] == EVENT_ID_NOTIFICATION_MODIFIED))
+        if ((p_data[6] == EVENT_ID_NOTIFICATION_ADDED) || (p_data[6] == EVENT_ID_NOTIFICATION_MODIFIED))
         {
             // if currently displayed notification is more important than new one, do not overwrite
-            if (((p_data[6] & EVENT_FLAG_IMPORTANT) != 0) || ((m_notification_flags & EVENT_FLAG_IMPORTANT) == 0))
+            if (((p_data[8] & EVENT_FLAG_IMPORTANT) != 0) || ((m_notification_flags & EVENT_FLAG_IMPORTANT) == 0))
             {
                 m_notification_uid = notification_uid;
-                m_notification_flags = p_data[6];
+                m_notification_flags = p_data[8];
 
-                int len_int = 7;
+                int len_int = 9;
                 ui->lblCTMessage->setText((char*)&p_data[len_int]);
 
                 len_int += (int)strlen((char *)&p_data[len_int]) + 1;
@@ -579,6 +618,12 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
 
                 len_int += (int)strlen((char *)&p_data[len_int]) + 1;
                 ui->btnCTANCSNegative->setText((char*)&p_data[len_int]);
+
+                device = FindInList(CONNECTION_TYPE_LE, handle, ui->cbBLEDeviceList);
+                if (device != NULL)
+                {
+                    SelectDevice(ui->cbBLEDeviceList, device->m_address);
+                }
             }
         }
         else // removed

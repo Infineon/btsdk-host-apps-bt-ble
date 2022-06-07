@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -96,6 +96,8 @@ CBtDevice::CBtDevice (bool paired) :
     m_panu_handle = NULL_HANDLE;
     m_conn_type = 0;
     m_bIsLEDevice = false;
+    m_bIsAncsConnected = false;
+    m_bIsAmsConnected = false;
     role = 0;
     address_type = 0;
     con_handle = 0;
@@ -395,6 +397,10 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             ui->tabMain->setCurrentWidget(ui->tabPANU);
             Log("PANU");
             break;
+        case HCI_CONTROL_GROUP_LE_AUDIO:
+            ui->tabLEAudio->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabLEAudio);
+            break;
         }
     }
     else
@@ -427,6 +433,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
         ui->tabMAPClient->setEnabled(bEnable);
         ui->tabTest->setEnabled(bEnable);
         ui->tabPANU->setEnabled(bEnable);
+        ui->tabLEAudio->setEnabled(bEnable);
     }
 }
 
@@ -440,10 +447,11 @@ void MainWindow::ReadDevicesFromSettings(const char *group, QComboBox *cbDevices
     QStringList  device_keys = m_settings.allKeys();
 
     int nvram_id=-1;
-    QString dev_name_id, dev_name="";
+    QString dev_name_id, dev_name;
     int bda0,bda1,bda2,bda3,bda4,bda5;
     for (int i = 0; i < device_keys.size(); i++)
     {
+        dev_name="";
         dev_name_id = m_settings.value(device_keys[i],"").toString();
         if (dev_name_id.size() >= 3)
         {
@@ -715,6 +723,7 @@ void MainWindow::onUnbond(QComboBox* cb)
         ui->btnUnbond->setEnabled(false);
 
     cb->setItemIcon(cb->currentIndex(), *new QIcon);
+    cb->removeItem(i);
 }
 
 
@@ -860,6 +869,18 @@ CBtDevice *MainWindow::FindInList(UINT16 conn_type, UINT16 handle, QComboBox * p
             if(device->m_conn_type & WICED_CONNECTION_TYPE_SPP)
             {
                 if(handle == device->m_spp_handle)
+                    return device;
+            }
+            else if (device->m_conn_type & WICED_CONNECTION_TYPE_LE)
+            {
+                CHAR trace[256];
+                sprintf (trace, "FindInList con_handle = %d, m_paired = %d, m_address %02x:%02x:%02x:%02x:%02x:%02x",
+                    device->con_handle, device->m_paired,
+                    device->m_address[0], device->m_address[1], device->m_address[2],
+                    device->m_address[3], device->m_address[4], device->m_address[5]);
+                Log(trace);
+
+                if(handle == device->con_handle)
                     return device;
             }
             else
@@ -1078,6 +1099,8 @@ CBtDevice *MainWindow::AddDeviceToList(BYTE *addr, QComboBox * pCb, char * bd_na
 {
     CBtDevice *device = nullptr;
     QString abuffer;
+
+    Log("AddDeviceToList addr %02x:%02x:%02x:%02x:%02x:%02x", addr[0], addr[1],addr[2],addr[3],addr[4],addr[5]);
 
     if (bd_name)
         abuffer.sprintf("%02x:%02x:%02x:%02x:%02x:%02x (%s)",
@@ -1477,6 +1500,40 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
             // application should probably send type of the device, if host does not remember.
             // for now we will use the fact that BR/EDR keys are just 16 bytes.
             BOOL bLeDevice = (p_data[25] | p_data[26] | p_data[27]) != 0;
+            BOOL needSetIdentityAddr = 0;
+            CBtDevice *device = nullptr;
+            CBtDevice *brdevice = nullptr;
+            int bleindex = ui->cbBLEDeviceList->currentIndex();
+            int brindex = ui->cbDeviceList->currentIndex();
+
+            if(bleindex != -1)
+            {
+                device = static_cast<CBtDevice *>(ui->cbBLEDeviceList->itemData(bleindex).value<CBtDevice*>());
+                if(bLeDevice)
+                {
+                    needSetIdentityAddr = 1;
+                }
+            }
+
+            if(brindex != -1)
+            {
+                brdevice = static_cast<CBtDevice *>(ui->cbDeviceList->itemData(brindex).value<CBtDevice*>());
+                if(memcmp(brdevice->m_address, &p_data[2], 6) == 0)
+                {
+                    needSetIdentityAddr = 0;
+                }
+            }
+
+            if(needSetIdentityAddr)
+            {
+                memcpy(device->m_address, &p_data[2], 6);
+                device->address_type = p_data[26];
+                QString abuffer;
+                abuffer.sprintf("%02x:%02x:%02x:%02x:%02x:%02x (%s)",
+                        p_data[2], p_data[3], p_data[4], p_data[5], p_data[6], p_data[7], device->m_name);
+
+                ui->cbBLEDeviceList->setItemText(bleindex, abuffer);
+            }
 
             CBtDevice * pDev = AddDeviceToList(&p_data[2], bLeDevice ? ui->cbBLEDeviceList : ui->cbDeviceList, nullptr, true);
             pDev->m_nvram_id =  p_data[0] + (p_data[1] << 8);
@@ -1851,7 +1908,7 @@ bool MainWindow::SetupCommPort()
     bool bFlow = ui->btnFlowCntrl->isChecked();
     if (ui->cbCommport->itemData(ui->cbCommport->currentIndex()).toString().compare("0") == 0)
     {
-        m_CommPort = new WicedSerialPortHostmode(str_cmd_ip_addr);
+        m_CommPort = new WicedSerialPortHostmode(str_cmd_ip_addr, iSpyInstance);
         serialPortName = "host-mode";
     }
     else
@@ -2123,6 +2180,7 @@ void Worker::read_serial_port_thread()
         }
         else if (packetType == HCI_EVENT_PKT)
         {
+            pktLen += offset;
             // If this is a Vendor Specific Event
             if (au8Hdr[1] == HCI_VSE_OPCODE)
             {

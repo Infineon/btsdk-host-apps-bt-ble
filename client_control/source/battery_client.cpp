@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -113,8 +113,486 @@ void MainWindow::on_btnBATTCReadLevel_clicked(void)
     cmd[commandBytes++] = (nHandle >> 8) & 0xff;
 
     Log("BATTC Read Level Command, Handle: %d", nHandle);
-    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_READ, cmd, commandBytes);
+    //SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_READ, cmd, commandBytes);
 }
+
+
+void MainWindow::on_btnBroadcastEnable_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Enable Broadcast Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_ENABLE_BROADCAST, cmd, commandBytes);
+}
+
+void MainWindow::on_btnDisableBroadcast_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Disabl Broadcast Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_DISABLE_BROADCAST, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnLevelModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify Level Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_LEVEL_STATUS_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnLevelNotify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_LEVEL_STATUS_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnServicedateModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Serial number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_SERVICE_DATE_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnServicedateNotify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Serial number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_SERVICE_DATE_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnCriticalStatusModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Modify critical status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_CRITICAL_STATUS_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnCriticalStatusSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate critical status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_CRITICAL_STATUS_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnEnergyStatusModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify Energy status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_ENERGY_STATUS_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnEnergyStatusSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Energy Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_ENERGY_STATUS_SIGNAL, cmd, commandBytes);
+}
+
+void MainWindow::on_btnTimeStatusModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify TIME Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_TIME_STATUS_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnTimeStatusNotify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate time Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_TIME_STATUS_SIGNAL, cmd, commandBytes);
+}
+
+
+
+void MainWindow::on_btnHealthStatusModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify Health Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_STATUS_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnHealthStatusSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Health Status Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_STATUS_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnHealthInfoModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify Health Info Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_INFO_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnHealthInfoSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Health Info Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_HEALTH_INFO_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnBatteryInfoModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify Battery Info Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_BATTERY_INFO_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnBatteryInfoSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Battery Info Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_BATTERY_INFO_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnNameModify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Modify manufacturer name Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_NAME_MODIFY, cmd, commandBytes);
+}
+
+
+
+void MainWindow::on_btnNameNotify_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Signal manufacturer name Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_NAME_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnModelChange_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Modify model number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_MODEL_MODIFY, cmd, commandBytes);
+}
+
+
+
+void MainWindow::on_btnModelSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify model number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_MODEL_SIGNAL, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnNumberMofiy_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Modify Serial number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_NUMBER_MODIFY, cmd, commandBytes);
+}
+
+
+void MainWindow::on_btnNumberSignal_clicked()
+{
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Notify/Indicate Serial number Handle: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_NUMBER_SIGNAL, cmd, commandBytes);
+}
+
+void MainWindow::on_btnBATTCAdvStart_clicked()
+{
+    /*
+    BYTE   cmd[60];
+    int    commandBytes = 0;
+
+    CBtDevice * pDev = GetConnectedBATTCDevice();
+    if (pDev == NULL)
+        return;
+
+    USHORT nHandle = pDev->m_battc_handle;
+
+    cmd[commandBytes++] = nHandle & 0xff;
+    cmd[commandBytes++] = (nHandle >> 8) & 0xff;
+
+    Log("BATTC Start advertisements: %d", nHandle);
+    SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_START_ADV, cmd, commandBytes);
+    */
+}
+
 
 // Handle WICED HCI events
 void MainWindow::onHandleWicedEventBATTC(unsigned int opcode, unsigned char *p_data, unsigned int len)
@@ -140,14 +618,19 @@ void MainWindow::HandleBATTCHEvents(DWORD opcode, LPBYTE p_data, DWORD len)
     switch (opcode)
     {
     case HCI_CONTROL_BATT_CLIENT_EVENT_CONNECTED:
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++){
             bda[5 - i] = p_data[i + 1];
+            //sprintf(trace, "BATTC Connected p_data:%d i:%d", p_data[i], i);
+            //Log(trace);
+        }
         sprintf(trace, "BATTC Connected status:%d address %02x:%02x:%02x:%02x:%02x:%02x handle:%d",
             p_data[0], bda[0], bda[1], bda[2], bda[3], bda[4], bda[5], p_data[7] + (p_data[8] << 8));
         Log(trace);
         handle = p_data[7] + (p_data[8] << 8);
-        if (p_data[0] == 0)
+        if (p_data[0] != 0)
         {
+            sprintf(trace, "Trying to add device to the list");
+            Log(trace);
             if ((device = FindInList(bda,ui->cbBLEDeviceList)) == NULL)
                 device = AddDeviceToList(bda, ui->cbBLEDeviceList, NULL);
             device->m_battc_handle = handle;
@@ -182,8 +665,8 @@ void MainWindow::HandleBATTCHEvents(DWORD opcode, LPBYTE p_data, DWORD len)
         break;
 
     case HCI_CONTROL_BATT_CLIENT_EVENT_STATUS:
-        sprintf(trace, "BATTC Cmd Status:%d ", p_data[0]);
-        Log(trace);
+        //sprintf(trace, "BATTC Cmd Status:%d ", p_data[0]);
+        //Log(trace);
         break;
 
     default:

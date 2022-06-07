@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -544,10 +544,11 @@ int ms_snprintf ( char * s, size_t n, const char * fmt, ... )
 }
 
 
-WicedSerialPortHostmode::WicedSerialPortHostmode(QString str_cmd_ip_addr)
+WicedSerialPortHostmode::WicedSerialPortHostmode(QString str_cmd_ip_addr, int iSpyInstance)
     : WicedSerialPort(true)
 {
     str_ip_addr = str_cmd_ip_addr;
+    SpyInstance = iSpyInstance;
     m_ClientSocket  = INVALID_SOCKET;
 }
 
@@ -627,7 +628,7 @@ bool WicedSerialPortHostmode::OpenSocket()
 
     service.sin_family = AF_INET;
     service.sin_addr.s_addr = inet_addr(ipAddr.data());
-    service.sin_port = htons(SOCK_PORT_NUM);
+    service.sin_port = htons(SOCK_PORT_NUM + SpyInstance);
     memset(service.sin_zero, 0, sizeof(service.sin_zero));
 
     // Connect to server.

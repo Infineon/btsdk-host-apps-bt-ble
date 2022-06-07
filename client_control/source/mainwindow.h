@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -157,7 +157,8 @@ public:
 
     char m_name[100];
     bool m_bIsLEDevice;
-
+    bool m_bIsAncsConnected;
+    bool m_bIsAmsConnected;
     QByteArray m_nvram;
     int m_nvram_id;
     bool m_paired;
@@ -278,6 +279,8 @@ public:
     void ReadDevicesFromSettings(const char *group, QComboBox *cbDevices, QPushButton *btnUnbond);
 
     void DisableBluetoothClassic();
+    void UpdateLEAudioRole(uint8_t role);
+    void UpdateLEAudioDevice(BOOL is_connected, BYTE *addr, uint16_t conn_id);
 
     // command line
     QString str_cmd_port;
@@ -670,6 +673,13 @@ public:
     bool m_mce_notif_registered;
     QListWidgetItem *m_mce_delete_item;
 
+    //LE Audio Demo
+    void InitUnicastSink();
+    void getMediaState(int state);
+    void update_mute_state(int state);
+    void onHandleWicedEventLeAudio(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    void Handle_LE_Audio_Events(DWORD opcode, BYTE *rx_buf, DWORD len);
+    CBtDevice *AddDeviceToListLeAudio(BYTE *addr, QComboBox * pCb, char * bd_name=nullptr,uint16_t conn_id=0);
 signals:
    void HandleWicedEvent(unsigned int opcode, unsigned int len, unsigned char *p_data);
    void HandleTrace(QString *pTrace);
@@ -1017,6 +1027,11 @@ public slots:
     // Test
     void on_btnTest_clicked();
 
+    //LE Audio
+    void update_media_player_list(uint8_t len, uint8_t *p_data);
+    void incoming_Call_Popup(uint16_t conn_id, uint8_t call_id , char* uri);
+    void handle_incoming_Call(uint16_t conn_id, uint8_t *p_data);
+
 public:
     Ui::MainWindow *ui;
 
@@ -1056,6 +1071,45 @@ private slots:
     void on_btnBLEHIDSendKey_right_pressed();
     void on_btnBLEHIDSendKey_right_released();
     void on_cbBLEHIDHold_clicked();
+
+    //LE Audio
+    void on_btn_LeAudioConnect_clicked();
+    void on_btn_startLeAdv_clicked();
+    void on_btn_setMediaPlayer_clicked();
+    void on_btn_muteUnmute_clicked();
+    void on_btn_playPause_clicked();
+    void on_btn_volDown_clicked();
+    void on_btn_volUp_clicked();
+    void on_btn_absVol_clicked();
+
+	// BAS
+	void on_btnNumberMofiy_clicked();
+    void on_btnNumberSignal_clicked();
+    void on_btnBroadcastEnable_clicked();
+    void on_btnDisableBroadcast_clicked();
+    void on_btnNameModify_clicked();
+    void on_btnNameNotify_clicked();
+    void on_btnModelChange_clicked();
+    void on_btnModelSignal_clicked();
+    void on_btnLevelModify_clicked();
+    void on_btnLevelNotify_clicked();
+    void on_btnServicedateModify_clicked();
+    void on_btnServicedateNotify_clicked();
+    void on_btnHealthInfoModify_clicked();
+    void on_btnHealthInfoSignal_clicked();
+    void on_btnBatteryInfoModify_clicked();
+    void on_btnBatteryInfoSignal_clicked();
+    void on_btnEnergyStatusModify_clicked();
+    void on_btnEnergyStatusSignal_clicked();
+    void on_btnCriticalStatusSignal_clicked();
+    void on_btnCriticalStatusModify_clicked();
+    void on_btnTimeStatusModify_clicked();
+    void on_btnTimeStatusNotify_clicked();
+    void on_btnHealthStatusModify_clicked();
+    void on_btnHealthStatusSignal_clicked();
+    void on_btnBATTCAdvStart_clicked();
+    void on_btn_connectToPeer_clicked();
+    void on_btnCall_clicked();
 };
 
 // Thread for SPP, iAP2 and serial port read

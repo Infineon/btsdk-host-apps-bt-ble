@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -83,6 +83,8 @@ void app_host_panu_event(uint16_t opcode, uint8_t * p_data, uint32_t len)
     unsigned char * p_rx_data = NULL;
     uint32_t rx_data_len = 0;
 
+    app_host_log("app_host_panu_event opcode = 0x%04x",opcode);
+
     switch (opcode)
     {
         case HCI_CONTROL_PANU_EVENT_CONNECTED :
@@ -102,6 +104,34 @@ void app_host_panu_event(uint16_t opcode, uint8_t * p_data, uint32_t len)
             device->m_panu_handle = handle;
             device->m_conn_type |= WICED_CONNECTION_TYPE_PANU;
             is_panu_connected = true;
+        }
+        break;
+
+        case HCI_CONTROL_PANU_EVENT_SERVICE_NOT_FOUND:
+        {
+            handle = (uint16_t)(p_data[0] | (p_data[1] << 8));
+            app_host_log("PANU SERVICE NOT FOUND, Handle: 0x%04x", handle);
+            device = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_PANU, handle);
+            if (device)
+            {
+                device->m_panu_handle = WICED_NULL_HANDLE;
+                device->m_conn_type &= ~WICED_CONNECTION_TYPE_PANU;
+            }
+            is_panu_connected = false;
+        }
+        break;
+
+        case HCI_CONTROL_PANU_EVENT_CONNECTION_FAILED:
+        {
+            handle = (uint16_t)(p_data[0] | (p_data[1] << 8));
+            app_host_log("PANU connect failed, Handle: 0x%04x", handle);
+            device = app_host_find_device_by_connection(WICED_CONNECTION_TYPE_PANU, handle);
+            if (device)
+            {
+                device->m_panu_handle = WICED_NULL_HANDLE;
+                device->m_conn_type &= ~WICED_CONNECTION_TYPE_PANU;
+            }
+            is_panu_connected = false;
         }
         break;
 

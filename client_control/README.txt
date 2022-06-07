@@ -222,7 +222,7 @@ See the readme in the MAP client app.
 HID Device
 ++++++++++
 This tab allows executing the functions of HID applications.
-Setup: app - dual_mode_keyboard for BR-EDR or LE remote/mouse for LE HOGP
+Setup: app - dual_mode_keyboard for BR-EDR or LE, remote/mouse for LE HOGP
 Peer device - Windows PC or any HID host
 - Enter Pairing Mode
   Sets the local device to pairable
@@ -232,6 +232,9 @@ Peer device - Windows PC or any HID host
   Sends the specified key from the drop-down with options such as button up, Caps Lock, etc.
 - Send Report
   Send report for Interrupt or Control channel.
+  Use 'Motion' button demonstarte sending mouse pointer reports. (For mouse only)
+- Send IR
+  Use 'IR' button to send IR. (For IR feature enabled application)
 
 See the readme in the dual_mode_keyboard, LE remote, or LE remote app.
 
@@ -265,6 +268,37 @@ This tab allows executing the functions of UART loopback testing.
 Setup: app - HCI Loopback app
 
 See the readme in the HCI Loopback app.
+
+PANU
+++++++++++
+This tab allows executing the functions of PANU applications.
+Setup: app - the application only available in watch app for CYW920721M2EVK-01 device
+Peer device - Any PAN-NAP device, such as iphone
+- Enable PANU function in watch app
+  Set PANU_SUPPORT=1 in makefile
+- Enable PAN-NAP function
+  For iphone example: enter into settings -> personal hotspot -> allow others to join -> turn on wlan and bluetooth
+- Connect
+  Connect PAN-NAP device.
+
+LE Audio
+++++++++
+This tab allows executing the functions of LE Audio.
+Client control supports LE Audio device in the Unicast Sink role.
+Setup: app - Unicast sink app
+Peer Device: Unicast source app
+
+- Start Adv : Start Unicast sink advertisement by clicking on Start Adv button.
+- Play/Pause : Unicast sink device can control the media by using play and pause buttons.
+- Mute/unMute: Unicast sink device can control the mute state by using mute and unmute buttons.
+- Volume Control:
+   + : Relative volume up command will be sent on clicking this button. If mute state is on it will be unmuted.
+   - : Relative volume down command will be sent on clicking this button. If mute state is on it will be unmuted.
+   Set Volume : Enter Volume value in the range (0-255) and click on set volume button, the provided value will be set. Mute state will not be changed.
+
+- The notifications received from the unicast client will be printed on the log terminal.
+
+See the readme in Unicast source app to understand the working of unicast source.
 
 Supported OS
 ============
