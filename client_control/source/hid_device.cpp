@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -35,6 +35,8 @@
  * Sample MCU application for BLE or BR/EDR HID Device using WICED HCI protocol.
  */
 
+#include <QIODevice>
+#include <QAudioOutput>
 #include "app_include.h"
 #include "usb_kb_usage.h"
 #include "hci_control_api.h"
@@ -45,6 +47,8 @@ extern "C"
 #include "app_host_hidd.h"
 }
 
+//extern const CHAR *szAdvState[];
+
 // Initialize app
 void MainWindow::InitBLEHIDD()
 {
@@ -52,6 +56,9 @@ void MainWindow::InitBLEHIDD()
     m_host_type = 0;
     m_host_valid = false;
     m_b_is_hidd = false;
+    m_hiddAudioRaw_fp = NULL;
+    m_hiddAudioRaw_write_fp = NULL;
+    m_device_capability_audio = m_device_capability_motion = m_device_capability_ir = 0;
     ui->cbBLEHIDInterupt->clear();
     ui->cbBLEHIDReport->clear();
 
@@ -113,10 +120,34 @@ void MainWindow::btnBLEHIDSendKeyDown(BYTE c, QPushButton * button)
         btnBLEHIDSendKey();
 }
 
+const char * MainWindow::hidd_media_key_str(BYTE c)
+{
+#define MAX_HIDD_MEDIA_KEY 8
+    static const char * hidd_media_str[MAX_HIDD_MEDIA_KEY+1] = {
+        "IR",
+        "AUDIO",
+        "MOTION",
+        "CONNECT",
+        "HOME",
+        "BACK",
+        "MUTE",
+        "POWER",
+        "Unknown"
+    };
+
+    c -= HCI_CONTROL_HIDD_KEY_IR;
+    if (c>MAX_HIDD_MEDIA_KEY)
+    {
+        c = MAX_HIDD_MEDIA_KEY;
+    }
+    return hidd_media_str[c];
+}
+
 void MainWindow::btnBLEHIDSendMedia(BYTE c, bool pressed, QPushButton * button)
 {
     setHIDD_buttonColor(button, pressed ? Qt::blue : Qt::white);
     app_host_hidd_key(c, pressed);
+    Log("Send media %s key %s to device", hidd_media_key_str(c), pressed?"pressed":"released");
 }
 
 bool MainWindow::btnBLEHIDSendKeyRelease(BYTE c, QPushButton * button)
@@ -200,32 +231,32 @@ void MainWindow::on_btnBLEHIDSendKey_3_released()
 
 void MainWindow::on_btnBLEHIDSendKey_audio_pressed()
 {
-    btnBLEHIDSendMedia(KEY_AUDIO, true, ui->btnBLEHIDSendKey_audio);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_AUDIO, true, ui->btnBLEHIDSendKey_audio);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_audio_released()
 {
-    btnBLEHIDSendMedia(KEY_AUDIO, false, ui->btnBLEHIDSendKey_audio);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_AUDIO, false, ui->btnBLEHIDSendKey_audio);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_ir_pressed()
 {
-    btnBLEHIDSendMedia(KEY_IR, true, ui->btnBLEHIDSendKey_ir);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_IR, true, ui->btnBLEHIDSendKey_ir);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_ir_released()
 {
-    btnBLEHIDSendMedia(KEY_IR, false, ui->btnBLEHIDSendKey_ir);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_IR, false, ui->btnBLEHIDSendKey_ir);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_motion_pressed()
 {
-    btnBLEHIDSendMedia(KEY_MOTION, true, ui->btnBLEHIDSendKey_motion);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_MOTION, true, ui->btnBLEHIDSendKey_motion);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_motion_released()
 {
-    btnBLEHIDSendMedia(KEY_MOTION, false, ui->btnBLEHIDSendKey_motion);
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_MOTION, false, ui->btnBLEHIDSendKey_motion);
 }
 
 void MainWindow::on_btnBLEHIDSendKey_a_pressed()
@@ -318,6 +349,36 @@ void MainWindow::on_btnBLEHIDSendKey_right_released()
     btnBLEHIDSendKeyUp(USB_USAGE_RIGHT_ARROW, ui->btnBLEHIDSendKey_right);
 }
 
+void MainWindow::on_btnBLEHIDSendKey_back_pressed()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_BACK, true, ui->btnBLEHIDSendKey_back);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_back_released()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_BACK, false, ui->btnBLEHIDSendKey_back);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_home_pressed()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_HOME, true, ui->btnBLEHIDSendKey_home);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_home_released()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_HOME, false, ui->btnBLEHIDSendKey_home);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_mute_pressed()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_MUTE, true, ui->btnBLEHIDSendKey_mute);
+}
+
+void MainWindow::on_btnBLEHIDSendKey_mute_released()
+{
+    btnBLEHIDSendMedia(HCI_CONTROL_HIDD_KEY_MUTE, false, ui->btnBLEHIDSendKey_mute);
+}
+
 void MainWindow::setHIDD_buttonColor(QPushButton * button, const QColor &color)
 {
     QPalette pal = button->palette();
@@ -366,26 +427,37 @@ void MainWindow::UpdateHIDD_ui_host()
     {
         ui->btnBLEHIDDVirtualUnplug->setEnabled(m_host_valid);
         ui->btnBLEHIDConnectDisconnect->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_1->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_2->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_3->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_audio->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_ir->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_motion->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_a->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_b->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_c->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_enter->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_esc->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_up->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_down->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_left->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_right->setEnabled(m_host_valid);
+        ui->btnBLEHIDSendKey_1->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_2->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_3->setEnabled(m_connected);
+        ui->btnBLEHIDSendReport->setEnabled(m_connected);
+#if 1
+        ui->btnBLEHIDSendKey_audio->setEnabled(m_connected && m_device_capability_audio);
+#else // for debugging that allow audio button without link
+        ui->btnBLEHIDSendKey_audio->setEnabled(m_device_capability_audio);
+#endif
+        ui->btnBLEHIDSendKey_ir->setEnabled(m_connected && m_device_capability_ir);
+        ui->btnBLEHIDSendKey_motion->setEnabled(m_connected && m_device_capability_motion);
+        ui->btnBLEHIDSendKey_a->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_b->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_c->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_enter->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_esc->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_up->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_down->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_left->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_right->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_back->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_mute->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_home->setEnabled(m_connected);
         ui->cbBLEHIDHold->setEnabled(m_host_valid);
         ui->cbBLEHIDCapLock->setEnabled(m_host_valid);
         ui->cbBLEHIDCtrl->setEnabled(m_host_valid);
         ui->cbBLEHIDAlt->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendReport->setEnabled(m_host_valid);
+        //ui->cbBLEHIDInterupt->setEnabled(m_host_valid);
+        //ui->cbBLEHIDReport->setEnabled(m_host_valid);
+        ui->btnAudioRawFileSend->setEnabled(m_connected && m_device_capability_audio);
+//        ui->cbAudioSelect->setEnabled(m_connected && m_device_capability_audio);
 
         setHIDD_buttonColor(ui->btnBLEHIDHost, m_connected ? Qt::red : Qt::white);
         if (m_host_valid)
@@ -506,6 +578,20 @@ void MainWindow::on_cbBLEHIDAlt_clicked()
     btnBLEHIDSendKey();
 }
 
+#define MAX_LINK_STRING 10
+static char const * link_string[MAX_LINK_STRING] = {
+                            "Initialized",
+                            "Disconnected",
+                            "Discoverable",
+                            "Connectable",
+                            "Connected",
+                            "Disconnecting",
+                            "Reconnecting",
+                            "Directed_uBCS_adv",
+                            "Undirected_uBCS_adv",
+                            "Invalid"};
+
+
 // Handle WICED HCI events for BLE/BR HID device
 void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p_data, unsigned int len)
 {
@@ -536,7 +622,7 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             break;
 
         case HCI_CONTROL_HIDD_EVENT_STATE_CHANGE:
-            Log("%s Device state changed to %d",p_data[1]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT", p_data[2]);
+            Log("%s Device state changed to %s",p_data[1]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT", link_string[p_data[2]>=MAX_LINK_STRING?MAX_LINK_STRING-1:p_data[2]]);
             if (p_data[1]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR)
             {
                 unsigned char new_pairing_mode = p_data[2]==2;   // discoverable mode
@@ -566,7 +652,7 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             break;
 
         case HCI_CONTROL_LE_EVENT_ADVERTISEMENT_STATE:
-            Log("Advertisement state:%d", p_data[0]);
+//            Log("%s", szAdvState[p_data[0]<=4?p_data[0]:0]);
             m_pairing_mode = p_data[0];
             UpdateHIDD_ui_pairing();
             break;
@@ -586,6 +672,244 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             setHIDD_linkChange(nullptr, FALSE);
             Log("HID Link down reason: %d ", p_data[0]);
             break;
+
+        case HCI_CONTROL_HIDD_EVENT_AUDIO_DATA_REQ:
+            {
+                unsigned int count = p_data[0] + (p_data[1] << 8); // little endian 16-bit data
+                send_AudioRawData(count);
+            }
+            break;
+
+        case HCI_CONTROL_HIDD_EVENT_AUDIO_DATA:
+            if (m_hiddAudioRaw_write_fp)
+            {
+                fwrite(p_data, sizeof(uint16_t), len/2, m_hiddAudioRaw_write_fp);
+                m_audioRawDataWrSize += len;
+                char s[20];
+                sprintf(s, "%d bytes", m_audioRawDataWrSize);
+                ui->audioRawDataWrSize->setText(s);
+            }
+            break;
+
+        case HCI_CONTROL_HIDD_EVENT_CAPABILITY:
+            m_device_capability_audio = p_data[0];
+            m_device_capability_motion = p_data[1];
+            m_device_capability_ir = p_data[2];
+            UpdateHIDD_ui_host();
+            Log("Device Capability: Audio=%02x Motion=%02x IR=%02x", p_data[0], p_data[1], p_data[2]);
+            break;
+
+        case HCI_CONTROL_HIDD_EVENT_AUDIO_STOP:
+            Log("Received audio stop event from the device");
+            stop_AudioRawFileSend();
+            break;
     }
 }
 
+void MainWindow::stop_AudioRawFileSend()
+{
+    fclose(m_hiddAudioRaw_fp);
+    m_hiddAudioRaw_fp = NULL;
+    ui->AudioRawDataSendProgressBar->setEnabled(false);
+    ui->AudioRawDataSendProgressBar->setValue(0);
+    ui->btnAudioRawFileSend->setText("Send");
+}
+
+#define MAX_AUDIO_SAMPLE_COUNT 512
+void MainWindow::send_AudioRawData(unsigned int count)
+{
+    unsigned int size;
+    UINT16 data[MAX_AUDIO_SAMPLE_COUNT];
+
+    if ((m_hiddAudioRaw_fp != NULL) && count && m_audioRawDataSize)
+    {
+        if (count > MAX_AUDIO_SAMPLE_COUNT)
+        {
+            count = MAX_AUDIO_SAMPLE_COUNT;
+        }
+
+        size = fread(data, 1, count*2, m_hiddAudioRaw_fp);
+
+        // if we have data, send it.
+        if (size)
+        {
+            SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_DATA, (unsigned char *) data, size);
+            m_audioRawDataCurrentSize += size;
+            ui->AudioRawDataSendProgressBar->setValue(100 * m_audioRawDataCurrentSize / m_audioRawDataSize);
+        }
+
+        // if we got less than we asked for, that means it is reaching the end of file
+        if ((size/sizeof(UINT16)) < count)
+        {
+            SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_STOP_REQ, NULL, 0);
+            stop_AudioRawFileSend();
+        }
+    }
+}
+
+void MainWindow::send_audio_file(const char * filename)
+{
+    m_hiddAudioRaw_fp = fopen(filename, "rb");
+    if (m_hiddAudioRaw_fp == NULL)
+    {
+        Log("Error opening file %s", filename);
+        QMessageBox(QMessageBox::Information, filename, "File Open Error", QMessageBox::Ok).exec();
+    }
+    else
+    {
+        Log("Sending input audio data file from %s", filename);
+        fseek(m_hiddAudioRaw_fp, 0, SEEK_END);
+        m_audioRawDataSize = ftell(m_hiddAudioRaw_fp);
+        rewind(m_hiddAudioRaw_fp);
+        m_audioRawDataCurrentSize = 0;
+
+        ui->AudioRawDataSendProgressBar->setEnabled(true);
+        ui->btnAudioRawFileSend->setText("Cancel");
+        uint8_t buff[1] = {1};
+        SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_START_REQ, buff, 2);
+    }
+}
+
+QFile sourceFile;
+QAudioOutput* audio; // class member.
+
+void MainWindow::play_audio_file(const char * filename)
+{
+    if (sourceFile.isOpen())
+    {
+        sourceFile.close();
+    }
+    sourceFile.setFileName(filename);
+    if (!sourceFile.open(QIODevice::ReadOnly))
+    {
+        Log("Fail to open file %s", filename);
+        return;
+    }
+
+    QAudioFormat format;
+    // Set up the format, eg.
+    format.setSampleRate(16000);
+    format.setChannelCount(1);
+    format.setSampleSize(16);
+    format.setCodec("audio/pcm");
+    format.setByteOrder(QAudioFormat::LittleEndian);
+    format.setSampleType(QAudioFormat::SignedInt);
+
+    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
+    if (!info.isFormatSupported(format))
+    {
+        Log("Raw audio format not supported by backend, cannot play audio.");
+        return;
+    }
+
+    audio = new QAudioOutput(format, this);
+//    connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
+    audio->start(&sourceFile);
+}
+
+void MainWindow::on_btnAudioRawFileSend_clicked()
+{
+    if (!strcmp(ui->btnAudioRawFileSend->text().toStdString().c_str(),"Cancel"))
+    {
+        stop_AudioRawFileSend();
+        SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_STOP_REQ, NULL, 0);
+    }
+    else
+    {
+        send_audio_file(ui->edAudioRawFile->text().toStdString().c_str());
+    }
+}
+
+void MainWindow::on_btnFindAudioRawFile_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Audio Raw Data File"), "", tr("Audio Raw Data Files (*.raw)"));
+    if (!fileName.isEmpty())
+    {
+        ui->edAudioRawFile->setText(fileName);
+    }
+}
+
+void MainWindow::on_cbAudioSelect_activated(int index)
+{
+    char filename[100];
+
+    ui->cbAudioSelect->setCurrentIndex(index);
+    sprintf(filename, "audio_%s.raw", ui->cbAudioSelect->currentText().toStdString().c_str());
+    ui->edAudioRawFile->setText(filename);
+//    send_audio_file(filename);
+}
+
+
+void MainWindow::on_cbBLEHIDDebug_currentIndexChanged(int index)
+{
+    (void) index;
+    Log("Route debug message to %s", ui->cbBLEHIDDebug->currentText().toStdString().c_str());
+    EnableAppTraces();
+}
+
+
+void MainWindow::on_btnFindAudioRawFile_2_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Audio Raw Data File"), "", tr("Audio Raw Data Files (*.raw)"));
+    if (!fileName.isEmpty())
+    {
+        FILE * tempFile = fopen(fileName.toStdString().c_str(), "rb");
+        if (tempFile)
+        {
+            fclose(tempFile);
+
+            if (QMessageBox::Yes != QMessageBox(QMessageBox::Information, "File Exists", "Overwrite?", QMessageBox::Yes|QMessageBox::No).exec())
+            {
+                return;
+            }
+        }
+        ui->edAudioRawFile_2->setText(fileName);
+    }
+}
+
+void MainWindow::on_audioPlayButton1_clicked()
+{
+    if (m_hiddAudioRaw_fp != NULL)
+    {
+        fclose(m_hiddAudioRaw_fp);
+    }
+    play_audio_file(ui->edAudioRawFile->text().toStdString().c_str());
+}
+
+void MainWindow::on_audioPlayButton2_clicked()
+{
+    if (m_hiddAudioRaw_write_fp != NULL)
+    {
+        fclose(m_hiddAudioRaw_write_fp);
+    }
+    play_audio_file(ui->edAudioRawFile_2->text().toStdString().c_str());
+}
+
+
+void MainWindow::on_audioRecordutton_pressed()
+{
+    uint8_t cmd = 1;
+    m_hiddAudioRaw_write_fp = fopen(ui->edAudioRawFile_2->text().toStdString().c_str(), "wb");
+
+    if (m_hiddAudioRaw_write_fp == NULL)
+    {
+        QMessageBox(QMessageBox::Information, "Audio Raw data output", "File Open Error", QMessageBox::Ok).exec();
+        return;
+    }
+    Log("File %s opened", ui->edAudioRawFile_2->text().toStdString().c_str());
+    m_audioRawDataWrSize = 0;
+    SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_MIC_START_STOP, &cmd, 1);
+}
+
+void MainWindow::on_audioRecordutton_released()
+{
+    uint8_t cmd = 0;
+    if (m_hiddAudioRaw_write_fp)
+    {
+        fclose(m_hiddAudioRaw_write_fp);
+        Log("File %s created, size = %d", ui->edAudioRawFile_2->text().toStdString().c_str(), m_audioRawDataWrSize);
+    }
+    SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_MIC_START_STOP, &cmd, 1);
+}

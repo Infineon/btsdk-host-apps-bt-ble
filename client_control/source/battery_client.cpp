@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -112,7 +112,7 @@ void MainWindow::on_btnBATTCReadLevel_clicked(void)
     cmd[commandBytes++] = nHandle & 0xff;
     cmd[commandBytes++] = (nHandle >> 8) & 0xff;
 
-    Log("BATTC Read Level Command, Handle: %d", nHandle);
+    Log("BATTC Read Level Command, Handle: %d (%02X%02X)", nHandle, cmd[1], cmd[0]);
     //SendWicedCommand(HCI_CONTROL_BATT_CLIENT_COMMAND_READ, cmd, commandBytes);
 }
 

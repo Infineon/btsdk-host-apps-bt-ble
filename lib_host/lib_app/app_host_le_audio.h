@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -33,6 +33,7 @@
  */
 
 #include "wiced_types.h"
+#include "wiced_hci_le_audio.h"
 #ifndef APP_HOST_LE_AUDIO_H
 #define APP_HOST_LE_AUDIO_H
 
@@ -45,15 +46,27 @@
 #define WICED_LE_AUDIO_UNMUTE_CMD      7
 #define WICED_LE_AUDIO_UNMUTE_RELATIVE_VOL_UP_CMD      8
 #define WICED_LE_AUDIO_UNMUTE_RELATIVE_VOL_DOWN_CMD    9
+#define WICED_LE_AUDIO_BROADCAST_SINK_PLAY_PAUSE_CMD         10
 
-bool app_host_le_audio_command(uint16_t conn_id, uint8_t cmd);
+#define BD_ADDR_LEN     6       /**< Device Bluetooth Address Length */
+
+bool app_host_le_audio_command(uint16_t conn_id, uint8_t cmd, void *p_codec_config);
 void app_host_le_audio_set_abs_volume(uint16_t conn_id, uint8_t vol);
 void app_host_le_audio_event(uint16_t opcode, uint8_t * p_data, uint16_t len);
 bool app_host_le_audio_get_media_players(uint16_t conn_id);
 bool app_host_le_audio_set_media_player(uint16_t conn_id, uint8_t len, uint8_t* p_player_name);
 
-bool app_host_le_audio_generate_call(uint16_t conn_id, uint8_t len, uint8_t* p_call_URI);
-bool app_host_le_audio_accept_call(uint16_t conn_id, uint8_t call_id);
-bool app_host_le_audio_terminate_call(uint16_t conn_id, uint8_t call_id);
+bool app_host_le_audio_generate_call(uint16_t conn_id, uint8_t uri_len, uint8_t* p_call_URI,uint8_t f_len, uint8_t* p_friendly_name);
+bool app_host_le_audio_handle_call_action(uint16_t conn_id, uint8_t call_id, wiced_bt_ga_tbs_call_action_t action);
+bool app_host_le_audio_terminate_call(uint16_t conn_id, uint8_t call_id, bool is_reject);
+bool app_host_le_audio_broadcast_source_start_streaming(uint8_t start,uint32_t codec_config, uint8_t bis_count, uint32_t num_channels,
+                                                        uint8_t encryption,
+                                                        uint32_t broadcast_id,
+                                                        uint8_t *broadcast_code);
+bool app_host_le_audio_broadcast_sink_find_sources(uint8_t start);
+bool app_host_le_audio_broadcast_assistant_scan_source(uint8_t start);
+bool app_host_le_audio_broadcast_sink_sync_to_stream(uint8_t listen, uint8_t *broadcast_code, uint32_t broadcast_id);
+bool app_host_le_audio_broadcast_assistant_select_source(uint8_t listen, uint16_t conn_id, uint8_t *broadcast_code, uint32_t broadcast_id, uint8_t use_past);
+
 
 #endif //APP_HOST_LE_AUDIO_H

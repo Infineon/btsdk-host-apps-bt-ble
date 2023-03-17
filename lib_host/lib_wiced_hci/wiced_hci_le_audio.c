@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -59,12 +59,14 @@ bool wiced_hci_le_audio_set_media_player(wiced_hci_bt_le_audio_set_media_player_
     return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_SET_MEDIA_PLAYER, cmd, (uint32_t)(p_cmd - cmd));
 }
 
-bool wiced_hci_le_audio_play(wiced_bt_le_audio_cmd_data_t *p_data)
+bool wiced_hci_le_audio_play(wiced_bt_le_audio_cmd_data_t *p_data, uint32_t *p_codec_config)
 {
     uint8_t    cmd[10];
     uint8_t     *p_cmd = cmd;
 
     UINT16_TO_STREAM(p_cmd, p_data->conn_id);
+    if(p_codec_config)
+      UINT32_TO_STREAM(p_cmd, *p_codec_config);
 
     return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_PLAY, cmd, (uint32_t)(p_cmd - cmd));
 }
@@ -140,6 +142,20 @@ bool wiced_hci_le_audio_unmute_relative_vol_down(wiced_bt_le_audio_cmd_data_t *p
     return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_DOWN, cmd, (uint32_t)(p_cmd - cmd));
 }
 
+bool wiced_hci_le_audio_broadcast_sink_play_pause(uint16_t listen, uint8_t *broadcast_code)
+{
+    uint8_t    cmd[10];
+    uint8_t     *p_cmd = cmd;
+
+    UINT16_TO_STREAM(p_cmd, listen);
+
+    if(broadcast_code)
+    {
+        ARRAY_TO_STREAM(p_cmd, broadcast_code, 16);
+    }
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_LISTEN_TO_BROADCAST, cmd, (uint32_t)(p_cmd - cmd));
+}
+
 bool wiced_hci_le_audio_unmute_relative_vol_up(wiced_bt_le_audio_cmd_data_t *p_data)
 {
     uint8_t    cmd[10];
@@ -150,7 +166,7 @@ bool wiced_hci_le_audio_unmute_relative_vol_up(wiced_bt_le_audio_cmd_data_t *p_d
     return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_UP, cmd, (uint32_t)(p_cmd - cmd));
 }
 
-bool wiced_hci_call_control_generate_call(wiced_hci_bt_call_control_URI *p_data)
+bool wiced_hci_call_control_generate_call(wiced_hci_bt_call_data_t *p_data)
 {
     uint8_t    cmd[50];
     uint8_t     *p_cmd = cmd;
@@ -158,19 +174,42 @@ bool wiced_hci_call_control_generate_call(wiced_hci_bt_call_control_URI *p_data)
     UINT16_TO_STREAM(p_cmd, p_data->conn_id);
     UINT8_TO_STREAM(p_cmd, p_data->uri_len);
     ARRAY_TO_STREAM(p_cmd, p_data->call_URI, p_data->uri_len);
+    UINT8_TO_STREAM(p_cmd, p_data->fri_name_len);
+    ARRAY_TO_STREAM(p_cmd, p_data->friendly_name, p_data->fri_name_len);
 
-    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_CALL, cmd, (uint32_t)(p_cmd - cmd));
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_PLACE_CALL, cmd, (uint32_t)(p_cmd - cmd));
 }
 
-bool wiced_hci_call_control_accept_call(wiced_bt_ga_tbs_call_control_point_t *p_data)
+bool wiced_hci_set_rmt_call_hold(uint8_t call_id)
 {
-    uint8_t    cmd[50];
+    uint8_t    cmd[30];
     uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, call_id);
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_CALL, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_set_rmt_hold_retrieve(uint8_t call_id)
+{
+    uint8_t    cmd[30];
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, call_id);
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_RETRIEVE, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_call_control_handle_call_action(wiced_bt_ga_tbs_call_control_point_t *p_data)
+{
+    uint8_t   cmd[50];
+    uint8_t   *p_cmd = cmd;
+    uint16_t opcode = p_data->opcode;
 
     UINT16_TO_STREAM(p_cmd, p_data->conn_id);
     UINT8_TO_STREAM(p_cmd, p_data->call_id);
 
-    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_ACCEPT_CALL, cmd, (uint32_t)(p_cmd - cmd));
+    return wiced_hci_send_command(opcode, cmd, (uint32_t)(p_cmd - cmd));
 }
 
 bool wiced_hci_call_control_terminate_call(wiced_bt_ga_tbs_call_control_point_t *p_data)
@@ -182,5 +221,75 @@ bool wiced_hci_call_control_terminate_call(wiced_bt_ga_tbs_call_control_point_t 
     UINT8_TO_STREAM(p_cmd, p_data->termination_data.call_id);
     UINT8_TO_STREAM(p_cmd, p_data->termination_data.termination_reason);
 
-    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_REJECT_CALL, cmd, (uint32_t)(p_cmd - cmd));
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_TERMIANTE_CALL, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_broadcast_source_start_streaming(wiced_bt_ga_broadcast_start_stop_streaming_t *p_data)
+{
+    uint8_t    cmd[50];
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, p_data->start);
+    UINT32_TO_STREAM(p_cmd, p_data->codec_config);
+    UINT8_TO_STREAM(p_cmd, p_data->enable_encryption);
+    UINT32_TO_STREAM(p_cmd, p_data->channel_counts);
+    UINT32_TO_STREAM(p_cmd, p_data->broadcast_id);
+    ARRAY_TO_STREAM(p_cmd, p_data->broadcast_code, 16);
+    UINT8_TO_STREAM(p_cmd, p_data->bis_count);
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SOURCE_START_STREAMIMG, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_broadcast_sink_find_source(uint8_t start)
+{
+    uint8_t    cmd[5];
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, start);
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_FIND_SOURCES, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_broadcast_assistant_scan_source(uint8_t start)
+{
+    uint8_t    cmd[5];
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, start);
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SCAN_SOURCE, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_broadcast_sink_sync_to_stream(uint8_t listen, uint8_t *broadcast_code, uint32_t broadcast_id)
+{
+    uint8_t    cmd[64] = {0};
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, listen);
+    UINT32_TO_STREAM(p_cmd, broadcast_id);
+    UINT8_TO_STREAM(p_cmd, (broadcast_code)?1:0);
+    if(broadcast_code)
+    {
+        ARRAY_TO_STREAM(p_cmd, broadcast_code, 16);
+    }
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_SYNC_TO_SOURCES, cmd, (uint32_t)(p_cmd - cmd));
+}
+
+bool wiced_hci_broadcast_assistant_select_source(uint8_t listen, uint16_t conn_id, uint8_t *broadcast_code, uint32_t broadcast_id, uint8_t use_past)
+{
+    uint8_t    cmd[50];
+    uint8_t     *p_cmd = cmd;
+
+    UINT8_TO_STREAM(p_cmd, listen);
+    UINT16_TO_STREAM(p_cmd, conn_id);
+    UINT8_TO_STREAM(p_cmd, use_past);
+    UINT32_TO_STREAM(p_cmd, broadcast_id);
+    UINT8_TO_STREAM(p_cmd, (broadcast_code)?1:0);
+    if(broadcast_code)
+    {
+        ARRAY_TO_STREAM(p_cmd, broadcast_code, 16);
+    }
+
+    return wiced_hci_send_command(HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SELECT_SOURCE, cmd, (uint32_t)(p_cmd - cmd));
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -67,7 +67,7 @@ void app_host_log(const char * fmt, ...)
     g_pMainWindow->Log(log_buffer);
 }
 
-}
+}  // extern "C"
 
 MainWindow *g_pMainWindow = NULL ;
 bool m_bClosing = false;
@@ -104,8 +104,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     m_b_app_init = false;
-    iSpyInstance = 0;
-    str_cmd_ip_addr = "127.0.0.1";
     app_host_init();
     ui->setupUi(this);
 
@@ -170,7 +168,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lstTrace->addItem("2.  Build and download an embedded application to the evaluation board.");
     ui->lstTrace->addItem("3.  Select the serial (COM) port for the Evaluation Board and open the port.");
     ui->lstTrace->addItem("    This is usually enumerated 'WICED HCI UART' on Windows or Linux PCs.");
-    ui->lstTrace->addItem("    The UI will be enabled when the Client Control app is able to communicate with the embedded BT app.");
+    ui->lstTrace->addItem("    The UI will be enabled when the Client Control app is able to communicate with the embedded Bluetooth app.");
     ui->lstTrace->addItem("4.  For more information about this application, click on the help (?) icon.");
 
    processScrollToTop();
@@ -632,14 +630,17 @@ void MainWindow::on_btnHelpTab_clicked()
     {
         ui->lstTrace->addItem("See README.txt file in ClientControl folder.");
     }
-
-
 }
 
-
-void MainWindow::on_cbBLEHIDDebug_currentIndexChanged(int index)
+void MainWindow::on_cbCommport_activated(const QString &arg1)
 {
-    (void) index;
-    Log("Route debug message to %s", ui->cbBLEHIDDebug->currentText().toStdString().c_str());
-    EnableAppTraces();
+    bool bEnable = 1;
+
+    if(arg1 != QString("host-mode"))
+    {
+        bEnable = 0;
+    }
+
+    ui->instance->setEnabled(bEnable);
+    ui->ip_addr->setEnabled(bEnable);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -177,6 +177,15 @@ void MainWindow::InitDm()
     if ( -1 != (port_inx = ui->cbCommport->findText(comm_port)))
     {
         ui->cbCommport->setCurrentIndex(port_inx);
+    }
+
+    ui->instance->setValue(iSpyInstance);
+    ui->ip_addr->setText(str_cmd_ip_addr);
+
+    if(comm_port == QString("host-mode"))
+    {
+        ui->instance->setEnabled(1);
+        ui->ip_addr->setEnabled(1);
     }
 
     // populate dropdown list of baud rates
@@ -790,6 +799,11 @@ void MainWindow::onStopDisc()
 
     ui->btnStartDisc->setEnabled(!m_inquiry_active);
     ui->btnStopDisc->setEnabled(m_inquiry_active);
+
+    QString selected_device = ui->cbDeviceList->currentText();
+    if (selected_device.isNull())
+        return;
+    Log("Selected BREDR device : %s", selected_device.toStdString().c_str());
 }
 
 // LE scan start
@@ -827,8 +841,12 @@ void MainWindow::OnBnClickedDiscoverDevicesStop()
         // scan command, len 1, enable = false
         app_host_dm_le_scan(false);
     }
-
     setGATTUI();
+
+    QString selected_device = ui->cbBLEDeviceList->currentText();
+    if (selected_device.isNull())
+        return;
+    Log("Selected LE device : %s", selected_device.toStdString().c_str());
 }
 
 // Find a paired device in list of devices using BDA
@@ -924,7 +942,7 @@ void MainWindow::SetDevicePaired(BYTE * info, int len)
 
     if (len>=7 && (info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE || info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR))
     {
-        // We have the BT type
+        // We have the Bluetooth type
         m_host_type = info[6];
         bLeDevice = m_host_type == RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE;
         QComboBox * cboxPtr = bLeDevice ? ui->cbBLEDeviceList : ui->cbDeviceList;
@@ -1740,6 +1758,9 @@ void MainWindow::HandleDeviceEventsMisc(DWORD opcode, LPBYTE tx_buf, DWORD len)
             m_major, m_minor, m_rev, m_build);
         Log("Chip: %d", m_chip);
 
+        // 20829 cannot route debug output, thus, we disable the UI
+        ui->cbBLEHIDDebug->setEnabled(m_chip!=20829);
+
         if(len < 10) // old API len is 9
             break;
 
@@ -1829,6 +1850,26 @@ void MainWindow::onMsgBoxButton(QAbstractButton*btn)
     FirmwareDownloadStop();
 }
 
+void MainWindow::reset_le_audio_ui()
+{
+    ui->btn_connectToPeer->setText("Connect");
+    ui->streams->clear();
+    clear_streams_list();
+    ui->btn_startLeAdv->setText("Start Adv");
+
+    ui->btn_playPause->setText("Play");
+    ui->btn_muteUnmute->setText("Mute");
+
+    //reset_controls();
+    ui->VolGroupBox->setEnabled(FALSE);
+    ui->mediaControlGroupBox->setEnabled(FALSE);
+    ui->mediaControlGroupBox->setEnabled(FALSE);
+    ui->codecConfigComboBox->clear();
+    ui->startBroadcastPushButton->setText("Start Broadcast");
+    ui->scan_streams->setText("Discover Sources");
+    ui->deviceRoleTxt->setText("Device Role");
+    ui->pushButton->setText("Sync to Stream");
+}
 /************** Serial port management *************/
 
 // User clicked button to open or close serial port
@@ -1852,6 +1893,7 @@ void MainWindow::on_btnOpenPort_clicked()
             ui->btnOpenPort->setText("Close Port");
             ui->cbBaudRate->setEnabled(false);
             ui->btnFlowCntrl->setEnabled(false);
+            reset_le_audio_ui();
         }
     }
     // Close port if open
@@ -1908,7 +1950,7 @@ bool MainWindow::SetupCommPort()
     bool bFlow = ui->btnFlowCntrl->isChecked();
     if (ui->cbCommport->itemData(ui->cbCommport->currentIndex()).toString().compare("0") == 0)
     {
-        m_CommPort = new WicedSerialPortHostmode(str_cmd_ip_addr, iSpyInstance);
+        m_CommPort = new WicedSerialPortHostmode(ui->ip_addr->text(), ui->instance->text().toInt());
         serialPortName = "host-mode";
     }
     else
@@ -2030,6 +2072,9 @@ void MainWindow::ClearPort()
     ui->cbBaudRate->setEnabled(true);
     ui->btnFlowCntrl->setEnabled(true);
     ui->btnOpenPort->setText("Open Port");
+
+    ui->instance->setEnabled(0);
+    ui->ip_addr->setEnabled(0);
 }
 
 

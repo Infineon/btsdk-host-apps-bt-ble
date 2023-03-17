@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -37,6 +37,19 @@
 
 
 #include "app_include.h"
+
+#ifndef FALLTHROUGH_INTENDED
+ #if defined __has_cpp_attribute
+  #if __has_cpp_attribute(fallthrough)
+   #define FALLTHROUGH_INTENDED [[fallthrough]]
+  #else
+   #define FALLTHROUGH_INTENDED
+  #endif
+ #else
+  #define FALLTHROUGH_INTENDED
+ #endif
+#endif
+
 extern "C"
 {
 #include "app_host.h"
@@ -409,7 +422,7 @@ void MainWindow::HandleANCEvents(DWORD opcode, LPBYTE p_data, DWORD len)
             else
                 ui->btnANCUnreadAlerts->setText("Enable Unread Alerts");
         }
-        [[fallthrough]];
+        FALLTHROUGH_INTENDED;
         // On HCI_CONTROL_ANC_EVENT_SERVER_SUPPORTED_NEW_ALERTS
         // populate the list box with supported new alerts
     case HCI_CONTROL_ANC_EVENT_SERVER_SUPPORTED_NEW_ALERTS:
@@ -417,7 +430,7 @@ void MainWindow::HandleANCEvents(DWORD opcode, LPBYTE p_data, DWORD len)
             if(ui->radioANCReadNewAlerts->isChecked())
                 on_radioANCReadNewAlerts_clicked();
         }
-        [[fallthrough]];
+        FALLTHROUGH_INTENDED;
         // On HCI_CONTROL_ANC_EVENT_SERVER_SUPPORTED_UNREAD_ALERTS
         // populate the list box with supported unread alerts
     case HCI_CONTROL_ANC_EVENT_SERVER_SUPPORTED_UNREAD_ALERTS:
@@ -427,7 +440,8 @@ void MainWindow::HandleANCEvents(DWORD opcode, LPBYTE p_data, DWORD len)
         }
         break;
 
-
+    default:
+        break;
     }
 
 }

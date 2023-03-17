@@ -4,5 +4,6 @@
         <file>paired.png</file>
         <file>bt.png</file>
         <file>IconCall.png</file>
+        <file>callhold.png</file>
     </qresource>
 </RCC>

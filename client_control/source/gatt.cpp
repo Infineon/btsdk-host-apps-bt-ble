@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -142,7 +142,7 @@ typedef struct
 
 static gatt_uuid128_service_desc_t gatt_uuid128_service_desc[] =
 {
-    {{0x7e, 0x60, 0xfa, 0xf2, 0xbe, 0x7e, 0x3b, 0xa6, 0xe0, 0x47, 0x9d, 0x05, 0xb2, 0x93, 0x52, 0x69}, "Cypress BT Serial GATT Service"},
+    {{0x7e, 0x60, 0xfa, 0xf2, 0xbe, 0x7e, 0x3b, 0xa6, 0xe0, 0x47, 0x9d, 0x05, 0xb2, 0x93, 0x52, 0x69}, "IFX Bluetooth Serial GATT Service"},
 
     {{0x89, 0xD3, 0x50, 0x2B, 0x0F, 0x36, 0x43, 0x3A, 0x8E, 0xF4, 0xC5, 0x02, 0xAD, 0x55, 0xF8, 0xDC}, "Apple Media Service"},
     {{0x79, 0x05, 0xF4, 0x31, 0xB5, 0xCE, 0x4E, 0x99, 0xA4, 0x0F, 0x4B, 0x1E, 0x12, 0x2D, 0x00, 0xD0}, "Apple Notification Center Service"},
@@ -164,11 +164,11 @@ static gatt_uuid128_service_desc_t gatt_uuid128_service_desc[] =
 
  static const CHAR *szAdvState[] =
  {
-     "Advertisement:Not discoverable",
-     "Advertisement:low directed",
-     "Advertisement:high directed",
-     "Advertisement:low undirected",
-     "Advertisement:high undirected",
+     "Advertisement: not discoverable",
+     "Advertisement: high directed",
+     "Advertisement: low directed",
+     "Advertisement: high undirected",
+     "Advertisement: low undirected",
  };
 
  static const char *szStatusCode[] =
@@ -224,11 +224,27 @@ void MainWindow::OnBnClickedLeConnect()
     if (p_device == NULL)
         return;
 
-    Log("LeConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
-        p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
-            p_device->m_address[4], p_device->m_address[5]);
+    QString connText = ui->btn_connectToPeer->text();
 
-    app_host_gatt_connect(p_device->address_type, p_device->m_address);
+    if (connText == "Connect")
+    {
+        Log("LeConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
+            p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
+                p_device->m_address[4], p_device->m_address[5]);
+
+        app_host_gatt_connect(p_device->address_type, p_device->m_address);
+
+        ui->btn_connectToPeer->setText("Disconnect");
+    }
+    else
+    {
+        Log("LeDisConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
+            p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
+                p_device->m_address[4], p_device->m_address[5]);
+
+        app_host_gatt_cancel_connect(p_device->address_type, p_device->m_address);
+        reset_le_audio_ui();
+    }
 }
 
 // User called LE connect cancel
@@ -429,7 +445,7 @@ void MainWindow::processHandleLeAdvState(BYTE val)
         ui->btnBLEStartStopAdvert->setText("Start Adverts");
     }
 
-    Log("Advertisement:%d", val);
+    Log("%s", szAdvState[val<=4?val:0]);
 }
 
 // Handle WICED HCI events
@@ -594,7 +610,7 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
     case HCI_CONTROL_ANCS_EVENT_NOTIFICATION:
         handle = p_data[0] + (p_data[1] << 8);
 
-        notification_uid = p_data[2] + (p_data[3] << 8) + (p_data[4] << 16), (p_data[5] << 24);
+        notification_uid = (ULONG) (p_data[2] | (p_data[3] << 8) | (p_data[4] << 16) | (p_data[5] << 24));
         sprintf (trace, "(ANCS) %04lu Command:%u Category:%u Flags:%u", notification_uid, p_data[6], p_data[7], p_data[8]);
         Log(trace);
 

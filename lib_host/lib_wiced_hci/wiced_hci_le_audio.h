@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -43,8 +43,11 @@
 
 // LE Audio
 #define MAX_PLAYER_NAME 50
+#define MAX_CALL_FRIENDLY_NAME 30
+#define MAX_CALL_URI 30
 #define MAX_URI_LEN 50
-
+#define MAX_BROADCAST_CODE_LEN 16
+#define BD_ADDR_LEN     6
 typedef struct
 {
     uint16_t conn_id;
@@ -72,8 +75,8 @@ typedef enum
     WICED_BT_GA_CCP_ACTION_RETRIEVE_CALL = 0x03,  /**< Move a locally held call to an active call. Move a locally and
                                                      remotely held call to a remotely held call */
     WICED_BT_GA_CCP_ACTION_ORIGINATE = 0x04,      /**< Place a call */
-    WICED_BT_GA_CCP_ACTION_JOIN_CALL =
-        0x05, /**< Put a call to the active state and join all calls that are in the active state. */
+    WICED_BT_GA_CCP_ACTION_JOIN_CALL = 0x05, /**< Put a call to the active state and join all calls that are in the active state. */
+    WICED_BT_GA_CCP_UNKNOWN_OPCODE   = 0x06, /**< unknown opcode */
 } wiced_bt_ga_tbs_call_action_t;
 
 /** All posible termination reason */
@@ -103,12 +106,15 @@ typedef struct
     uint16_t conn_id;
     uint8_t uri_len;
     uint8_t call_URI[MAX_URI_LEN];
-} wiced_hci_bt_call_control_URI;
+    uint8_t fri_name_len;
+    uint8_t friendly_name[MAX_URI_LEN];
+} wiced_hci_bt_call_data_t;
 
 typedef struct
 {
 
     uint16_t conn_id; /**< TBS control point opcode*/
+    uint16_t opcode;
     union {
         uint8_t  call_id; /**< Call ID in case of WICED_BT_GA_CCP_ACTION_ACCEPT_CALL, WICED_BT_GA_CCP_ACTION_TERMINATE_CALL,
                                                    WICED_BT_GA_CCP_ACTION_HOLD_CALL, WICED_BT_GA_CCP_ACTION_RETRIEVE_CALL*/
@@ -116,10 +122,21 @@ typedef struct
     };
 } wiced_bt_ga_tbs_call_control_point_t;
 
+typedef struct
+{
+    uint8_t start;
+    uint32_t codec_config;
+    uint8_t enable_encryption;
+    uint32_t channel_counts;
+	uint32_t broadcast_id;
+    uint8_t broadcast_code[MAX_BROADCAST_CODE_LEN];
+    uint8_t bis_count;
+} wiced_bt_ga_broadcast_start_stop_streaming_t;
+
 typedef wiced_hci_bt_le_audio_conn_id_t wiced_bt_le_audio_cmd_data_t;
 typedef wiced_hci_bt_le_audio_vol_t wiced_bt_le_audio_vol_t;
 
-bool wiced_hci_le_audio_play(wiced_bt_le_audio_cmd_data_t *p_data);
+bool wiced_hci_le_audio_play(wiced_bt_le_audio_cmd_data_t *p_data, uint32_t *p_codec_config);
 bool wiced_hci_le_audio_stop(wiced_bt_le_audio_cmd_data_t *p_data);
 bool wiced_hci_le_audio_pause(wiced_bt_le_audio_cmd_data_t *p_data);
 bool wiced_hci_le_audio_volume_up(wiced_bt_le_audio_cmd_data_t *p_data);
@@ -132,8 +149,19 @@ bool wiced_hci_le_audio_set_media_player(wiced_hci_bt_le_audio_set_media_player_
 bool wiced_hci_le_audio_set_volume(wiced_hci_bt_le_audio_vol_t *p_data);
 bool wiced_hci_le_audio_unmute_relative_vol_up(wiced_bt_le_audio_cmd_data_t *p_data);
 bool wiced_hci_le_audio_unmute_relative_vol_down(wiced_bt_le_audio_cmd_data_t *p_data);
+bool wiced_hci_le_audio_broadcast_sink_play_pause(uint16_t listen, uint8_t *broadcast_code);
+bool wiced_hci_le_audio_broadcast_sink_play_pause_broadcast_code(uint16_t conn_id);
 
-bool wiced_hci_call_control_generate_call(wiced_hci_bt_call_control_URI *p_data);
-bool wiced_hci_call_control_accept_call(wiced_bt_ga_tbs_call_control_point_t *p_data);
-bool wiced_hci_call_control_accept_call(wiced_bt_ga_tbs_call_control_point_t *p_data);
+bool wiced_hci_call_control_generate_call(wiced_hci_bt_call_data_t *p_data);
+bool wiced_hci_call_control_handle_call_action(wiced_bt_ga_tbs_call_control_point_t *p_data);
+bool wiced_hci_call_control_terminate_call(wiced_bt_ga_tbs_call_control_point_t *p_data);
+bool wiced_hci_set_rmt_call_hold(uint8_t call_id);
+bool wiced_hci_set_rmt_hold_retrieve(uint8_t call_id);
+
+bool wiced_hci_broadcast_source_start_streaming(wiced_bt_ga_broadcast_start_stop_streaming_t *p_data);
+bool wiced_hci_broadcast_sink_find_source(uint8_t start);
+bool wiced_hci_broadcast_assistant_scan_source(uint8_t start);
+bool wiced_hci_broadcast_sink_sync_to_stream(uint8_t listen, uint8_t *broadcast_code, uint32_t broadcast_id);
+bool wiced_hci_broadcast_assistant_select_source(uint8_t listen, uint16_t conn_id, uint8_t *broadcast_code, uint32_t broadcast_id, uint8_t use_past);
+
 #endif // WICED_HCI_H

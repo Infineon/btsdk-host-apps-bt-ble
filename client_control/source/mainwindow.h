@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -279,14 +279,14 @@ public:
     void ReadDevicesFromSettings(const char *group, QComboBox *cbDevices, QPushButton *btnUnbond);
 
     void DisableBluetoothClassic();
-    void UpdateLEAudioRole(uint8_t role);
+    void UpdateLEAudioRole();
     void UpdateLEAudioDevice(BOOL is_connected, BYTE *addr, uint16_t conn_id);
 
     // command line
     QString str_cmd_port;
     QString str_cmd_baud;
-    int iSpyInstance;
-    QString str_cmd_ip_addr;
+    int iSpyInstance = 0;
+    QString str_cmd_ip_addr = "127.0.0.1";
 
     // Scripting support
     bool scripting;
@@ -407,6 +407,10 @@ public:
     void UpdateHIDD_ui_pairing();
     void setHIDD_HostAddr(unsigned char * ad);
     void setHIDD_linkChange(unsigned char * ad, bool cn);
+    void stop_AudioRawFileSend();
+    void send_AudioRawData(unsigned int count);
+    void send_audio_file(const char * filename);
+    void play_audio_file(const char * filename);
     bool m_b_is_hidd;
     BYTE m_pairing_mode;
     unsigned char m_host_ad[6];
@@ -414,6 +418,10 @@ public:
     bool m_host_valid;
     bool m_connected;
     BYTE m_host_type;
+    FILE * m_hiddAudioRaw_fp;
+    FILE * m_hiddAudioRaw_write_fp;
+    unsigned char m_device_capability_audio, m_device_capability_ir, m_device_capability_motion;
+    unsigned int m_audioRawDataSize, m_audioRawDataCurrentSize, m_audioRawDataWrSize;
 
     // HID Host
     void HidhVirtualUnplug(uint16_t handle);
@@ -427,6 +435,7 @@ public:
     void HandleHidHAudioStart(LPBYTE p_data, DWORD len);
     void HandleHidHAudioStop(LPBYTE p_data, DWORD len);
     void HandleHidHAudioRxData(LPBYTE p_data, DWORD len);
+    const char * hidd_media_key_str(BYTE c);
     bool m_hidh_wakeup_state;
     bool m_hidh_audio_started;
     bool m_hidh_audio_configured;
@@ -706,6 +715,9 @@ public slots:
    void DisableAppTraces();
    void handleReadyRead();
    void serialPortError(QSerialPort::SerialPortError error);
+   void reset_le_audio_ui();
+   void clear_streams_list();
+
 
     // Device manager
     void processHandleLeAdvState(BYTE val);
@@ -1029,9 +1041,16 @@ public slots:
 
     //LE Audio
     void update_media_player_list(uint8_t len, uint8_t *p_data);
-    void incoming_Call_Popup(uint16_t conn_id, uint8_t call_id , char* uri);
-    void handle_incoming_Call(uint16_t conn_id, uint8_t *p_data);
-
+    void update_media_player_status(uint8_t *p_data);
+    void incoming_call_popup(uint16_t conn_id, uint8_t call_id , char* uri);
+    void ongoing_call_terminate_popup(uint16_t conn_id, uint8_t call_id);
+    void retrieve_call_on_hold_popup(uint16_t conn_id, uint8_t call_id);
+    void join_call_popup(uint16_t conn_id, uint8_t call_id, char *uri);
+    void handle_incoming_call(uint16_t conn_id, uint8_t *p_data);
+    void handle_stream_response_data(uint8_t *p_data);
+    void handle_status_update(uint8_t *p_data);
+    void update_call_friendly_name(uint8_t *p_data);
+    void update_call_remote_hold_state(uint8_t *p_data);
 public:
     Ui::MainWindow *ui;
 
@@ -1110,6 +1129,25 @@ private slots:
     void on_btnBATTCAdvStart_clicked();
     void on_btn_connectToPeer_clicked();
     void on_btnCall_clicked();
+    void on_startBroadcastPushButton_clicked();
+    void on_scan_streams_clicked();
+    void on_pushButton_clicked();
+    void on_cbCommport_activated(const QString &arg1);
+    void on_btnFindAudioRawFile_clicked();
+    void on_btnAudioRawFileSend_clicked();
+    void on_btnFindAudioRawFile_2_clicked();
+    void on_cbAudioSelect_activated(int index);
+    void on_btnBLEHIDSendKey_back_pressed();
+    void on_btnBLEHIDSendKey_back_released();
+    void on_btnBLEHIDSendKey_home_pressed();
+    void on_btnBLEHIDSendKey_home_released();
+    void on_btnBLEHIDSendKey_mute_pressed();
+    void on_btnBLEHIDSendKey_mute_released();
+    void on_audioPlayButton1_clicked();
+    void on_audioPlayButton2_clicked();
+    void on_audioRecordutton_pressed();
+    void on_audioRecordutton_released();
+    void on_rmtHoldBtn_clicked();
 };
 
 // Thread for SPP, iAP2 and serial port read

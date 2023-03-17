@@ -7,6 +7,7 @@
 QT += core gui
 QT += serialport
 QT += network
+QT += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,6 +25,7 @@ macx {
 SOURCES += main.cpp\
     audio_src_dual_a2dp.cpp \
     hci_loopback.cpp \
+    le_audio_demo.cpp \
         mainwindow.cpp \
         audio_src.cpp \
         device_manager.cpp \
@@ -45,7 +47,6 @@ SOURCES += main.cpp\
         findme_locator.cpp \
         demo.cpp \
         opp_server.cpp \
-        unicast_snk.cpp \
     gatt_db.cpp \
     ../../lib_host/lib_app/app_host.c \
     ../../lib_host/lib_app/app_host_ag.c \
@@ -114,7 +115,6 @@ HEADERS  += mainwindow.h \
             app_include.h \
     usb_kb_usage.h \
     wiced_bt_defs.h \
-    btle_homekit2_lightbulb.h \
     ../../lib_host/lib_app/app_host.h \
     ../../lib_host/lib_wiced_hci/wiced_hci.h \
     ../../lib_host/lib_wiced_hci/wiced_types.h \

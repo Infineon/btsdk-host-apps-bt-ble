@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -38,13 +38,6 @@
 
 #include "wiced_hci_hidd.h"
 #include "hci_control_api.h"
-
-enum {
-    KEY_IR      = 0xf0,
-    KEY_AUDIO   = 0xf1,
-    KEY_MOTION  = 0xf2,
-    KEY_CONNECT = 0xf3,
-};
 
 // HID Device
 bool app_host_hidd_connect();
