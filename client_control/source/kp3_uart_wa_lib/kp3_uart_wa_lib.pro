@@ -12,9 +12,9 @@
 # This workaround is required for KitProg3 (KP3) UART HCI devices
 # to work correctly with ClientControl and CyBluetool applications.
 #
-# 1. https://jira.cypress.com/browse/BTSDK-4891
+# 1. BTSDK-4891
 #    KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
-# 2. https://jira.cypress.com/browse/CYBLUETOOL-369
+# 2. CYBLUETOOL-369
 #    KP3_RTS (BT_UART_CTS) stays high when Bluetool com port is enabled
 #
 QT -= gui

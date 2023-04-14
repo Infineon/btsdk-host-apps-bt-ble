@@ -576,10 +576,10 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
             device->m_bIsAmsConnected = false;
             device->con_handle = 0;
         }
-        ui->lblCTMessage->setText("");
-        ui->lblCTTitle->setText("");
-        ui->btnCTANCSPositive->setText("");
-        ui->btnCTANCSNegative->setText("");
+        ui->lblCTMessage->setText("Message");
+        ui->lblCTTitle->setText("Tile");
+        ui->btnCTANCSPositive->setText("ANCS Positive");
+        ui->btnCTANCSNegative->setText("ANCS Negative");
         setHIDD_linkChange(nullptr, FALSE);
         UpdateLEAudioDevice(FALSE, NULL, 0);
         break;

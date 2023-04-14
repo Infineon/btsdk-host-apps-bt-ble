@@ -92,7 +92,6 @@
 #define HCI_CONTROL_GROUP_AUDIO_DUAL_A2DP                     0x2b
 #define HCI_CONTROL_GROUP_HCITEST                             0x2c
 #define HCI_CONTROL_GROUP_MESH_MODELS                         0x2d
-#define HCI_CONTROL_GROUP_CONN_MESH                           0x2e
 #define HCI_CONTROL_GROUP_BMS                                 0x2e
 #define HCI_CONTROL_GROUP_PANU                                0x2f
 #define HCI_CONTROL_GROUP_LE_AUDIO                            0x30
@@ -762,26 +761,6 @@
 #define HCI_CONTROL_HCITEST_COMMAND                         ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x0 ) /* Test start request */
 #define HCI_CONTROL_HCITEST_CONFIGURE                       ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x1 ) /* Test configure request */
 
-/* Connected Mesh Commands */
-#define HCI_CONTROL_CONN_MESH_COMMAND_BECOME_PROVISIONER    ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x01 )  /* Become Provisioner */
-#define HCI_CONTROL_CONN_MESH_COMMAND_END_PROVISIONING      ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x02 )  /* Become Provisioner */
-#define HCI_CONTROL_CONN_MESH_COMMAND_GET_NODE_LIST         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x03 )  /* Provisioner only - report list of all nodes */
-#define HCI_CONTROL_CONN_MESH_COMMAND_SEND_APP_DATA         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x04 )  /* Send Application Data */
-#define HCI_CONTROL_CONN_MESH_COMMAND_RESET					( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x05 )  /* Reset device */
-#define HCI_CONTROL_CONN_MESH_COMMAND_FACTORY_RESET         ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x06 )  /* Factory reset the network */
-#define HCI_CONTROL_CONN_MESH_COMMAND_GET_CONN_STATUS       ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x07 )  /* Report connection status */
-#define HCI_CONTROL_CONN_MESH_COMMAND_PING_ALL_NODES        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x08 )  /* Provisioner only - ping all nodes */
-#define HCI_CONTROL_CONN_MESH_COMMAND_START_STOP_DATA       ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Start/Stop Data */
-#define HCI_CONTROL_CONN_MESH_COMMAND_GET_STATS				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0A )  /* Collect stats */
-#define HCI_CONTROL_CONN_MESH_COMMAND_IDENTIFY				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0B )  /* Identify node */
-#define HCI_CONTROL_CONN_MESH_COMMAND_GET_RSSI 				( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0C )  /* Collect RSSI values */
-#define HCI_CONTROL_CONN_MESH_COMMAND_APP_INFO_GET          ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0D )  /* Get node application info (FW ID) */
-#define HCI_CONTROL_CONN_MESH_COMMAND_OTA_START             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0E )  /* Firmware update start */
-#define HCI_CONTROL_CONN_MESH_COMMAND_OTA_DATA              ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0F )  /* Firmware image data */
-#define HCI_CONTROL_CONN_MESH_COMMAND_OTA_APPLY             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x10 )  /* Apply new firmware image */
-#define HCI_CONTROL_CONN_MESH_COMMAND_OTA_CANCEL            ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x11 )  /* Cancel firmware update */
-#define HCI_CONTROL_CONN_MESH_COMMAND_GET_LQ_STATS          ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x12 )  /* Collect link quality stats */
-
 /* BMS Commands */
 #define HCI_CONTROL_BMS_COMMAND_BECOME_PROVISIONER          ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x01 )  /* Become Provisioner */
 #define HCI_CONTROL_BMS_COMMAND_END_PROVISIONING            ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x02 )  /* Become Provisioner */
@@ -798,9 +777,10 @@
 #define HCI_CONTROL_BMS_COMMAND_APP_INFO_GET                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0D )  /* Get node application info (FW ID) */
 #define HCI_CONTROL_BMS_COMMAND_OTA_START                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0E )  /* Firmware update start */
 #define HCI_CONTROL_BMS_COMMAND_OTA_DATA                    ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0F )  /* Firmware image data */
-#define HCI_CONTROL_BMS_COMMAND_OTA_APPLY                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x10 )  /* Apply new firmware image */
-#define HCI_CONTROL_BMS_COMMAND_OTA_CANCEL                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x11 )  /* Cancel firmware update */
-#define HCI_CONTROL_BMS_COMMAND_GET_LQ_STATS                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Collect link quality stats */
+#define HCI_CONTROL_BMS_COMMAND_OTA_VERIFY                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x10 )  /* Verify received firmware image */
+#define HCI_CONTROL_BMS_COMMAND_OTA_APPLY                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x11 )  /* Apply new firmware image */
+#define HCI_CONTROL_BMS_COMMAND_OTA_CANCEL                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Cancel firmware update */
+#define HCI_CONTROL_BMS_COMMAND_GET_LQ_STATS                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Collect link quality stats */
 
 #define HCI_CONTROL_PANU_COMMAND_CONNECT                    ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x01 )
 #define HCI_CONTROL_PANU_COMMAND_DISCONNECT                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x02 )
@@ -1375,23 +1355,6 @@
 #define HCI_CONTROL_HCITEST_EVENT_STATUS                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x01 ) /* test status */
 #define HCI_CONTROL_HCITEST_EVENT_PACKET                    ( ( HCI_CONTROL_GROUP_HCITEST << 8 ) | 0x02 ) /* test packet (for loopback) */
 
-/* Connected Mesh Events */
-#define HCI_CONTROL_CONN_MESH_EVENT_NODE_PROVISIONED        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x01 )  /* Node addr */
-#define HCI_CONTROL_CONN_MESH_EVENT_GET_DATA                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x02 )  /* Application Data Received */
-#define HCI_CONTROL_CONN_MESH_EVENT_APP_DATA                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x03 )  /* Application Data Received */
-#define HCI_CONTROL_CONN_MESH_EVENT_NODE_LIST               ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x04 )  /* Node List report */
-#define HCI_CONTROL_CONN_MESH_EVENT_CONN_STATUS             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x05 )  /* Connection Status update */
-#define HCI_CONTROL_CONN_MESH_EVENT_PING_RESULT             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x06 )  /* Ping Result */
-#define HCI_CONTROL_CONN_MESH_EVENT_DATA_STATS              ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x07 )  /* Stats */
-#define HCI_CONTROL_CONN_MESH_EVENT_CONN_UP                 ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x08 )  /* Node addr */
-#define HCI_CONTROL_CONN_MESH_EVENT_CONN_DOWN               ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x09 )  /* Node addr */
-#define HCI_CONTROL_CONN_MESH_EVENT_OP_STATE_CHANGED        ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0a )  /* Node addr */
-#define HCI_CONTROL_CONN_MESH_EVENT_RESET_COMPLETE          ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0b )  /* Node addr */
-#define HCI_CONTROL_CONN_MESH_EVENT_RSSI_VALUES             ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0c )  /* [Src Node] [Peer addr][RSSI] ... */
-#define HCI_CONTROL_CONN_MESH_EVENT_APP_INFO                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0d )  /* Node application info (FW ID) */
-#define HCI_CONTROL_CONN_MESH_EVENT_OTA_STATUS              ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0e )  /* Firmware update command status */
-#define HCI_CONTROL_CONN_MESH_EVENT_LQ_STATS                ( ( HCI_CONTROL_GROUP_CONN_MESH << 8 ) | 0x0f )  /* Link quality Stats */
-
 /* BMS Events */
 #define HCI_CONTROL_BMS_EVENT_NODE_PROVISIONED              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x01 )  /* Node addr */
 #define HCI_CONTROL_BMS_EVENT_GET_DATA                      ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x02 )  /* Application Data Received */
@@ -1489,6 +1452,19 @@
 #define HCI_CONTROL_BSG_STATUS_SUCCESS                      0
 #define HCI_CONTROL_BSG_STATUS_NOT_CONNECTED                1
 #define HCI_CONTROL_BSG_STATUS_OVERRUN                      2
+
+/* BMS OTA status codes (HCI_CONTROL_BMS_EVENT_OTA_STATUS) */
+#define HCI_CONTROL_BMS_OTA_STATUS_SUCCESS                  0
+#define HCI_CONTROL_BMS_OTA_STATUS_NOT_STARTED              1
+#define HCI_CONTROL_BMS_OTA_STATUS_ALREADY_STARTED          2
+#define HCI_CONTROL_BMS_OTA_STATUS_NO_RESOURCE              3
+#define HCI_CONTROL_BMS_OTA_STATUS_FW_NOT_ACCEPTED          4
+#define HCI_CONTROL_BMS_OTA_STATUS_SIZE_TOO_LARGE           5
+#define HCI_CONTROL_BMS_OTA_STATUS_NODE_LIST_ERROR          6
+#define HCI_CONTROL_BMS_OTA_STATUS_INTERNAL_ERROR           7
+#define HCI_CONTROL_BMS_OTA_STATUS_VERIFY_FAILED            8
+#define HCI_CONTROL_BMS_OTA_STATUS_APPLY_FAILED             9
+#define HCI_CONTROL_BMS_OTA_STATUS_CONN_LOST                10
 
 
 #ifndef BD_ADDR_LEN

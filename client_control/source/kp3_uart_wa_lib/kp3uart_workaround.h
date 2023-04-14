@@ -32,7 +32,7 @@
  */
 
 /*
- *  Workaround for https://jira.cypress.com/browse/BTSDK-4891 -
+ *  Workaround BTSDK-4891 -
  *  KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
  *  Do addtional UART control flow handling, specific for the KP3 serial device on Windows.
  *  For FTDI based devices this call does nothing.
@@ -54,9 +54,9 @@ namespace KitProg3Sepcifics {
 // the UART RTS/DTR lines of KitProg3 device in a specific way via 'usbser' driver on Windows.
 //
 // Workaround for
-// 1. https://jira.cypress.com/browse/BTSDK-4891
+// 1. BTSDK-4891
 // KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
-// 2. https://jira.cypress.com/browse/CYBLUETOOL-369
+// 2. CYBLUETOOL-369
 // KP3_RTS (BT_UART_CTS) stays high when Bluetool com port is enabled
 //
 class Kp3UartWorkaround

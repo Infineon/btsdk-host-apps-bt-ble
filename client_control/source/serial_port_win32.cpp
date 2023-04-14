@@ -295,7 +295,7 @@ BOOL Win32SerialPort::OpenPort(const char *str_port_name, int baudRate, int flow
         ClearCommError(m_handle, &dwError, &comStat);
 
         //
-        // Workaround for https://jira.cypress.com/browse/BTSDK-4891 -
+        // BTSDK-4891 -
         // KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
         // Do addtional UART control flow handling, specific for the KP3 serial device on Windows.
         // For FTDI based devices this call does nothing.

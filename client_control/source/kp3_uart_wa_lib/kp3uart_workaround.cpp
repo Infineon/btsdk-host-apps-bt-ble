@@ -32,7 +32,7 @@
  */
 
 /*
- *  Workaround for https://jira.cypress.com/browse/BTSDK-4891 -
+ *  Workaround for BTSDK-4891 -
  *  KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
  *  Do addtional UART control flow handling, specific for the KP3 serial device on Windows.
  *  For FTDI based devices this call does nothing.
@@ -49,9 +49,9 @@ namespace KitProg3Sepcifics {
 //
 // Handling the KitProg3 UART RTS/DTR lines in a specific way via 'usbser' driver on Windows.
 // Workaround for
-// 1. https://jira.cypress.com/browse/BTSDK-4891
+// 1. BTSDK-4891
 // KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
-// 2. https://jira.cypress.com/browse/CYBLUETOOL-369
+// 2. CYBLUETOOL-369
 // KP3_RTS (BT_UART_CTS) stays high when Bluetool com port is enabled
 //
 
@@ -84,9 +84,9 @@ void Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(const QString& com_port
 // Obtains the information about Serial (Com port) device from the system using SetupAPI windows API,
 // This information includes the OS driver name for the serial device.
 // Workaround for
-// 1. https://jira.cypress.com/browse/BTSDK-4891
+// 1. BTSDK-4891
 // KP3_RTS (BT_UART_CTS) stays high when Clientcontrol com port is enabled
-// 2. https://jira.cypress.com/browse/CYBLUETOOL-369
+// 2. CYBLUETOOL-369
 // KP3_RTS (BT_UART_CTS) stays high when Bluetool com port is enabled
 //
 void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portNameToFind, QString& driver_name_out)
