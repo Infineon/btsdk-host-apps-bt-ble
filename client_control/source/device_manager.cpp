@@ -299,6 +299,11 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
             UpdateHIDD_ui_host();
             app_host_hidd_get_host_info();
             break;
+        case HCI_CONTROL_GROUP_IFXVH:
+            ui->tabIFXVH->setEnabled(bEnable);
+            ui->tabMain->setCurrentWidget(ui->tabIFXVH);
+            Log("IFX-Voice Host");
+            break;
         case HCI_CONTROL_GROUP_AVRC_TARGET:
             ui->tabAVRCTG->setEnabled(bEnable);
             ui->tabMain->setCurrentWidget(ui->tabAVRCTG);
@@ -423,6 +428,7 @@ void MainWindow::EnableTabs(UINT8 feature, bool bEnable)
         ui->tabAVRCTG->setEnabled(bEnable);
         ui->tabHIDD->setEnabled(bEnable);
         ui->tabHIDH->setEnabled(bEnable);
+        ui->tabIFXVH->setEnabled(bEnable);
         ui->tabSPP->setEnabled(bEnable);
         ui->tabIAP2->setEnabled(bEnable);
         ui->tabHK->setEnabled(bEnable);

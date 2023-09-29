@@ -40,8 +40,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1146</width>
-         <height>720</height>
+         <width>1132</width>
+         <height>752</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayoutScrollArea" stretch="0,0,0,0">
@@ -385,7 +385,7 @@
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>18</number>
+           <number>14</number>
           </property>
           <property name="usesScrollButtons">
            <bool>true</bool>
@@ -4070,11 +4070,17 @@
              <rect>
               <x>328</x>
               <y>44</y>
-              <width>731</width>
+              <width>771</width>
               <height>41</height>
              </rect>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_29">
+             <property name="leftMargin">
+              <number>5</number>
+             </property>
+             <property name="rightMargin">
+              <number>5</number>
+             </property>
              <item>
               <widget class="QComboBox" name="cbBLEHIDInterupt">
                <property name="toolTip">
@@ -4193,192 +4199,288 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="horizontalLayoutWidget_2">
+           <widget class="QGroupBox" name="ifxvh_audio_groupBox_2">
             <property name="geometry">
              <rect>
-              <x>330</x>
-              <y>90</y>
-              <width>795</width>
-              <height>41</height>
+              <x>320</x>
+              <y>100</y>
+              <width>781</width>
+              <height>131</height>
              </rect>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_61">
-             <item>
-              <widget class="QLabel" name="HID_AudioRawDataLabel">
-               <property name="text">
-                <string>Send Audio Raw Data:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cbAudioSelect">
-               <property name="cursor">
-                <cursorShape>ArrowCursor</cursorShape>
-               </property>
-               <property name="toolTip">
-                <string>Select audio file to send</string>
-               </property>
-               <property name="statusTip">
-                <string/>
-               </property>
-               <property name="currentIndex">
-                <number>0</number>
-               </property>
-               <property name="maxVisibleItems">
-                <number>10</number>
-               </property>
-               <property name="maxCount">
-                <number>2147483646</number>
-               </property>
-               <property name="insertPolicy">
-                <enum>QComboBox::NoInsert</enum>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Test123</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Play_YouTube</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Weather_Report</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Home</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Netflix</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Mute</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>What_time_is_it</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Volume_Up</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Volume_Down</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="edAudioRawFile">
-               <property name="toolTip">
-                <string>Enter the input file name for 16-bit audio raw data</string>
-               </property>
-               <property name="text">
-                <string>audio_test123.raw</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QProgressBar" name="AudioRawDataSendProgressBar">
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnAudioRawFileSend">
-               <property name="toolTip">
-                <string>Send 16-bit audio raw data</string>
-               </property>
-               <property name="text">
-                <string>Send</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="audioPlayButton1">
-               <property name="text">
-                <string>Play</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnFindAudioRawFile">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="horizontalLayoutWidget_3">
-            <property name="geometry">
-             <rect>
-              <x>330</x>
-              <y>140</y>
-              <width>731</width>
-              <height>41</height>
-             </rect>
+            <property name="title">
+             <string>Audio</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_62">
-             <item>
-              <widget class="QLabel" name="HID_AudioRawDataLabel_2">
-               <property name="text">
-                <string>Record Audio Raw Data:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="edAudioRawFile_2">
-               <property name="toolTip">
-                <string>Enter the output file name for 16-bit audio raw data</string>
-               </property>
-               <property name="text">
-                <string>audio_pcm_out.raw</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="audioRawDataWrSize">
-               <property name="text">
-                <string>0 byte</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="audioRecordutton">
-               <property name="text">
-                <string>Record</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="audioPlayButton2">
-               <property name="text">
-                <string>Play</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnFindAudioRawFile_2">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QWidget" name="horizontalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>90</y>
+               <width>781</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_62">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="HID_AudioRawDataLabel_2">
+                <property name="text">
+                 <string>Record Audio Data:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edAudioRawFile_2">
+                <property name="toolTip">
+                 <string>Enter the output file name for 16-bit audio raw data</string>
+                </property>
+                <property name="text">
+                 <string>audio_pcm_out.raw</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="sampleRate16KHz">
+                <property name="tabletTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>16kHz</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="record_encoded">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="tabletTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Encoded</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="audioRawDataWrSize">
+                <property name="text">
+                 <string>0 byte</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="audioRecordutton">
+                <property name="text">
+                 <string>Record</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="audioPlayButton2">
+                <property name="text">
+                 <string>Play</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnFindAudioRawFile_2">
+                <property name="text">
+                 <string>Browse</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>50</y>
+               <width>781</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_61">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="HID_AudioRawDataLabel">
+                <property name="text">
+                 <string>Send Audio Data:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cbAudioSelect">
+                <property name="cursor">
+                 <cursorShape>ArrowCursor</cursorShape>
+                </property>
+                <property name="toolTip">
+                 <string>Select audio file to send</string>
+                </property>
+                <property name="statusTip">
+                 <string/>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <property name="maxVisibleItems">
+                 <number>10</number>
+                </property>
+                <property name="maxCount">
+                 <number>2147483646</number>
+                </property>
+                <property name="insertPolicy">
+                 <enum>QComboBox::NoInsert</enum>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Test123</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Play_YouTube</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Weather_Report</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Home</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Netflix</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Mute</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>What_time_is_it</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Volume_Up</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Volume_Down</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edAudioRawFile">
+                <property name="toolTip">
+                 <string>Enter the input file name for 16-bit audio raw data</string>
+                </property>
+                <property name="text">
+                 <string>audio_test123.raw</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="sampleRate16KHz_2">
+                <property name="tabletTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>16kHz</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="send_encoded">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="tabletTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Encoded</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QProgressBar" name="AudioRawDataSendProgressBar">
+                <property name="value">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnAudioRawFileSend">
+                <property name="toolTip">
+                 <string>Send 16-bit audio raw data</string>
+                </property>
+                <property name="text">
+                 <string>Send</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="audioPlayButton1">
+                <property name="text">
+                 <string>Play</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnFindAudioRawFile">
+                <property name="text">
+                 <string>Browse</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QLabel" name="HID_AudioCodec">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>761</width>
+               <height>31</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
            </widget>
           </widget>
           <widget class="QWidget" name="tabLECOC">
@@ -5077,6 +5179,230 @@
                <string>continue</string>
               </property>
              </item>
+            </widget>
+           </widget>
+          </widget>
+          <widget class="QWidget" name="tabIFXVH">
+           <attribute name="title">
+            <string>IFXV Host</string>
+           </attribute>
+           <widget class="QGroupBox" name="ifxv_host_capabilities">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>20</y>
+              <width>221</width>
+              <height>151</height>
+             </rect>
+            </property>
+            <property name="title">
+             <string>IFX-Voice Host Capabilities</string>
+            </property>
+            <widget class="QWidget" name="layoutWidget1">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>201</width>
+               <height>111</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <widget class="QLabel" name="ifxvh_profile">
+                <property name="text">
+                 <string>Profile:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvh_codec">
+                <property name="text">
+                 <string>Codec:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvh_data">
+                <property name="text">
+                 <string>Sampling Data:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvh_sampling_rate">
+                <property name="text">
+                 <string>Sampling Rate:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="ifxv_device_capabilities">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>180</y>
+              <width>221</width>
+              <height>151</height>
+             </rect>
+            </property>
+            <property name="title">
+             <string>IFX-Voice Device Capabilities</string>
+            </property>
+            <widget class="QWidget" name="layoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>201</width>
+               <height>111</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <widget class="QLabel" name="ifxvd_profile">
+                <property name="text">
+                 <string>Profile:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvd_codec">
+                <property name="text">
+                 <string>Codec:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvd_data">
+                <property name="text">
+                 <string>Sampling Data:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="ifxvd_sampling_rate">
+                <property name="text">
+                 <string>Sampling Rate:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="ifxvh_audio_groupBox">
+            <property name="geometry">
+             <rect>
+              <x>270</x>
+              <y>30</y>
+              <width>451</width>
+              <height>131</height>
+             </rect>
+            </property>
+            <property name="title">
+             <string>Audio</string>
+            </property>
+            <widget class="QPushButton" name="ifxvh_record_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>40</x>
+               <y>60</y>
+               <width>91</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Connect</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="ifxvh_play_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>60</y>
+               <width>91</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Play</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="ifxvh_status">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>100</y>
+               <width>431</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="edAudioRawFile_ifxvh">
+             <property name="geometry">
+              <rect>
+               <x>40</x>
+               <y>30</y>
+               <width>311</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>Enter the input file name for 16-bit audio raw data</string>
+             </property>
+             <property name="text">
+              <string>ifxv_audio.raw</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_195">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>31</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>File:</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="ifxvh_browse_button">
+             <property name="geometry">
+              <rect>
+               <x>260</x>
+               <y>60</y>
+               <width>91</width>
+               <height>22</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Browse</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="ifxvh_file_size">
+             <property name="geometry">
+              <rect>
+               <x>360</x>
+               <y>30</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>0 Byte</string>
+             </property>
             </widget>
            </widget>
           </widget>
@@ -7659,7 +7985,7 @@
      <x>0</x>
      <y>0</y>
      <width>1146</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -7947,7 +8273,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

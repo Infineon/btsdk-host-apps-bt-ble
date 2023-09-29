@@ -95,6 +95,7 @@
 #define HCI_CONTROL_GROUP_BMS                                 0x2e
 #define HCI_CONTROL_GROUP_PANU                                0x2f
 #define HCI_CONTROL_GROUP_LE_AUDIO                            0x30
+#define HCI_CONTROL_GROUP_IFXVH                               0x31
 #define HCI_CONTROL_GROUP_MISC                                0xFF
 
 #define HCI_CONTROL_GROUP(x) ((((x) >> 8)) & 0xff)
@@ -343,6 +344,7 @@
 #define HCI_CONTROL_PBC_COMMAND_GET_OUTGOING_CALLS          ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x06 )      /* Get list of outgoing calls */
 #define HCI_CONTROL_PBC_COMMAND_GET_MISSED_CALLS            ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x07 )      /* Get list of missed calls */
 #define HCI_CONTROL_PBC_COMMAND_ABORT                       ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x08 )      /* Abort current operation */
+#define HCI_CONTROL_PBC_COMMAND_GET_FAVORITE_CONTACTS       ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x09 )      /* Get list of favorite contacts  */
 
 /* LE COC commands */
 #define HCI_CONTROL_LE_COC_COMMAND_CONNECT                  ( ( HCI_CONTROL_GROUP_LE_COC << 8 ) | 0x01 )   /* LE COC Connect */
@@ -781,9 +783,59 @@
 #define HCI_CONTROL_BMS_COMMAND_OTA_APPLY                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x11 )  /* Apply new firmware image */
 #define HCI_CONTROL_BMS_COMMAND_OTA_CANCEL                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Cancel firmware update */
 #define HCI_CONTROL_BMS_COMMAND_GET_LQ_STATS                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Collect link quality stats */
+#define HCI_CONTROL_BMS_COMMAND_SET_TEST_MODE               ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x14 )  /* Set test mode */
+
+#define HCI_CONTROL_BMS_COMMAND_NET_CREATE                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 ) /* Create network */
+#define HCI_CONTROL_BMS_COMMAND_NODE_PROVISION              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 ) /* Provision node */
+#define HCI_CONTROL_BMS_COMMAND_RECORDS_GET                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x22 ) /* Request list of provisioning record IDs */
+#define HCI_CONTROL_BMS_COMMAND_RECORD_REQUEST              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x23 ) /* Request fragment of provisioning record */
+
 
 #define HCI_CONTROL_PANU_COMMAND_CONNECT                    ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x01 )
 #define HCI_CONTROL_PANU_COMMAND_DISCONNECT                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x02 )
+
+/* LE AUDIO Commands */
+#define HCI_CONTROL_LE_AUDIO_COMMAND_GET_MEDIA_PLAYERS      ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_SET_MEDIA_PLAYER       ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_PLAY                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_PAUSE                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_UP                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_DOWN               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_ABS_VOL                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_MUTE                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x08 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x09 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_UP          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0A )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_DOWN        ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0B )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_PLACE_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0C )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_ACCEPT_CALL            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0D )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_TERMIANTE_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0E )
+
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SOURCE_START_STREAMIMG       ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x0F)
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SCAN_SOURCE        ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x11)
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SELECT_SOURCE      ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x14)
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_FIND_SOURCES            ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x15)
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_SYNC_TO_SOURCES         ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x16)
+#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_LISTEN_TO_BROADCAST     ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x18)
+
+#define HCI_CONTROL_LE_AUDIO_COMMAND_HOLD_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x19 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_RETRIEVE_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1A )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_REMOTELY_HOLD_CALL    ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1B )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_RETRIEVE_CALL     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1C )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_ORIGINATE_CALL        ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1D )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_LOC_REM_HELD_CALL     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1E )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_JOIN_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1F )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_CALL                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x20 )//should be removed, retained for backward compatibility
+#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x21 )
+#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_RETRIEVE     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x22 )
+
+/* IFXV HOST commands */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_HOST_CAPABILITIES                     ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x00 ) /* Get host capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_DEVICE_CAPABILITIES                   ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x01 ) /* Get device capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_AUDIO_CFG                             ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x02 ) /* Get audio configuration */
+#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_START                               ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x03 ) /* Start audio */
+#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_STOP                                ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x04 ) /* Stop audio */
+#define HCI_CONTROL_IFXVH_COMMAND_SET_HOST_CAPABILITES                      ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x05 ) /* Set host capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_CONNECT                                   ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x06 ) /* Initiate Scan for connection */
 
 /* General events that the controller can send */
 #define HCI_CONTROL_EVENT_COMMAND_STATUS                    ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x01 )    /* Command status event for the requested operation */
@@ -1050,6 +1102,7 @@
 #define HCI_CONTROL_PBC_EVENT_OUTGOING_CALLS                ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x06 )      /* List of outgoing calls event*/
 #define HCI_CONTROL_PBC_EVENT_MISSED_CALLS                  ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x07 )      /* List of missed calls event*/
 #define HCI_CONTROL_PBC_EVENT_ABORTED                       ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x08 )      /* Aborted operation event */
+#define HCI_CONTROL_PBC_EVENT_FAVORITE_CONTACTS             ( ( HCI_CONTROL_GROUP_PBC << 8 ) | 0x09 )      /* Lost of favorite contacts event */
 
 /* LE COC Events */
 #define HCI_CONTROL_LE_COC_EVENT_CONNECTED                  ( ( HCI_CONTROL_GROUP_LE_COC << 8 ) | 0x01)    /* LE COC Connected */
@@ -1371,6 +1424,12 @@
 #define HCI_CONTROL_BMS_EVENT_APP_INFO                      ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0d )  /* Node application info (FW ID) */
 #define HCI_CONTROL_BMS_EVENT_OTA_STATUS                    ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0e )  /* Firmware update command status */
 #define HCI_CONTROL_BMS_EVENT_LQ_STATS                      ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0f )  /* Link quality Stats */
+#define HCI_CONTROL_BMS_EVENT_TEST_RESULT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x10 )  /* [Node Addr] [Rx RSSI][Tx RSSI] */
+
+#define HCI_CONTROL_BMS_EVENT_NET_CREATED                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 )
+#define HCI_CONTROL_BMS_EVENT_SCAN_REPORT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 )
+#define HCI_CONTROL_BMS_EVENT_RECORDS_LIST                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x22 )
+#define HCI_CONTROL_BMS_EVENT_RECORD_RESPONSE               ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x23 )
 
 #define HCI_CONTROL_PANU_EVENT_OPEN                         ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x01 )
 #define HCI_CONTROL_PANU_EVENT_CLOSE                        ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x02 )
@@ -1378,40 +1437,6 @@
 #define HCI_CONTROL_PANU_EVENT_SERVICE_NOT_FOUND            ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x04 )
 #define HCI_CONTROL_PANU_EVENT_CONNECTION_FAILED            ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x05 )
 #define HCI_CONTROL_PANU_EVENT_DISCONNECTED                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x06 )
-
-/* LE AUDIO Commands */
-#define HCI_CONTROL_LE_AUDIO_COMMAND_GET_MEDIA_PLAYERS      ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_SET_MEDIA_PLAYER       ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_PLAY                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_PAUSE                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_UP                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_VOL_DOWN               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_ABS_VOL                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_MUTE                   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x08 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE                 ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x09 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_UP          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0A )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_UNMUTE_VOL_DOWN        ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0B )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_PLACE_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0C )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_ACCEPT_CALL            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0D )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_TERMIANTE_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0E )
-
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SOURCE_START_STREAMIMG       ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x0F)
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SCAN_SOURCE        ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x11)
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_ASSISTANT_SELECT_SOURCE      ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x14)
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_FIND_SOURCES            ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x15)
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_SYNC_TO_SOURCES         ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x16)
-#define HCI_CONTROL_LE_AUDIO_COMMAND_BROADCAST_SINK_LISTEN_TO_BROADCAST     ((HCI_CONTROL_GROUP_LE_AUDIO << 8) | 0x18)
-
-#define HCI_CONTROL_LE_AUDIO_COMMAND_HOLD_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x19 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_RETRIEVE_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1A )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_REMOTELY_HOLD_CALL    ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1B )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_RETRIEVE_CALL     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1C )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_ORIGINATE_CALL        ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1D )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_LOC_REM_HELD_CALL     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1E )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_JOIN_CALL             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x1F )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_CALL                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x20 )//should be removed, retained for backward compatibility
-#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x21 )
-#define HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_RETRIEVE     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x22 )
 
 /* LE Audio Events */
 #define HCI_CONTROL_LE_AUDIO_MEDIA_PLAYER_EVT               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
@@ -1426,6 +1451,16 @@
 #define HCI_CONTROL_LE_AUDIO_MUTE_AND_VOLUME_STATUS_EVT     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0a )
 #define HCI_CONTROL_LE_AUDIO_CALL_FRINDLY_NAME_EVT          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0b )
 #define HCI_CONTROL_LE_AUDIO_REMOTE_HOLD_CALL_EVT           ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0c )
+
+/* Events for the IFXV HOST profile */
+#define HCI_CONTROL_IFXVH_EVENT_HOST_CAPABILITIES                         ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x00 ) /* Get host capabilities */
+#define HCI_CONTROL_IFXVH_EVENT_DEVICE_CAPABILITIES                       ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x01 ) /* Get device capabilities */
+#define HCI_CONTROL_IFXVH_EVENT_AUDIO_CFG                                 ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x02 ) /* Get audio configuration */
+#define HCI_CONTROL_IFXVH_EVENT_AUDIO_START                               ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x03 ) /* Audio stared */
+#define HCI_CONTROL_IFXVH_EVENT_AUDIO_STOP                                ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x04 ) /* Audio stopped */
+#define HCI_CONTROL_IFXVH_EVENT_AUDIO_DATA                                ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x05 ) /* Set host capabilities */
+#define HCI_CONTROL_IFXVH_EVENT_MSG                                       ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x06 ) /* Message */
+#define HCI_CONTROL_IFXVH_EVENT_STATUS_CHANGED                            ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x07 ) /* Status Changed */
 
 /* Status codes returned in HCI_CONTROL_EVENT_COMMAND_STATUS the event */
 #define HCI_CONTROL_STATUS_SUCCESS                          0
@@ -1465,7 +1500,11 @@
 #define HCI_CONTROL_BMS_OTA_STATUS_VERIFY_FAILED            8
 #define HCI_CONTROL_BMS_OTA_STATUS_APPLY_FAILED             9
 #define HCI_CONTROL_BMS_OTA_STATUS_CONN_LOST                10
+#define HCI_CONTROL_BMS_OTA_STATUS_OUT_OF_ORDER             11
 
+/* BMS link quality statistics request options (HCI_CONTROL_BMS_COMMAND_GET_LQ_STATS) */
+#define HCI_CONTROL_BMS_LQ_STATS_READ                       0
+#define HCI_CONTROL_BMS_LQ_STATS_CLEAR                      1
 
 #ifndef BD_ADDR_LEN
 #define BD_ADDR_LEN 6
@@ -1583,6 +1622,7 @@
 #define HCI_CONTROL_HIDD_AUDIO_DIGITAL_MIC   0x8
 #define HCI_CONTROL_HIDD_AUDIO_ADPCM         0x10
 #define HCI_CONTROL_HIDD_AUDIO_OPUS          0x20
+#define HCI_CONTROL_HIDD_AUDIO_MSBC          0x40
 
 #define HCI_CONTROL_HIDD_MOUSE_SUPPORT    0x1
 #define HCI_CONTROL_HIDD_MOUSE_8_BIT      0x2
@@ -1590,5 +1630,11 @@
 #define HCI_CONTROL_HIDD_MOUSE_16_BIT     0x8
 
 #define HCI_CONTROL_HIDD_IR_SUPPORT       0x1
+
+/* IFXV defines */
+#define HCI_CONTROL_IFXV_STATUS_IDLE         0x0
+#define HCI_CONTROL_IFXV_STATUS_SCANNING     0x1
+#define HCI_CONTROL_IFXV_STATUS_DISCOVERY    0x2
+#define HCI_CONTROL_IFXV_STATUS_CONNECTED    0x3
 
 #endif /* HCI_CONTROL_API.H_ */

@@ -224,27 +224,11 @@ void MainWindow::OnBnClickedLeConnect()
     if (p_device == NULL)
         return;
 
-    QString connText = ui->btn_connectToPeer->text();
-
-    if (connText == "Connect")
-    {
-        Log("LeConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
+    Log("LeConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
             p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
                 p_device->m_address[4], p_device->m_address[5]);
 
-        app_host_gatt_connect(p_device->address_type, p_device->m_address);
-
-        ui->btn_connectToPeer->setText("Disconnect");
-    }
-    else
-    {
-        Log("LeDisConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
-            p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
-                p_device->m_address[4], p_device->m_address[5]);
-
-        app_host_gatt_cancel_connect(p_device->address_type, p_device->m_address);
-        reset_le_audio_ui();
-    }
+    app_host_gatt_connect(p_device->address_type, p_device->m_address);
 }
 
 // User called LE connect cancel

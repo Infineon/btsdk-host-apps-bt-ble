@@ -64,6 +64,44 @@ QString status_val[] = {"", "PA Sync established", "PA Sync lost", "BIG Sync est
 uint8_t incoming_call_cnt = 0;
 char g_friendly_name[MAX_CALL_FRIENDLY_NAME];
 
+enum
+{
+    BAP_CODEC_CONFIG_8_1_1,
+    BAP_CODEC_CONFIG_8_1_2,
+    BAP_CODEC_CONFIG_8_2_1,
+    BAP_CODEC_CONFIG_8_2_2,
+    BAP_CODEC_CONFIG_16_1_1,
+    BAP_CODEC_CONFIG_16_1_2,
+    BAP_CODEC_CONFIG_16_2_1,
+    BAP_CODEC_CONFIG_16_2_2,
+    BAP_CODEC_CONFIG_24_1_1,
+    BAP_CODEC_CONFIG_24_1_2,
+    BAP_CODEC_CONFIG_24_2_1,
+    BAP_CODEC_CONFIG_24_2_2,
+    BAP_CODEC_CONFIG_32_1_1,
+    BAP_CODEC_CONFIG_32_1_2,
+    BAP_CODEC_CONFIG_32_2_1,
+    BAP_CODEC_CONFIG_32_2_2,
+    BAP_CODEC_CONFIG_441_1_1,
+    BAP_CODEC_CONFIG_441_1_2,
+    BAP_CODEC_CONFIG_441_2_1,
+    BAP_CODEC_CONFIG_441_2_2,
+    BAP_CODEC_CONFIG_48_1_1,
+    BAP_CODEC_CONFIG_48_1_2,
+    BAP_CODEC_CONFIG_48_2_1,
+    BAP_CODEC_CONFIG_48_2_2,
+    BAP_CODEC_CONFIG_48_3_1,
+    BAP_CODEC_CONFIG_48_3_2,
+    BAP_CODEC_CONFIG_48_4_1,
+    BAP_CODEC_CONFIG_48_4_2,
+    BAP_CODEC_CONFIG_48_5_1,
+    BAP_CODEC_CONFIG_48_5_2,
+    BAP_CODEC_CONFIG_48_6_1,
+    BAP_CODEC_CONFIG_48_6_2,
+};
+
+uint8_t broadcast_supported_config[] = {BAP_CODEC_CONFIG_16_2_2, BAP_CODEC_CONFIG_48_2_2, BAP_CODEC_CONFIG_48_4_2, BAP_CODEC_CONFIG_48_6_2};
+
 // Helper function
 uint16_t le_audio_update_conn_id(CBtDevice *p_device)
 {
@@ -801,7 +839,36 @@ void MainWindow::UpdateLEAudioDevice(BOOL is_connected, BYTE *address, uint16_t 
 
 void MainWindow::on_btn_connectToPeer_clicked()
 {
-    OnBnClickedLeConnect();
+    int item =  ui->cbBLEDeviceList->currentIndex();
+    if (item < 0)
+        return;
+
+    CBtDevice *p_device = (CBtDevice *)ui->cbBLEDeviceList->itemData(item).value<CBtDevice *>();
+
+    if (p_device == NULL)
+        return;
+
+    QString connText = ui->btn_connectToPeer->text();
+
+    if (connText == "Connect")
+    {
+        Log("LeConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
+            p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
+                p_device->m_address[4], p_device->m_address[5]);
+
+        app_host_gatt_connect(p_device->address_type, p_device->m_address);
+
+        ui->btn_connectToPeer->setText("Disconnect");
+    }
+    else
+    {
+        Log("LeDisConnect BtDevice : %02x:%02x:%02x:%02x:%02x:%02x",
+            p_device->m_address[0], p_device->m_address[1], p_device->m_address[2], p_device->m_address[3],
+                p_device->m_address[4], p_device->m_address[5]);
+
+        app_host_gatt_cancel_connect(p_device->address_type, p_device->m_address);
+        reset_le_audio_ui();
+    }
 }
 
 void MainWindow::on_btnCall_clicked()
@@ -848,7 +915,7 @@ void MainWindow::on_startBroadcastPushButton_clicked()
             encryption = ("Unencrypted BIS" == ui->encryptionComboBox->currentText()) ? 0 : 1;
             num_channels = ui->channelCountComboBox->currentText().toInt();
             bis_count = ui->bisCntcomboBox->currentText().toInt();
-            codec_config = ui->codecConfigComboBox->currentIndex();
+            codec_config = broadcast_supported_config[ui->codecConfigComboBox->currentIndex()];
             broadcast_id = ui->BroadcastID->text().rightJustified(6, '0').toInt(&status, 16);
             if(!status)
                 return;

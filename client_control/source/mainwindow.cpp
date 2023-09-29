@@ -141,6 +141,7 @@ MainWindow::MainWindow(QWidget *parent) :
     InitAG();
     InitHF();
     InitSPP();
+    InitIFXVH();
     InitHIDH();
     InitBLEHIDD();
     InitGATT();
@@ -225,6 +226,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventAG(opcode, p_data, len);
     onHandleWicedEventBLEHIDD(opcode, p_data, len);
     onHandleWicedEventHIDH(opcode, p_data, len);
+    onHandleWicedEventIFXVH(opcode, p_data, len);
     onHandleWicedEventAVRCCT(opcode, p_data, len);
     onHandleWicedEventAVRCTG(opcode, p_data, len);
     onHandleWicedEventHK(opcode, p_data, len);

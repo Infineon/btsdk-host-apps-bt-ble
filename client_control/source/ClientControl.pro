@@ -25,6 +25,7 @@ macx {
 SOURCES += main.cpp\
     audio_src_dual_a2dp.cpp \
     hci_loopback.cpp \
+    ifxv_host.cpp \
     le_audio_demo.cpp \
         mainwindow.cpp \
         audio_src.cpp \

@@ -36,6 +36,7 @@
  */
 
 #include <QIODevice>
+#include <QAudioFormat>
 #include <QAudioOutput>
 #include "app_include.h"
 #include "usb_kb_usage.h"
@@ -46,6 +47,8 @@ extern "C"
 {
 #include "app_host_hidd.h"
 }
+
+#define AUDIO_CODEC (m_device_capability_audio & (HCI_CONTROL_HIDD_AUDIO_ADPCM | HCI_CONTROL_HIDD_AUDIO_OPUS | HCI_CONTROL_HIDD_AUDIO_MSBC))
 
 //extern const CHAR *szAdvState[];
 
@@ -427,35 +430,30 @@ void MainWindow::UpdateHIDD_ui_host()
     {
         ui->btnBLEHIDDVirtualUnplug->setEnabled(m_host_valid);
         ui->btnBLEHIDConnectDisconnect->setEnabled(m_host_valid);
-        ui->btnBLEHIDSendKey_1->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_2->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_3->setEnabled(m_connected);
-        ui->btnBLEHIDSendReport->setEnabled(m_connected);
-#if 1
-        ui->btnBLEHIDSendKey_audio->setEnabled(m_connected && m_device_capability_audio);
-#else // for debugging that allow audio button without link
-        ui->btnBLEHIDSendKey_audio->setEnabled(m_device_capability_audio);
-#endif
-        ui->btnBLEHIDSendKey_ir->setEnabled(m_connected && m_device_capability_ir);
+//        ui->btnBLEHIDSendKey_1->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_2->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_3->setEnabled(m_connected);
+        ui->btnBLEHIDSendKey_audio->setEnabled(AUDIO_CODEC);
+        ui->btnBLEHIDSendKey_ir->setEnabled(m_device_capability_ir);
         ui->btnBLEHIDSendKey_motion->setEnabled(m_connected && m_device_capability_motion);
-        ui->btnBLEHIDSendKey_a->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_b->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_c->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_enter->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_esc->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_up->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_down->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_left->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_right->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_back->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_mute->setEnabled(m_connected);
-        ui->btnBLEHIDSendKey_home->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_a->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_b->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_c->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_enter->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_esc->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_up->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_down->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_left->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_right->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_back->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_mute->setEnabled(m_connected);
+//        ui->btnBLEHIDSendKey_home->setEnabled(m_connected);
         ui->cbBLEHIDHold->setEnabled(m_host_valid);
         ui->cbBLEHIDCapLock->setEnabled(m_host_valid);
         ui->cbBLEHIDCtrl->setEnabled(m_host_valid);
         ui->cbBLEHIDAlt->setEnabled(m_host_valid);
-        //ui->cbBLEHIDInterupt->setEnabled(m_host_valid);
-        //ui->cbBLEHIDReport->setEnabled(m_host_valid);
+//        ui->cbBLEHIDInterupt->setEnabled(m_host_valid);
+//        ui->cbBLEHIDReport->setEnabled(m_host_valid);
         ui->btnAudioRawFileSend->setEnabled(m_connected && m_device_capability_audio);
 //        ui->cbAudioSelect->setEnabled(m_connected && m_device_capability_audio);
 
@@ -467,9 +465,15 @@ void MainWindow::UpdateHIDD_ui_host()
             ui->btnBLEHIDHost->setText(strBda);
 
             if(m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE)
+            {
                 ui->btnBLEUnbond->setEnabled(true);
+                ui->btnUnbond->setEnabled(false);
+            }
             else
+            {
+                ui->btnBLEUnbond->setEnabled(false);
                 ui->btnUnbond->setEnabled(true);
+            }
         }
         else
         {
@@ -696,6 +700,44 @@ void MainWindow::onHandleWicedEventBLEHIDD(unsigned int opcode, unsigned char *p
             m_device_capability_motion = p_data[1];
             m_device_capability_ir = p_data[2];
             UpdateHIDD_ui_host();
+            if (m_device_capability_audio)
+            {
+                char s[100];
+                sprintf(s, "Codec: %s, 16KHz%s, %s MIC", m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_ADPCM ? "ADPCM" :
+                                       m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_OPUS ? "OPUS" :
+                                       m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_MSBC ? "mSBC" : "None",
+                                       m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_8K ? "/8kHz":"",
+                                       m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_DIGITAL_MIC ? "Digital":"Analog");
+                ui->HID_AudioCodec->setText(s);
+                if (m_device_capability_audio & HCI_CONTROL_HIDD_AUDIO_8K)
+                {
+                    ui->sampleRate16KHz->setEnabled(true);
+                    ui->sampleRate16KHz_2->setEnabled(true);
+                }
+                else
+                {
+                    ui->sampleRate16KHz->setChecked(true);
+                    ui->sampleRate16KHz_2->setChecked(true);
+                    ui->sampleRate16KHz->setEnabled(false);
+                    ui->sampleRate16KHz_2->setEnabled(false);
+                }
+                if (m_device_capability_audio & (HCI_CONTROL_HIDD_AUDIO_ADPCM | HCI_CONTROL_HIDD_AUDIO_OPUS | HCI_CONTROL_HIDD_AUDIO_MSBC))
+                {
+                    ui->send_encoded->setEnabled(true);
+                    ui->record_encoded->setEnabled(true);
+                }
+                else
+                {
+                    ui->send_encoded->setChecked(false);
+                    ui->send_encoded->setEnabled(false);
+                    ui->record_encoded->setChecked(false);
+                    ui->record_encoded->setEnabled(false);
+                }
+            }
+            else
+            {
+                ui->HID_AudioCodec->setText("");
+            }
             Log("Device Capability: Audio=%02x Motion=%02x IR=%02x", p_data[0], p_data[1], p_data[2]);
             break;
 
@@ -765,7 +807,9 @@ void MainWindow::send_audio_file(const char * filename)
 
         ui->AudioRawDataSendProgressBar->setEnabled(true);
         ui->btnAudioRawFileSend->setText("Cancel");
-        uint8_t buff[1] = {1};
+        uint8_t buff[2];
+        buff[0] = 1;
+        buff[1] = ui->send_encoded->isChecked() ? 1 : 0;
         SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_START_REQ, buff, 2);
     }
 }
@@ -773,7 +817,7 @@ void MainWindow::send_audio_file(const char * filename)
 QFile sourceFile;
 QAudioOutput* audio; // class member.
 
-void MainWindow::play_audio_file(const char * filename)
+void MainWindow::play_audio_file(const char * filename, uint32_t sample_rate )
 {
     if (sourceFile.isOpen())
     {
@@ -788,7 +832,7 @@ void MainWindow::play_audio_file(const char * filename)
 
     QAudioFormat format;
     // Set up the format, eg.
-    format.setSampleRate(16000);
+    format.setSampleRate(sample_rate);
     format.setChannelCount(1);
     format.setSampleSize(16);
     format.setCodec("audio/pcm");
@@ -802,6 +846,7 @@ void MainWindow::play_audio_file(const char * filename)
         return;
     }
 
+    Log("Playing file %s", filename);
     audio = new QAudioOutput(format, this);
 //    connect(audio, SIGNAL(stateChanged(QAudio::State)), this, SLOT(handleStateChanged(QAudio::State)));
     audio->start(&sourceFile);
@@ -823,7 +868,7 @@ void MainWindow::on_btnAudioRawFileSend_clicked()
 void MainWindow::on_btnFindAudioRawFile_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Audio Raw Data File"), "", tr("Audio Raw Data Files (*.raw)"));
+        tr("Audio Data File"), "", tr("Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc)"));
     if (!fileName.isEmpty())
     {
         ui->edAudioRawFile->setText(fileName);
@@ -852,7 +897,7 @@ void MainWindow::on_cbBLEHIDDebug_currentIndexChanged(int index)
 void MainWindow::on_btnFindAudioRawFile_2_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Audio Raw Data File"), "", tr("Audio Raw Data Files (*.raw)"));
+        tr("Audio Data File"), "", tr("Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc)"));
     if (!fileName.isEmpty())
     {
         FILE * tempFile = fopen(fileName.toStdString().c_str(), "rb");
@@ -875,7 +920,15 @@ void MainWindow::on_audioPlayButton1_clicked()
     {
         fclose(m_hiddAudioRaw_fp);
     }
-    play_audio_file(ui->edAudioRawFile->text().toStdString().c_str());
+
+    if (ui->send_encoded->isChecked())
+    {
+        Log("Cannot play encoded file");
+    }
+    else
+    {
+        play_audio_file(ui->edAudioRawFile->text().toStdString().c_str(), ui->sampleRate16KHz_2->isChecked()? 16000 : 8000);
+    }
 }
 
 void MainWindow::on_audioPlayButton2_clicked()
@@ -884,23 +937,34 @@ void MainWindow::on_audioPlayButton2_clicked()
     {
         fclose(m_hiddAudioRaw_write_fp);
     }
-    play_audio_file(ui->edAudioRawFile_2->text().toStdString().c_str());
+    if (ui->record_encoded->isChecked())
+    {
+        Log("Cannot play encoded file");
+    }
+    else
+    {
+        play_audio_file(ui->edAudioRawFile_2->text().toStdString().c_str(), ui->sampleRate16KHz->isChecked()? 16000 : 8000);
+    }
 }
 
 
 void MainWindow::on_audioRecordutton_pressed()
 {
-    uint8_t cmd = 1;
+    uint8_t cmd[3] = {1};
+
+    cmd[0] = 1; // start
+    cmd[1] = ui->sampleRate16KHz->isChecked() ? 1 : 0; // 16kHz or 8kHz
+    cmd[2] = ui->record_encoded->isChecked() ? 1 : 0;         // save the file encoded or in RAW PCM.
     m_hiddAudioRaw_write_fp = fopen(ui->edAudioRawFile_2->text().toStdString().c_str(), "wb");
 
     if (m_hiddAudioRaw_write_fp == NULL)
     {
-        QMessageBox(QMessageBox::Information, "Audio Raw data output", "File Open Error", QMessageBox::Ok).exec();
+        QMessageBox(QMessageBox::Information, "Audio data output", "File Open Error", QMessageBox::Ok).exec();
         return;
     }
     Log("File %s opened", ui->edAudioRawFile_2->text().toStdString().c_str());
     m_audioRawDataWrSize = 0;
-    SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_MIC_START_STOP, &cmd, 1);
+    SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_MIC_START_STOP, cmd, 3);
 }
 
 void MainWindow::on_audioRecordutton_released()
@@ -909,7 +973,16 @@ void MainWindow::on_audioRecordutton_released()
     if (m_hiddAudioRaw_write_fp)
     {
         fclose(m_hiddAudioRaw_write_fp);
+        m_hiddAudioRaw_write_fp = NULL;
         Log("File %s created, size = %d", ui->edAudioRawFile_2->text().toStdString().c_str(), m_audioRawDataWrSize);
     }
     SendWicedCommand(HCI_CONTROL_HIDD_COMMAND_AUDIO_MIC_START_STOP, &cmd, 1);
+    if (ui->record_encoded->isChecked())
+    {
+        Log("Cannot play encoded file");
+    }
+    else
+    {
+        play_audio_file(ui->edAudioRawFile_2->text().toStdString().c_str(), ui->sampleRate16KHz->isChecked()? 16000 : 8000);
+    }
 }

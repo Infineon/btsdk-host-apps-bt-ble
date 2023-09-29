@@ -410,7 +410,7 @@ public:
     void stop_AudioRawFileSend();
     void send_AudioRawData(unsigned int count);
     void send_audio_file(const char * filename);
-    void play_audio_file(const char * filename);
+    void play_audio_file(const char * filename, uint32_t sample_rate );
     bool m_b_is_hidd;
     BYTE m_pairing_mode;
     unsigned char m_host_ad[6];
@@ -455,6 +455,13 @@ public:
     int WaveOutBufferOut;
     int WaveOutBufferNb;
 #endif
+
+    // IFX-Voice Host
+    void InitIFXVH();
+    void onHandleWicedEventIFXVH(unsigned int opcode, unsigned char *p_data, unsigned int len);
+    FILE * m_ifxv_AudioRaw_fp;
+    unsigned int m_ifxv_audioRawDataWrSize;
+    uint8_t m_ifxv_connected;
 
     // AVRC CT
     void InitAVRCCT();
@@ -1148,6 +1155,10 @@ private slots:
     void on_audioRecordutton_pressed();
     void on_audioRecordutton_released();
     void on_rmtHoldBtn_clicked();
+    void on_ifxvh_record_button_pressed();
+    void on_ifxvh_record_button_released();
+    void on_ifxvh_play_button_pressed();
+    void on_ifxvh_browse_button_clicked();
 };
 
 // Thread for SPP, iAP2 and serial port read
