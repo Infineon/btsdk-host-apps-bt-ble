@@ -3952,7 +3952,7 @@
              <rect>
               <x>10</x>
               <y>10</y>
-              <width>627</width>
+              <width>911</width>
               <height>31</height>
              </rect>
             </property>
@@ -5242,8 +5242,8 @@
            <widget class="QGroupBox" name="ifxv_device_capabilities">
             <property name="geometry">
              <rect>
-              <x>20</x>
-              <y>180</y>
+              <x>250</x>
+              <y>20</y>
               <width>221</width>
               <height>151</height>
              </rect>
@@ -5295,8 +5295,8 @@
            <widget class="QGroupBox" name="ifxvh_audio_groupBox">
             <property name="geometry">
              <rect>
-              <x>270</x>
-              <y>30</y>
+              <x>20</x>
+              <y>180</y>
               <width>451</width>
               <height>131</height>
              </rect>
@@ -5404,6 +5404,44 @@
               <string>0 Byte</string>
              </property>
             </widget>
+           </widget>
+           <widget class="QComboBox" name="cbAlertLevel">
+            <property name="geometry">
+             <rect>
+              <x>562</x>
+              <y>40</y>
+              <width>81</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <item>
+             <property name="text">
+              <string>No Alert</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Mild Alert</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>High Alert</string>
+             </property>
+            </item>
+           </widget>
+           <widget class="QLabel" name="findme_alert">
+            <property name="geometry">
+             <rect>
+              <x>480</x>
+              <y>40</y>
+              <width>71</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Findme Alert</string>
+            </property>
            </widget>
           </widget>
           <widget class="QWidget" name="tabLEAudio">
@@ -8273,7 +8311,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

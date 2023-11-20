@@ -124,6 +124,17 @@ void MainWindow::InitIFXVH()
     m_ifxv_connected = 0;
 }
 
+void MainWindow::on_cbAlertLevel_activated(int index)
+{
+    uint8_t cmd[3] = {1};
+
+    cmd[0] = 0; // Group Findme
+    cmd[1] = 0; // Set Immediate Alert Level
+    cmd[2] = index; // Alert Level
+    Log("Send Immediate Alert Level %d", index);
+    SendWicedCommand(HCI_CONTROL_IFXVH_COMMAND_CUSTOM_DEFINED, cmd, 3);
+}
+
 // Handle WICED HCI events for BLE/BR HID device
 void MainWindow::onHandleWicedEventIFXVH(unsigned int opcode, unsigned char *p_data, unsigned int len)
 {
@@ -313,8 +324,8 @@ void MainWindow::on_ifxvh_record_button_released()
 
 void MainWindow::on_ifxvh_browse_button_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Audio Data File"), "", tr("Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc)"));
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Audio Data File"), "", tr("Raw Files (*.raw);;Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc);;All (*.*)"));
     if (!fileName.isEmpty())
     {
         FILE * tempFile = fopen(fileName.toStdString().c_str(), "rb");

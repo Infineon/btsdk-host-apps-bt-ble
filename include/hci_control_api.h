@@ -785,6 +785,11 @@
 #define HCI_CONTROL_BMS_COMMAND_GET_LQ_STATS                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Collect link quality stats */
 #define HCI_CONTROL_BMS_COMMAND_SET_TEST_MODE               ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x14 )  /* Set test mode */
 
+#define HCI_CONTROL_BMS_COMMAND_READ_CONFIGURATION          ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x15 )  /* Read network configuration */
+#define HCI_CONTROL_BMS_COMMAND_CACHE_TLE_READ              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x16 )  /* Set cached battery reading command */
+#define HCI_CONTROL_BMS_COMMAND_GET_CHANNEL_STATS           ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x17 )  /* Get per-channel PER */
+#define HCI_CONTROL_BMS_COMMAND_SET_CHANNEL_MAP             ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x18 )  /* Set channel map */
+
 #define HCI_CONTROL_BMS_COMMAND_NET_CREATE                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 ) /* Create network */
 #define HCI_CONTROL_BMS_COMMAND_NODE_PROVISION              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 ) /* Provision node */
 #define HCI_CONTROL_BMS_COMMAND_RECORDS_GET                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x22 ) /* Request list of provisioning record IDs */
@@ -829,13 +834,14 @@
 #define HCI_CONTROL_LE_AUDIO_COMMAND_REM_HOLD_RETRIEVE     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x22 )
 
 /* IFXV HOST commands */
-#define HCI_CONTROL_IFXVH_COMMAND_GET_HOST_CAPABILITIES                     ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x00 ) /* Get host capabilities */
-#define HCI_CONTROL_IFXVH_COMMAND_GET_DEVICE_CAPABILITIES                   ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x01 ) /* Get device capabilities */
-#define HCI_CONTROL_IFXVH_COMMAND_GET_AUDIO_CFG                             ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x02 ) /* Get audio configuration */
-#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_START                               ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x03 ) /* Start audio */
-#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_STOP                                ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x04 ) /* Stop audio */
-#define HCI_CONTROL_IFXVH_COMMAND_SET_HOST_CAPABILITES                      ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x05 ) /* Set host capabilities */
-#define HCI_CONTROL_IFXVH_COMMAND_CONNECT                                   ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x06 ) /* Initiate Scan for connection */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_HOST_CAPABILITIES    ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x00 ) /* Get host capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_DEVICE_CAPABILITIES  ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x01 ) /* Get device capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_GET_AUDIO_CFG            ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x02 ) /* Get audio configuration */
+#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_START              ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x03 ) /* Start audio */
+#define HCI_CONTROL_IFXVH_COMMAND_AUDIO_STOP               ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x04 ) /* Stop audio */
+#define HCI_CONTROL_IFXVH_COMMAND_SET_HOST_CAPABILITES     ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x05 ) /* Set host capabilities */
+#define HCI_CONTROL_IFXVH_COMMAND_CONNECT                  ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x06 ) /* Initiate Scan for connection */
+#define HCI_CONTROL_IFXVH_COMMAND_CUSTOM_DEFINED           ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x07 ) /* Custom Defined Command */
 
 /* General events that the controller can send */
 #define HCI_CONTROL_EVENT_COMMAND_STATUS                    ( ( HCI_CONTROL_GROUP_DEVICE << 8 ) | 0x01 )    /* Command status event for the requested operation */
@@ -1425,6 +1431,9 @@
 #define HCI_CONTROL_BMS_EVENT_OTA_STATUS                    ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0e )  /* Firmware update command status */
 #define HCI_CONTROL_BMS_EVENT_LQ_STATS                      ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x0f )  /* Link quality Stats */
 #define HCI_CONTROL_BMS_EVENT_TEST_RESULT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x10 )  /* [Node Addr] [Rx RSSI][Tx RSSI] */
+#define HCI_CONTROL_BMS_EVENT_READ_CONFIGURATION            ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x11 )  /* [TLE Read type] [TLE read cmd len [Max Batt Len][Read Duty Cycle]*/
+#define HCI_CONTROL_BMS_EVENT_CHANNEL_STATS                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Per-channel stats response */
+#define HCI_CONTROL_BMS_EVENT_NODE_PROVISION_FAILED         ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Node addr*/
 
 #define HCI_CONTROL_BMS_EVENT_NET_CREATED                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 )
 #define HCI_CONTROL_BMS_EVENT_SCAN_REPORT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 )

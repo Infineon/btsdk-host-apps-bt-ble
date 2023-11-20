@@ -946,9 +946,14 @@ void MainWindow::SetDevicePaired(BYTE * info, int len)
     bool bLeDevice = false;
     int i;
 
+    // The info pointer should have the following data
+    //   byte[6]   BD_Addr
+    //   byte[1]   Transport type, ie RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE or RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR
+
+    // Since some older app may not contain transport type, we take action accordingly.
     if (len>=7 && (info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE || info[6]==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR))
     {
-        // We have the Bluetooth type
+        // We have the transport type
         m_host_type = info[6];
         bLeDevice = m_host_type == RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE;
         QComboBox * cboxPtr = bLeDevice ? ui->cbBLEDeviceList : ui->cbDeviceList;
@@ -1662,15 +1667,29 @@ void MainWindow::HandleDeviceEventsDm(DWORD opcode, LPBYTE p_data, DWORD len)
         bool success = p_data[0] == 0;
         Log("Pairing status: %s, code: %d", success ? "Success" : "Fail", static_cast<int>(p_data[0]));
 
+        // The HCI_CONTROL_EVENT_PAIRING_COMPLETE event should have data
+        //   byte[1]   Result code, 0:Success
+        //   byte[6]   BD_Addr
+        //   byte[1]   Transport type, ie RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE or RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BREDR
+        //
+
+        // Some older app may not contain all data so we validate the data length
         if (success && (len >= 7))
         {
-            uint8_t bda[6];
-            for (int i=0;i<6;i++) bda[i] = p_data[6-i];
+            // We have BD_ADDR parameter
+            uint8_t data[7];
+            for (int i=0;i<6;i++) data[i] = p_data[6-i];
+
+            // check to see if we have transport data, if we do, copy it.
+            if (len > 7)
+            {
+                data[6] = p_data[7];
+            }
 
             // mark paired only if it is success
-            SetDevicePaired(bda, static_cast<int>(--len));
-            setHIDD_HostAddr(bda);
-            setHIDD_linkChange(bda, TRUE);
+            SetDevicePaired(data, static_cast<int>(--len));
+            setHIDD_HostAddr(data);
+            setHIDD_linkChange(data, TRUE);
         }
         break;
     }

@@ -461,7 +461,7 @@ void MainWindow::UpdateHIDD_ui_host()
         if (m_host_valid)
         {
             char strBda[100];
-            sprintf(strBda, "%s Host: %02x:%02x:%02x:%02x:%02x:%02x",m_host_type?"":m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT",m_host_ad[0],m_host_ad[1],m_host_ad[2],m_host_ad[3],m_host_ad[4],m_host_ad[5]);
+            sprintf(strBda, "%s Host: %02x:%02x:%02x:%02x:%02x:%02x",!m_host_type?"":m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE?"LE":"BT",m_host_ad[0],m_host_ad[1],m_host_ad[2],m_host_ad[3],m_host_ad[4],m_host_ad[5]);
             ui->btnBLEHIDHost->setText(strBda);
 
             if(m_host_type==RPC_BT_DEVICE_TYPE_BT_DEVICE_TYPE_BLE)
@@ -868,7 +868,7 @@ void MainWindow::on_btnAudioRawFileSend_clicked()
 void MainWindow::on_btnFindAudioRawFile_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Audio Data File"), "", tr("Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc)"));
+        tr("Audio Data File"), "", tr("Raw Files (*.raw);;Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc);;All (*.*)"));
     if (!fileName.isEmpty())
     {
         ui->edAudioRawFile->setText(fileName);
@@ -896,8 +896,8 @@ void MainWindow::on_cbBLEHIDDebug_currentIndexChanged(int index)
 
 void MainWindow::on_btnFindAudioRawFile_2_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Audio Data File"), "", tr("Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc)"));
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Audio Data File"), "", tr("Raw Files (*.raw);;Audio Data Files (*.raw *.bin *.opus *.adpcm *.msbc);;All (*.*)"));
     if (!fileName.isEmpty())
     {
         FILE * tempFile = fopen(fileName.toStdString().c_str(), "rb");

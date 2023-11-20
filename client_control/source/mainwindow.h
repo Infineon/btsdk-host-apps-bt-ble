@@ -1159,6 +1159,7 @@ private slots:
     void on_ifxvh_record_button_released();
     void on_ifxvh_play_button_pressed();
     void on_ifxvh_browse_button_clicked();
+    void on_cbAlertLevel_activated(int index);
 };
 
 // Thread for SPP, iAP2 and serial port read
