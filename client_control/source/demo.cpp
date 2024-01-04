@@ -121,60 +121,61 @@ static void addDelay()
 void MainWindow::ConnectWiFi(BYTE *ssid, BYTE *password)
 {
     char command[100];
+    int result = 0;
 
     Log("ConnectWiFi");
 
     sprintf(command, "wl mpc 0");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl PM 0");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl down");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl wsec 4");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl wpa_auth 0x80");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl sup_wpa 1");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl set_pmk %s", password);
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl up");
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 
     sprintf(command, "wl join %s imode bss amode wpa2psk", ssid);
-    system(command);
-    Log(command);
+    result = system(command);
+    Log("%s res %d", command, result);
 
     addDelay();
 }

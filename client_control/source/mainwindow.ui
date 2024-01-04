@@ -5602,6 +5602,9 @@
                 </layout>
                </item>
                <item>
+                <widget class="QComboBox" name="br_name"/>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_56">
                  <item>
                   <widget class="QLineEdit" name="broadcastCodeEdit">
@@ -8311,7 +8314,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

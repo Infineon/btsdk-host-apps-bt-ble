@@ -435,7 +435,7 @@ void MainWindow::UpdateHIDD_ui_host()
 //        ui->btnBLEHIDSendKey_3->setEnabled(m_connected);
         ui->btnBLEHIDSendKey_audio->setEnabled(AUDIO_CODEC);
         ui->btnBLEHIDSendKey_ir->setEnabled(m_device_capability_ir);
-        ui->btnBLEHIDSendKey_motion->setEnabled(m_connected && m_device_capability_motion);
+        ui->btnBLEHIDSendKey_motion->setEnabled(m_device_capability_motion);
 //        ui->btnBLEHIDSendKey_a->setEnabled(m_connected);
 //        ui->btnBLEHIDSendKey_b->setEnabled(m_connected);
 //        ui->btnBLEHIDSendKey_c->setEnabled(m_connected);

@@ -259,7 +259,9 @@ bool WicedSerialPort::open(const char *str_port_name, qint32 baudRate, bool bFlo
     struct termios tty;
     int baud = B115200;
     bool bopen = false;
+#if defined(Q_OS_MACOS)
     int custom_speed = 0;
+#endif
 
     if(fd_serial_port < 0)
     {
@@ -369,6 +371,7 @@ void WicedSerialPort::flush()
 
 bool WicedSerialPort::waitForBytesWritten(int iMilisec)
 {
+    UNUSED(iMilisec);
     return (tcdrain(fd_serial_port) == 0);
 }
 
@@ -379,6 +382,7 @@ void WicedSerialPort::indicate_close()
 
 bool openSerialPort(QSerialPort & serial)
 {
+    UNUSED(serial);
     return false;
 }
 #endif
@@ -522,11 +526,21 @@ extern "C" BOOLEAN wiced_transport_send_buffer (int type, uint8_t* p_trans_buffe
 
 void script_handle_event(uint16_t opcode, uint32_t is_connected, uint32_t port_handle, uint8_t * p_data, uint32_t len)
 {
+    UNUSED(opcode);
+    UNUSED(is_connected);
+    UNUSED(port_handle);
+    UNUSED(p_data);
+    UNUSED(len);
 }
 void start_waiting(uint32_t timeout, uint16_t wait_event)
 {
+    UNUSED(timeout);
+    UNUSED(wait_event);
 }
 BOOLEAN wiced_transport_send_buffer (int type, uint8_t* p_trans_buffer, uint16_t data_size)
 {
+    UNUSED(type);
+    UNUSED(p_trans_buffer);
+    UNUSED(data_size);
     return FALSE;
 }

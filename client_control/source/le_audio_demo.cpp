@@ -58,7 +58,8 @@ Q_DECLARE_METATYPE(CBtDevice *)
 #define REMOVE 0
 #define CALL_ID 1 //Initial call
 
-QList<uint32_t> broadcastSourceList;
+QMap<uint32_t, char*> broadcastSourceList;
+//QList<uint32_t> broadcastSourceList;
 uint8_t le_audio_dev_role = HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SOURCE;
 QString status_val[] = {"", "PA Sync established", "PA Sync lost", "BIG Sync established", "BIG Sync terminated"};
 uint8_t incoming_call_cnt = 0;
@@ -1043,13 +1044,22 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::handle_stream_response_data(uint8_t *p_data)
 {
     uint32_t broadcast_id;
+    uint8_t len;
+    char br_name[20];
 
     STREAM_TO_UINT32(broadcast_id, p_data);
 
+
+    memset(br_name, 0, 20);
+    STREAM_TO_UINT8(len, p_data);
+    if(len >= 20)len = (20-1);
+    memcpy(br_name, p_data, len);
+
     if (!broadcastSourceList.contains(broadcast_id))
     {
-        broadcastSourceList.append(broadcast_id);
+        broadcastSourceList.insert(broadcast_id, br_name);
         ui->streams->addItem(QString::number(broadcast_id, 16));
+        ui->br_name->addItem(QString::number(broadcast_id, 16) + " : " + QString::fromLocal8Bit(br_name));
     }
     else
     {

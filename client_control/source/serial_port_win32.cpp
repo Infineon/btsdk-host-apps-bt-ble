@@ -147,6 +147,26 @@ void WicedSerialPort::indicate_close()
     p_win_serial_port->indicate_close();
 }
 
+const char* log_filename = "serial_port_trace.txt";
+FILE* g_fpLogFile = NULL;
+
+extern "C" void log_to_file(QString s)
+{
+    if (log_filename != NULL)
+    {
+        if (g_fpLogFile == NULL)
+        {
+            if (NULL == (g_fpLogFile = fopen(log_filename, "a")))
+            {
+                printf("fopen() failed: %d\n", errno);
+                return;
+            }
+        }
+        fprintf(g_fpLogFile, "%s\n", s.toStdString().c_str());
+        fflush(g_fpLogFile);
+    }
+}
+
 void Log(const char * fmt, ...)
 {
     va_list cur_arg;
@@ -157,6 +177,9 @@ void Log(const char * fmt, ...)
     va_end(cur_arg);
 
     qDebug(trace);
+#if LOG_SERIAL_TRACE_TO_FILE
+    log_to_file(trace);
+#endif
 }
 
 //
@@ -206,6 +229,18 @@ BOOL Win32SerialPort::OpenPort(const char *str_port_name, int baudRate, int flow
         COMMPROP commProp;
         COMSTAT comStat;
         DCB serial_config;
+        char* com_port_name;
+        USB_UART_CHIP_TYPE usbUartChipType = USB_UART_UNKNOWN;
+
+        //Remove "\\.\" from str_port_name
+        com_port_name = strstr(str_port_name, "COM");
+        if (!com_port_name)
+            com_port_name = strstr(str_port_name, "com");
+
+        if (com_port_name)
+        {
+            usbUartChipType = Kp3UartWorkaround::getUsbUartChipTypeOnWindows(com_port_name);
+        }
 
         PurgeComm(m_handle, PURGE_RXABORT | PURGE_RXCLEAR |PURGE_TXABORT | PURGE_TXCLEAR);
 
@@ -232,14 +267,23 @@ BOOL Win32SerialPort::OpenPort(const char *str_port_name, int baudRate, int flow
         serial_config.fBinary = TRUE;
         if (flow_control){
             serial_config.fOutxCtsFlow = TRUE; // TRUE;
-            serial_config.fRtsControl = RTS_CONTROL_HANDSHAKE;
+            if (usbUartChipType == USB_UART_RP2040)
+            {
+                serial_config.fRtsControl = RTS_CONTROL_ENABLE;
+                serial_config.fDtrControl = DTR_CONTROL_ENABLE;
+            }
+            else
+            {
+                serial_config.fRtsControl = RTS_CONTROL_HANDSHAKE;
+            }
         }
         else{
             serial_config.fOutxCtsFlow = FALSE; // TRUE;
             serial_config.fRtsControl = RTS_CONTROL_DISABLE;
         }
         serial_config.fOutxDsrFlow = FALSE; // TRUE;
-        serial_config.fDtrControl = FALSE;
+        if (usbUartChipType != USB_UART_RP2040)
+            serial_config.fDtrControl = FALSE;
 
         serial_config.fOutX = FALSE;
         serial_config.fInX = FALSE;
@@ -300,7 +344,7 @@ BOOL Win32SerialPort::OpenPort(const char *str_port_name, int baudRate, int flow
         // Do addtional UART control flow handling, specific for the KP3 serial device on Windows.
         // For FTDI based devices this call does nothing.
         //
-        Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(str_port_name, m_handle);
+        Kp3UartWorkaround::assertRtsDtrLinesOnWindows(usbUartChipType, m_handle);
 
     }
     Log ("Opened%s at speed: %u flow %s", str_port_name, baudRate, flow_control?"on":"off");

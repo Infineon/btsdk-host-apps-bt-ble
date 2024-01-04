@@ -94,8 +94,47 @@ bool EventFilter::eventFilter(QObject *obj, QEvent *event)
     return true;
 }
 
+int MainWindow::ExtractCmdlineArgs(const QStringList &args)
+{
+    // parse command line args
+    // -c <port name>
+    // -b <baud rate>
+    // -s enable scripting
+    int num_args = args.count();
+    for(int i =1; i < num_args; i++)
+    {
+        QString str = args.at(i);
+
+        if (str == "-s")
+            this->scripting = true;
+
+        if(str == "-c")
+        {
+            this->str_cmd_port = args.at(i+1);
+        }
+        if(str == "-b")
+        {
+            this->str_cmd_baud = args.at(i+1);
+        }
+        if(str == "-i")
+        {
+            this->iSpyInstance = args.at(i+1).toInt();
+        }
+        if(str == "-ip")
+        {
+            if(args.at(i+1) != NULL && num_args > 2)
+                this->str_cmd_ip_addr = args.at(i+1);
+            else
+                this->str_cmd_ip_addr = "127.0.0.1";
+        }
+    }
+
+    return 0;
+
+}
+
 // Initialize UI and variables
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QStringList args, QWidget *parent) :
     QMainWindow(parent),
     m_paired_icon(":/paired.png"),
     m_settings("clientcontrol.ini",QSettings::IniFormat),
@@ -103,6 +142,8 @@ MainWindow::MainWindow(QWidget *parent) :
     scripting(false),
     ui(new Ui::MainWindow)
 {
+    ExtractCmdlineArgs(args);
+
     m_b_app_init = false;
     app_host_init();
     ui->setupUi(this);

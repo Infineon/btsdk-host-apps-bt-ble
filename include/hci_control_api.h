@@ -789,6 +789,8 @@
 #define HCI_CONTROL_BMS_COMMAND_CACHE_TLE_READ              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x16 )  /* Set cached battery reading command */
 #define HCI_CONTROL_BMS_COMMAND_GET_CHANNEL_STATS           ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x17 )  /* Get per-channel PER */
 #define HCI_CONTROL_BMS_COMMAND_SET_CHANNEL_MAP             ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x18 )  /* Set channel map */
+#define HCI_CONTROL_BMS_COMMAND_GET_AFH_PARAMS              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x19 )  /* Get AFH parameters */
+#define HCI_CONTROL_BMS_COMMAND_SET_AFH_PARAMS              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x1A )  /* Set AFH parameters */
 
 #define HCI_CONTROL_BMS_COMMAND_NET_CREATE                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 ) /* Create network */
 #define HCI_CONTROL_BMS_COMMAND_NODE_PROVISION              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 ) /* Provision node */
@@ -1434,6 +1436,7 @@
 #define HCI_CONTROL_BMS_EVENT_READ_CONFIGURATION            ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x11 )  /* [TLE Read type] [TLE read cmd len [Max Batt Len][Read Duty Cycle]*/
 #define HCI_CONTROL_BMS_EVENT_CHANNEL_STATS                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Per-channel stats response */
 #define HCI_CONTROL_BMS_EVENT_NODE_PROVISION_FAILED         ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Node addr*/
+#define HCI_CONTROL_BMS_EVENT_AFH_PARAMS                    ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x14 )  /* AFH parameters */
 
 #define HCI_CONTROL_BMS_EVENT_NET_CREATED                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 )
 #define HCI_CONTROL_BMS_EVENT_SCAN_REPORT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 )

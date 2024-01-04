@@ -175,10 +175,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QStringList args, QWidget *parent = nullptr );
     ~MainWindow();
 
     QString m_SettingsFile;
+
+    int ExtractCmdlineArgs(const QStringList &args);
 
     void closeEvent (QCloseEvent *event);
     void showEvent(QShowEvent *ev);

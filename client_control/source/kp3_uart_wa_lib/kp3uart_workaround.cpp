@@ -60,9 +60,9 @@ namespace KitProg3Sepcifics {
 // NOTE: For other UART devices (e.g. FTDI) it does nothing
 //
 void Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(const QString& com_port_name_or_path, HANDLE com_port_handle) {
-    QString driver_name;
-    GetSerialDeviceDetailsUsingSetupAPI(com_port_name_or_path, driver_name);
-    Log("[Kp3UartRtsWorkaround] Detected driver_name: %s", driver_name.toStdString().c_str());
+    QString driver_name, hardware_id;
+    GetSerialDeviceDetailsUsingSetupAPI(com_port_name_or_path, driver_name, hardware_id);
+    Log("[Kp3UartRtsWorkaround] Detected driver_name: %s hardware_id: %s", driver_name.toStdString().c_str(), hardware_id.toStdString().c_str());
 
     auto isKp3Device = [] (const QString& driver_name) {
         if (driver_name == "usbser") return true;
@@ -81,6 +81,47 @@ void Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(const QString& com_port
 }
 
 //
+// Get USB-UART bridge chip type to use different workaround for KP3 and RP2040 which used on Laird Vela-IF820 EVK.
+// Workaround for RP2040 handles HOST_RX baudrate won't be set correctly on Windows 11.
+//
+USB_UART_CHIP_TYPE Kp3UartWorkaround::getUsbUartChipTypeOnWindows(const QString& com_port_name_or_path) {
+    QString driver_name, hardware_id;
+    GetSerialDeviceDetailsUsingSetupAPI(com_port_name_or_path, driver_name, hardware_id);
+    Log("[Kp3UartRtsWorkaround] Detected driver_name: %s hardware_id: %s", driver_name.toStdString().c_str(), hardware_id.toStdString().c_str());
+
+    if (driver_name == "usbser")
+    {
+        if (strstr(hardware_id.toStdString().c_str(), "VID_2E8A&PID_000C"))
+        {
+            Log("[Kp3UartRtsWorkaround] %s is RP2040", com_port_name_or_path.toStdString().c_str());
+            return USB_UART_RP2040;
+        }
+        else
+        {
+            //Previous code didn't check VID&PID here. Treat all usb-uart bridge which uses usbser driver as KP3
+            Log("[Kp3UartRtsWorkaround] %s is KP3", com_port_name_or_path.toStdString().c_str());
+            return USB_UART_KP3;
+        }
+    }
+
+    return USB_UART_UNKNOWN;
+}
+
+void Kp3UartWorkaround::assertRtsDtrLinesOnWindows(USB_UART_CHIP_TYPE chip_type, HANDLE com_port_handle) {
+    if (chip_type == USB_UART_KP3)
+    {
+        Log("[Kp3UartRtsWorkaround] Asserting RTS/DTR control lines of KP3 port");
+        EscapeCommFunction(com_port_handle, SETRTS);
+        EscapeCommFunction(com_port_handle, SETDTR);
+    }
+    else if (chip_type == USB_UART_RP2040)
+    {
+        Log("[Kp3UartRtsWorkaround] Asserting DTR control lines of RP2040 port");
+        EscapeCommFunction(com_port_handle, SETDTR);
+    }
+}
+
+//
 // Obtains the information about Serial (Com port) device from the system using SetupAPI windows API,
 // This information includes the OS driver name for the serial device.
 // Workaround for
@@ -89,7 +130,7 @@ void Kp3UartWorkaround::assertRtsDtrLinesForKP3OnWindows(const QString& com_port
 // 2. CYBLUETOOL-369
 // KP3_RTS (BT_UART_CTS) stays high when Bluetool com port is enabled
 //
-void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portNameToFind, QString& driver_name_out)
+void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portNameToFind, QString& driver_name_out, QString& hardware_id_out)
 {
     //Create a "device information set" for the specified GUID
     HDEVINFO hDevInfoSet = SetupDiGetClassDevs(&GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, nullptr, nullptr,  DIGCF_PRESENT);
@@ -117,8 +158,8 @@ void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portN
             nError = RegQueryValueExA(hKey, "PortName", 0, NULL, reinterpret_cast<LPBYTE>(szBufferHkeyPort), &dwBufferSize);
             if (nError == ERROR_SUCCESS)
             {
-                QRegularExpression regex {szBufferHkeyPort};
-                if (regex.match(portNameToFind).hasMatch()) {
+                if (QString(szBufferHkeyPort).toLower() == portNameToFind.toLower())
+                {
                     portFound = true;
                     break; // the dev info for the given port found
                 }
@@ -132,6 +173,7 @@ void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portN
     }
 
     QString driver_name;
+    QString hardware_id;
 
     if (portFound) {
         DWORD dwSize, dwPropertyRegDataType;
@@ -146,14 +188,27 @@ void Kp3UartWorkaround::GetSerialDeviceDetailsUsingSetupAPI(const QString& portN
         } else {
             Log("Failed to get serial driver name using SetupAPI");
         }
+        if (SetupDiGetDeviceRegistryPropertyA(hDevInfoSet, &devInfo, SPDRP_HARDWAREID,
+            &dwPropertyRegDataType,
+            reinterpret_cast<BYTE*>(szDesc),
+            sizeof(szDesc),  // The size, in bytes
+            &dwSize))
+        {
+            hardware_id = szDesc;
+        }
+        else
+        {
+            Log("Failed to get serial hardware id using SetupAPI");
+        }
     }
 
     //Free up the "device information set" now that we are finished with it
     SetupDiDestroyDeviceInfoList(hDevInfoSet);
 
     driver_name_out = driver_name;
+    hardware_id_out = hardware_id;
 }
-
+extern "C" void log_to_file(QString s);
 void Kp3UartWorkaround::Log(const char * fmt, ...)
 {
     va_list cur_arg;
@@ -162,7 +217,9 @@ void Kp3UartWorkaround::Log(const char * fmt, ...)
     memset(trace, 0, sizeof(trace));
     vsprintf(trace, fmt, cur_arg);
     va_end(cur_arg);
-
+#if LOG_SERIAL_TRACE_TO_FILE
+    log_to_file(trace);
+#endif
     qDebug(trace);
 }
 

@@ -49,6 +49,13 @@
 namespace Cypress {
 namespace KitProg3Sepcifics {
 
+#define LOG_SERIAL_TRACE_TO_FILE 0
+typedef enum _USB_UART_CHIP_TYPE {
+    USB_UART_UNKNOWN = 0,
+    USB_UART_KP3 = 1,
+    USB_UART_RP2040 = 2,
+} USB_UART_CHIP_TYPE;
+
 //
 // This module allows to handle
 // the UART RTS/DTR lines of KitProg3 device in a specific way via 'usbser' driver on Windows.
@@ -63,12 +70,14 @@ class Kp3UartWorkaround
 {
     Kp3UartWorkaround() = delete;
     static void Log(const char * fmt, ...);
-    static void GetSerialDeviceDetailsUsingSetupAPI(const QString& portNameToFind, QString& driver_name_out);
+    static void GetSerialDeviceDetailsUsingSetupAPI(const QString& portNameToFind, QString& driver_name_out, QString& hardware_id_out);
 public:
     // This static method activates RTS/DTR control lines for KitProg3 UART device
     // via 'usbser' driver on Windows platform.
     // For FTDI based devices this call does nothing
     static void assertRtsDtrLinesForKP3OnWindows(const QString& com_port_name_or_path, HANDLE com_port_handle);
+    static USB_UART_CHIP_TYPE getUsbUartChipTypeOnWindows(const QString& com_port_name_or_path);
+    static void assertRtsDtrLinesOnWindows(USB_UART_CHIP_TYPE chip_type, HANDLE com_port_handle);
 };
 
 }

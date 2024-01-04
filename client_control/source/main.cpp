@@ -51,41 +51,7 @@ int main(int argc, char *argv[])
     qApp->setFont(font);
 
 
-    MainWindow w;
-
-    // parse command line args
-    // -c <port name>
-    // -b <baud rate>
-    // -s enable scripting
-    QStringList args = a.arguments();
-    int num_args = args.count();
-    for(int i =1; i < num_args; i++)
-    {
-        QString str = args.at(i);
-
-        if (str == "-s")
-            w.scripting = true;
-
-        if(str == "-c")
-        {
-            w.str_cmd_port = args.at(i+1);
-        }
-        if(str == "-b")
-        {
-            w.str_cmd_baud = args.at(i+1);
-        }
-        if(str == "-i")
-        {
-            w.iSpyInstance = args.at(i+1).toInt();
-        }
-        if(str == "-ip")
-        {
-            if(args.at(i+1) != NULL && num_args > 2)
-                w.str_cmd_ip_addr = args.at(i+1);
-            else
-                w.str_cmd_ip_addr = "127.0.0.1";
-        }
-    }
+    MainWindow w(a.arguments());
 
     w.show();
 

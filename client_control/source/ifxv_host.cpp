@@ -273,12 +273,11 @@ void MainWindow::onHandleWicedEventIFXVH(unsigned int opcode, unsigned char *p_d
             break;
 
         case HCI_CONTROL_IFXVH_EVENT_STATUS_CHANGED:
-            Log("Event Status Change: %d", (p_data[0]));
             if (len)
             {
                 switch (p_data[0]) {
                 case HCI_CONTROL_IFXV_STATUS_IDLE:
-                    ui->ifxvh_status->setText("");
+                    ui->ifxvh_status->setText("Idle");
                     break;
                 case HCI_CONTROL_IFXV_STATUS_SCANNING:
                     ui->ifxvh_status->setText("Scanning...");
@@ -290,6 +289,7 @@ void MainWindow::onHandleWicedEventIFXVH(unsigned int opcode, unsigned char *p_d
                     ui->ifxvh_status->setText("Connected");
                     break;
                 }
+                Log("Event Status Change: %d (%s)", (p_data[0]), ui->ifxvh_status->text().toStdString().c_str());
             }
             break;
     }

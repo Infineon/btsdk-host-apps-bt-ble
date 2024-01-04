@@ -200,6 +200,7 @@ void MainWindow::InitDm()
     }
     ui->cbBaudRate->setCurrentIndex(baud_inx);
     ui->btnFlowCntrl->setChecked(flow_control );
+    ui->cbCommport->addItem(QString("host-mode"), "0");
 
     // Startup timer
     m_dmStartupTimer = new QTimer(this);

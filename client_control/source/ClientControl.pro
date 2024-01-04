@@ -173,7 +173,7 @@ INCLUDEPATH += ./kp3_uart_wa_lib
 # ws2_32.lib and winmm.lib path might need to be adjusted on user PC, for example
 # C:\WINDDK\7600.16385.0\lib\win7\i386\ws2_32.lib
 # -L"Windows" -lws2_32
-win32: LIBS += -lQt5Network ..\Windows\ws2_32.lib ..\Windows\winmm.lib -lsetupapi
+win32: LIBS += ..\Windows\ws2_32.lib ..\Windows\winmm.lib -lsetupapi
 
 unix:!macx {
 LIBS += -lasound -lrt
