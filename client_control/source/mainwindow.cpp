@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -43,6 +43,7 @@
 #include "ui_mainwindow.h"
 #include <QTimer>
 #include <QTextStream>
+#include <QDebug>
 
 extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_port_index,int iSpyInstance);
 
@@ -122,10 +123,20 @@ int MainWindow::ExtractCmdlineArgs(const QStringList &args)
         }
         if(str == "-ip")
         {
-            if(args.at(i+1) != NULL && num_args > 2)
-                this->str_cmd_ip_addr = args.at(i+1);
-            else
+            if(args.at(i+1) != NULL && num_args > 2){
+                QStringList list = args.at(i + 1).split(":");
+                qDebug() << "List = %s"<< list;
+                foreach(QString item, list)
+                    qDebug() << "List items = " << item;
+
+                this->str_cmd_ip_addr = list[0];
+                if(list.length() > 1){
+                    this->cmd_ip_addr_port = list[1].toInt();
+                }
+            }else{
                 this->str_cmd_ip_addr = "127.0.0.1";
+            }
+            this->m_use_host_mode = true;
         }
     }
 
@@ -142,6 +153,7 @@ MainWindow::MainWindow(QStringList args, QWidget *parent) :
     scripting(false),
     ui(new Ui::MainWindow)
 {
+    m_use_host_mode = 0;
     ExtractCmdlineArgs(args);
 
     m_b_app_init = false;
@@ -232,8 +244,10 @@ MainWindow::~MainWindow()
 // indication of app shutdown
 void MainWindow::closeEvent (QCloseEvent *event)
 {
+    printf("[%s] 1\n",__FUNCTION__);
     closeEventDm(event);
     event->accept();
+    printf("[%s] 2\n",__FUNCTION__);
 }
 
 void MainWindow::showEvent(QShowEvent *ev)
@@ -262,6 +276,7 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventDm(opcode,p_data,len);
     onHandleWicedEventAudioSrc(opcode, p_data, len);
     onHandleWicedEventAudioSrc_DualA2DP(opcode, p_data, len);
+    onHandleWicedEventLeAudio(opcode, p_data, len);
     onHandleWicedEventHF(opcode, p_data, len);
     onHandleWicedEventSPP(opcode, p_data, len);
     onHandleWicedEventAG(opcode, p_data, len);
@@ -288,7 +303,6 @@ void MainWindow::onHandleWicedEvent(unsigned int opcode, unsigned int len, unsig
     onHandleWicedEventHciDfu(opcode, p_data, len);
     onHandleWicedEventHciLoopback(opcode, p_data, len);
     onHandleWicedEventPANU(opcode, p_data, len);
-    onHandleWicedEventLeAudio(opcode, p_data, len);
     // free event data, allocated in Dm module when event arrives
     if (p_data)
         free(p_data);
@@ -684,6 +698,6 @@ void MainWindow::on_cbCommport_activated(const QString &arg1)
         bEnable = 0;
     }
 
-    ui->instance->setEnabled(bEnable);
+    ui->devPortNum->setEnabled(bEnable);
     ui->ip_addr->setEnabled(bEnable);
 }

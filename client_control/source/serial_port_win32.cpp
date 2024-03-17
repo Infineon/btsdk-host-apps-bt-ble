@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -591,7 +591,7 @@ int ms_snprintf ( char * s, size_t n, const char * fmt, ... )
 WicedSerialPortHostmode::WicedSerialPortHostmode(QString str_cmd_ip_addr, int iSpyInstance)
     : WicedSerialPort(true)
 {
-    str_ip_addr = str_cmd_ip_addr;
+    str_ip_addr = std::move(str_cmd_ip_addr);
     SpyInstance = iSpyInstance;
     m_ClientSocket  = INVALID_SOCKET;
 }

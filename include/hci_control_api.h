@@ -1,7 +1,7 @@
 /***************************************************************************//**
 * \file <hci_control_api.h>
 *
-* Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -791,6 +791,8 @@
 #define HCI_CONTROL_BMS_COMMAND_SET_CHANNEL_MAP             ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x18 )  /* Set channel map */
 #define HCI_CONTROL_BMS_COMMAND_GET_AFH_PARAMS              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x19 )  /* Get AFH parameters */
 #define HCI_CONTROL_BMS_COMMAND_SET_AFH_PARAMS              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x1A )  /* Set AFH parameters */
+#define HCI_CONTROL_BMS_COMMAND_GET_L0_STATE                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x1B )  /* Get L0 role and NV Ram */
+#define HCI_CONTROL_BMS_COMMAND_SET_L0_STATE                ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x1C )  /* Set L0 role and NV Ram */
 
 #define HCI_CONTROL_BMS_COMMAND_NET_CREATE                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 ) /* Create network */
 #define HCI_CONTROL_BMS_COMMAND_NODE_PROVISION              ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 ) /* Provision node */
@@ -1437,6 +1439,8 @@
 #define HCI_CONTROL_BMS_EVENT_CHANNEL_STATS                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x12 )  /* Per-channel stats response */
 #define HCI_CONTROL_BMS_EVENT_NODE_PROVISION_FAILED         ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x13 )  /* Node addr*/
 #define HCI_CONTROL_BMS_EVENT_AFH_PARAMS                    ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x14 )  /* AFH parameters */
+#define HCI_CONTROL_BMS_EVENT_SAVE_L0_STATE                 ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x15 )  /* L0 NVRam */
+#define HCI_CONTROL_BMS_EVENT_GET_L0_STATE                  ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x16 )  /*  */
 
 #define HCI_CONTROL_BMS_EVENT_NET_CREATED                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x20 )
 #define HCI_CONTROL_BMS_EVENT_SCAN_REPORT                   ( ( HCI_CONTROL_GROUP_BMS << 8 ) | 0x21 )
@@ -1451,18 +1455,24 @@
 #define HCI_CONTROL_PANU_EVENT_DISCONNECTED                 ( ( HCI_CONTROL_GROUP_PANU << 8 ) | 0x06 )
 
 /* LE Audio Events */
-#define HCI_CONTROL_LE_AUDIO_MEDIA_PLAYER_EVT               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )
-#define HCI_CONTROL_LE_AUDIO_PLAY_STATUS_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )
-#define HCI_CONTROL_LE_AUDIO_VOLUME_STATUS_EVT              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )
-#define HCI_CONTROL_LE_AUDIO_MUTE_STATUS_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )
-#define HCI_CONTROL_LE_AUDIO_DEVICE_ROLE_EVT                ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )
-#define HCI_CONTROL_LE_AUDIO_INCOMING_CALL_EVT              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )
-#define HCI_CONTROL_LE_AUDIO_CALL_TERMINATED_EVT            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )
-#define HCI_CONTROL_LE_AUDIO_BROADCAST_SINK_STREAM_RSP_EVT  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x08 )
-#define HCI_CONTROL_LE_AUDIO_STATUS_UPDATE_EVT              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x09 )
-#define HCI_CONTROL_LE_AUDIO_MUTE_AND_VOLUME_STATUS_EVT     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0a )
-#define HCI_CONTROL_LE_AUDIO_CALL_FRINDLY_NAME_EVT          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0b )
-#define HCI_CONTROL_LE_AUDIO_REMOTE_HOLD_CALL_EVT           ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0c )
+#define HCI_CONTROL_LE_AUDIO_EVENT_MEDIA_PLAYER             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x01 )  /* Event to update the media player */
+#define HCI_CONTROL_LE_AUDIO_EVENT_PLAY_STATUS              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x02 )  /* Event to update the play status  */
+#define HCI_CONTROL_LE_AUDIO_EVENT_VOLUME_STATUS            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x03 )  /* Event to update the volume status */
+#define HCI_CONTROL_LE_AUDIO_EVENT_MUTE_STATUS              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x04 )  /* Event to update the mute status  */
+#define HCI_CONTROL_LE_AUDIO_EVENT_DEVICE_ROLE              ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x05 )  /* Event to update the LE Audio role */
+#define HCI_CONTROL_LE_AUDIO_EVENT_INCOMING_CALL            ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x06 )  /* Event to indicate incoming call */
+#define HCI_CONTROL_LE_AUDIO_EVENT_CALL_TERMINATED          ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x07 )  /* Event to indicate termination of the call */
+#define HCI_CONTROL_LE_AUDIO_EVENT_BROADCAST_STREAM_RSP     ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x08 )  /* Event on finding a new broadcast stream */
+#define HCI_CONTROL_LE_AUDIO_EVENT_BROADCAST_STATUS_UPDATE  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x09 )  /* Event to update broadcast stream status */
+#define HCI_CONTROL_LE_AUDIO_EVENT_MUTE_AND_VOLUME_STATUS   ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0a )  /* Event to update mute and volume status */
+#define HCI_CONTROL_LE_AUDIO_EVENT_CALL_FRIENDLY_NAME       ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0b )  /* Event to indicate the call friendly name */
+#define HCI_CONTROL_LE_AUDIO_EVENT_REMOTE_HOLD_CALL         ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0c )  /* Event to hold remote call */
+/* Below 3 macro value CANNOT be changed as its send from the audio module(controller)*/
+#define HCI_CONTROL_LE_AUDIO_EVENT_REQUEST_DATA             ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0d )  /* Request for audio pcm sample data, lite host */
+#define HCI_CONTROL_LE_AUDIO_EVENT_STARTED                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0e )  /* Command for audio start succeeded */
+#define HCI_CONTROL_LE_AUDIO_EVENT_STOPPED                  ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x0f )  /* Command for audio stop completed */
+/* End of macros from audio module */
+#define HCI_CONTROL_LE_AUDIO_EVENT_APP_STATUS               ( ( HCI_CONTROL_GROUP_LE_AUDIO << 8 ) | 0x10 )  /* Event to update the app status */
 
 /* Events for the IFXV HOST profile */
 #define HCI_CONTROL_IFXVH_EVENT_HOST_CAPABILITIES                         ( ( HCI_CONTROL_GROUP_IFXVH << 8 ) | 0x00 ) /* Get host capabilities */
@@ -1578,13 +1588,15 @@
 
 #define HCI_CONTROL_HCI_AUDIO_COMMAND_BUTTON                ( ( HCI_CONTROL_GROUP_HCI_AUDIO << 8 ) | 0x30 ) /* Button event */
 
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SOURCE        0
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SINK          1
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SOURCE      2
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SINK        3
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_ASSISTANT   4
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_SERVER   5
-#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_CLIENT   6
+/* LE Audio device role definitions */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SOURCE        0x001       /* App acts as unicast source */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SOURCE      0x002       /* App acts as broadcast source */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_SERVER   0x004       /* App acts as call control/TBS server */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_ASSISTANT   0x080       /* App acts as broadcast assistant */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_UNICAST_SINK          0x100       /* App acts as unicast sink */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_BROADCAST_SINK        0x200       /* App acts as broadcast sink */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_CALL_CONTROL_CLIENT   0x400       /* App acts as call control client */
+#define HCI_CONTROL_LE_AUDIO_DEV_ROLE_ALL                   0xFFFFFFFF  /* App supports all LE audio roles */
 
 /* MCE command/event parameter types */
 #define HCI_CONTROL_MCE_PARAM_BDA                           1   /* BD address, 6 bytes */
@@ -1648,5 +1660,28 @@
 #define HCI_CONTROL_IFXV_STATUS_SCANNING     0x1
 #define HCI_CONTROL_IFXV_STATUS_DISCOVERY    0x2
 #define HCI_CONTROL_IFXV_STATUS_CONNECTED    0x3
+
+
+/* LE AUDIO defines */
+#define HCI_CONTROL_LEA_BROADCAST_PA_SYNC_ESTABLISHED  1
+#define HCI_CONTROL_LEA_BROADCAST_PA_SYNC_LOST         2
+#define HCI_CONTROL_LEA_BROADCAST_BIG_SYNC_ESTABLISHED 3
+#define HCI_CONTROL_LEA_BROADCAST_BIG_SYNC_LOST        4
+
+#define HCI_CONTROL_LEA_MUTE_STATUS             0
+#define HCI_CONTROL_LEA_VOLUME_STATUS           1
+#define HCI_CONTROL_LEA_MUTE_AND_VOLUME_STATUS  2
+
+#define HCI_CONTROL_LEA_APP_STATE_CONNECTED           0
+#define HCI_CONTROL_LEA_APP_STATE_MTU_CONFIGURED      1
+#define HCI_CONTROL_LEA_APP_STATE_DISCOVERY_COMPLETE  2
+#define HCI_CONTROL_LEA_APP_STATE_INITING             3
+#define HCI_CONTROL_LEA_APP_STATE_READY               4
+#define HCI_CONTROL_LEA_APP_STATE_DISCONNECTING       5
+#define HCI_CONTROL_LEA_APP_STATE_DISCONNECTED        6
+
+#define HCI_CONTROL_LEA_APP_STATE_INIT_NOTIFYING   0
+#define HCI_CONTROL_LEA_APP_STATE_INIT_ENABLING    1
+#define HCI_CONTROL_LEA_APP_STATE_INIT_READING     2
 
 #endif /* HCI_CONTROL_API.H_ */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2021-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -82,8 +82,6 @@ bool app_host_le_audio_command(uint16_t conn_id, uint8_t cmd, void *p_codec_conf
         return wiced_hci_le_audio_unmute_relative_vol_up(&data);
     case WICED_LE_AUDIO_UNMUTE_RELATIVE_VOL_DOWN_CMD:
         return wiced_hci_le_audio_unmute_relative_vol_down(&data);
-    case WICED_LE_AUDIO_BROADCAST_SINK_PLAY_PAUSE_CMD:
-        return wiced_hci_le_audio_broadcast_sink_play_pause_broadcast_code (data.conn_id);
     }
 
     return false;
@@ -117,7 +115,7 @@ bool app_host_le_audio_generate_call(uint16_t conn_id, uint8_t uri_len, uint8_t*
     else if(f_len == 0)
     {
        f_len = strlen("Unknown");
-       memcpy(p_friendly_name,"Unknown", f_len);
+       memcpy(p_friendly_name, "Unknown", f_len);
        app_host_log("Call friendly name NOT provided...");
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -74,11 +74,13 @@ extern void TraceHciPkt(BYTE type, BYTE *buffer, USHORT length, USHORT serial_po
 Q_DECLARE_METATYPE( CBtDevice* )
 
 // CBtDevice data structure for caching peer device info
-CBtDevice::CBtDevice (bool paired) :
+CBtDevice::CBtDevice (uint16_t conn_id, bool paired) :
     m_nvram(nullptr), m_nvram_id(-1), m_paired(paired)
 {
     memset(m_address,0,sizeof(m_address));
     memset(m_name,0,sizeof(m_name));
+
+    m_con_handle = conn_id;
 
     m_audio_handle = NULL_HANDLE;
     m_hf_handle = NULL_HANDLE;
@@ -100,11 +102,64 @@ CBtDevice::CBtDevice (bool paired) :
     m_bIsAmsConnected = false;
     role = 0;
     address_type = 0;
-    con_handle = 0;
+    m_connect_in_progress = 0;
+    m_ready_to_play = false;
 }
 
 CBtDevice::~CBtDevice ()
 {
+}
+
+char *CBtDevice::get_bdaddr_string(void)
+{
+    get_bd_string(m_address, m_bd_string, sizeof(m_bd_string));
+
+    return m_bd_string;
+}
+
+int get_bd_string(uint8_t *bdaddr, char *p_bdaddr_str, int str_len)
+{
+    return snprintf(p_bdaddr_str, str_len, "%02x:%02x:%02x:%02x:%02x:%02x",
+             bdaddr[0], bdaddr[1], bdaddr[2], bdaddr[3], bdaddr[4], bdaddr[5]);
+
+}
+
+void CBtDevice::set_connection_in_progress(bool in_progress)
+{
+    m_connect_in_progress = in_progress;
+}
+
+bool CBtDevice::connect_in_progress(void)
+{
+    return m_connect_in_progress;
+}
+
+void CBtDevice::set_connection_handle(uint16_t con_handle)
+{
+    m_con_handle = con_handle;
+}
+
+uint16_t CBtDevice::get_connection_handle()
+{
+    return m_con_handle;
+}
+
+void CBtDevice::set_ready_to_play(bool play)
+{
+    m_ready_to_play = play;
+}
+bool CBtDevice::is_ready_to_play()
+{
+    return m_ready_to_play;
+}
+
+
+void CBtDevice::handle_le_disconnect(void)
+{
+    m_bIsAncsConnected = false;
+    m_bIsAmsConnected = false;
+    m_con_handle = 0;
+    set_connection_in_progress(0);
 }
 
 // valid baud rates
@@ -179,14 +234,8 @@ void MainWindow::InitDm()
         ui->cbCommport->setCurrentIndex(port_inx);
     }
 
-    ui->instance->setValue(iSpyInstance);
+    ui->devPortNum->setValue(this->cmd_ip_addr_port);
     ui->ip_addr->setText(str_cmd_ip_addr);
-
-    if(comm_port == QString("host-mode"))
-    {
-        ui->instance->setEnabled(1);
-        ui->ip_addr->setEnabled(1);
-    }
 
     // populate dropdown list of baud rates
     QString strBaud;
@@ -200,7 +249,9 @@ void MainWindow::InitDm()
     }
     ui->cbBaudRate->setCurrentIndex(baud_inx);
     ui->btnFlowCntrl->setChecked(flow_control );
-    ui->cbCommport->addItem(QString("host-mode"), "0");
+    if(ui->cbCommport->findText(QString("host-mode")) == -1){
+        ui->cbCommport->addItem(QString("host-mode"), "0");
+    }
 
     // Startup timer
     m_dmStartupTimer = new QTimer(this);
@@ -236,6 +287,23 @@ void MainWindow::InitDm()
     m_build = 0;
     m_chip = 0;
     m_features = 0xFF;
+
+    Log("[%s] %s",__FUNCTION__, comm_port.toStdString().c_str());
+    if(comm_port == QString("host-mode"))
+    {
+        ui->devPortNum->setEnabled(1);
+        ui->ip_addr->setEnabled(1);
+        ui->cbCommport->setCurrentIndex(port_inx);
+    }
+
+#if 1
+    if(m_use_host_mode){
+        int index = ui->cbCommport->findText("host-mode");
+        if ( index != -1 ) { // -1 for not found
+           ui->cbCommport->setCurrentIndex(index);
+        }
+    }
+#endif
 }
 
 // Enable or disable UI
@@ -899,13 +967,11 @@ CBtDevice *MainWindow::FindInList(UINT16 conn_type, UINT16 handle, QComboBox * p
             else if (device->m_conn_type & WICED_CONNECTION_TYPE_LE)
             {
                 CHAR trace[256];
-                sprintf (trace, "FindInList con_handle = %d, m_paired = %d, m_address %02x:%02x:%02x:%02x:%02x:%02x",
-                    device->con_handle, device->m_paired,
-                    device->m_address[0], device->m_address[1], device->m_address[2],
-                    device->m_address[3], device->m_address[4], device->m_address[5]);
+                sprintf (trace, "FindInList con_handle = %d, m_paired = %d, m_address %s",
+                    device->get_connection_handle(), device->m_paired, device->get_bdaddr_string());
                 Log(trace);
 
-                if(handle == device->con_handle)
+                if(handle == device->get_connection_handle())
                     return device;
             }
             else
@@ -1876,26 +1942,7 @@ void MainWindow::onMsgBoxButton(QAbstractButton*btn)
     FirmwareDownloadStop();
 }
 
-void MainWindow::reset_le_audio_ui()
-{
-    ui->btn_connectToPeer->setText("Connect");
-    ui->streams->clear();
-    clear_streams_list();
-    ui->btn_startLeAdv->setText("Start Adv");
 
-    ui->btn_playPause->setText("Play");
-    ui->btn_muteUnmute->setText("Mute");
-
-    //reset_controls();
-    ui->VolGroupBox->setEnabled(FALSE);
-    ui->mediaControlGroupBox->setEnabled(FALSE);
-    ui->mediaControlGroupBox->setEnabled(FALSE);
-    ui->codecConfigComboBox->clear();
-    ui->startBroadcastPushButton->setText("Start Broadcast");
-    ui->scan_streams->setText("Discover Sources");
-    ui->deviceRoleTxt->setText("Device Role");
-    ui->pushButton->setText("Sync to Stream");
-}
 /************** Serial port management *************/
 
 // User clicked button to open or close serial port
@@ -1919,7 +1966,7 @@ void MainWindow::on_btnOpenPort_clicked()
             ui->btnOpenPort->setText("Close Port");
             ui->cbBaudRate->setEnabled(false);
             ui->btnFlowCntrl->setEnabled(false);
-            reset_le_audio_ui();
+            le_audio_reset_ui();
         }
     }
     // Close port if open
@@ -1939,6 +1986,7 @@ void MainWindow::on_btnOpenPort_clicked()
 // Open and setup serial port
 bool MainWindow::SetupCommPort()
 {
+
     // If command line was specified for BAUD rate or COM port, use it
     if(!str_cmd_baud.isEmpty())
     {
@@ -1962,6 +2010,11 @@ bool MainWindow::SetupCommPort()
     m_settings.setValue("Baud",baud_rate);
 
     QString comm_port = ui->cbCommport->currentText();
+
+    if(!comm_port.length()){
+        return FALSE;
+    }
+
     m_settings.setValue("port",comm_port);
 
     if (m_CommPort)
@@ -1976,7 +2029,7 @@ bool MainWindow::SetupCommPort()
     bool bFlow = ui->btnFlowCntrl->isChecked();
     if (ui->cbCommport->itemData(ui->cbCommport->currentIndex()).toString().compare("0") == 0)
     {
-        m_CommPort = new WicedSerialPortHostmode(ui->ip_addr->text(), ui->instance->text().toInt());
+        m_CommPort = new WicedSerialPortHostmode(ui->ip_addr->text(), ui->devPortNum->text().toInt());
         serialPortName = "host-mode";
     }
     else
@@ -1990,8 +2043,17 @@ bool MainWindow::SetupCommPort()
 
     if (m_bPortOpen)
     {
-        Log("Opened %s at speed: %u flow %s", serialPortName.toStdString().c_str(), serialPortBaudRate,
-                ui->btnFlowCntrl->isChecked() ? "on":"off");
+        QString str = "Opened " + serialPortName;
+        if(serialPortName == "host-mode"){
+            str += " ip " + ui->ip_addr->text() + " instance: " + ui->devPortNum->text();
+        }else{
+            str += " baud " + QString::number(serialPortBaudRate);
+            QString flow = ui->btnFlowCntrl->isChecked()?"on": "off";
+            str += " flow " + flow;
+        }
+        //Log("Opened %s at speed: %u flow %s", serialPortName.toStdString().c_str(), serialPortBaudRate, ui->btnFlowCntrl->isChecked() ? "on":"off");
+        Log(str.toStdString().c_str());
+
 
 #if 0
         if(comm_port.contains("WICED Peripheral"))
@@ -2066,23 +2128,30 @@ void MainWindow::CloseCommPort()
 // When the UI is closed, close port and save settings
 void MainWindow::closeEventDm (QCloseEvent *)
 {
+    printf("[%s]\n",__FUNCTION__);
     CloseCommPort();
 
+    printf("[%s] 1\n",__FUNCTION__);
     // save settings for baudrate, serial port and flow-ctrl
     QSettings settings(m_SettingsFile, QSettings::IniFormat);
     int baud_rate = ui->cbBaudRate->currentText().toInt();
     m_settings.setValue("Baud",baud_rate);
 
+    printf("[%s] 2\n",__FUNCTION__);
     bool flow_control = ui->btnFlowCntrl->isChecked();
     m_settings.setValue("FlowControl",flow_control);
 
+    printf("[%s] 3\n",__FUNCTION__);
     QString comm_port = ui->cbCommport->currentText();
     m_settings.setValue("port",comm_port);
+
+    printf("[%s] 4\n",__FUNCTION__);
 }
 
 // Clear port and UI
 void MainWindow::ClearPort()
 {
+    printf("[%s]",__FUNCTION__);
     CloseCommPort();
     QThread::sleep(1);
     if(m_CommPort)
@@ -2099,8 +2168,9 @@ void MainWindow::ClearPort()
     ui->btnFlowCntrl->setEnabled(true);
     ui->btnOpenPort->setText("Open Port");
 
-    ui->instance->setEnabled(0);
-    ui->ip_addr->setEnabled(0);
+    set_audio_started_status(false);
+    //ui->instance->setEnabled(0);
+    //ui->ip_addr->setEnabled(0);
 }
 
 

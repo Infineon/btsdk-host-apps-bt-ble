@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -30,14 +30,11 @@
  * of such system or application assumes all risk of such use and in doing
  * so agrees to indemnify Cypress against all liability.
  */
-
-
-
 #include "wiced_hci.h"
 #include "hci_control_api.h"
 #include <string.h>
 
-#define WICED_HCI_DATA_MAX 1030
+#define WICED_HCI_DATA_MAX 1024
 
 // extern API, Implemented by application
 extern int app_host_port_write(uint8_t *data, uint32_t len);
@@ -45,29 +42,25 @@ extern int app_host_port_write(uint8_t *data, uint32_t len);
 // Send WICED HCI command
 bool wiced_hci_send_command(uint16_t command, uint8_t * payload, uint32_t len)
 {
-    uint8_t    data[WICED_HCI_DATA_MAX];
-    uint32_t totalLength = 0;
-    uint16_t    header  = 0;
+    if(!command){
+        return (app_host_port_write( payload, len) > 0 ? true : false);
+    }
 
-    memset(data, 0, sizeof(data));
-
-    // If command header byte is not set, set it now
-    if (command)
+    // For all commands set the header bytes
     {
+        uint8_t    data[WICED_HCI_DATA_MAX];
+        uint16_t    header  = 0;
+
         data[header++] = HCI_WICED_PKT;
         data[header++] = command & 0xff;
         data[header++] = (command >> 8) & 0xff;
         data[header++] = len & 0xff;
         data[header++] = (len >> 8) & 0xff;
+
+        if(len){
+            memcpy(&data[header], payload, len);
+        }
+
+        return (app_host_port_write( data,  header+len) > 0 ? true : false);
     }
-
-    if(len)
-        memcpy(&data[header], payload, len);
-
-    totalLength = header+len;
-
-    if(totalLength == 0)
-        return false;
-
-    return (app_host_port_write( data,  totalLength) > 0 ? true : false);
 }

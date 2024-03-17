@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -165,7 +165,7 @@ void MainWindow::onCTPlay()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PLAY_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_PLAY_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -184,7 +184,7 @@ void MainWindow::onCTStop()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_STOP_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_STOP_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -203,7 +203,7 @@ void MainWindow::onCTPause()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PAUSE_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_PAUSE_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -222,7 +222,7 @@ void MainWindow::onCTUnitInfo()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_unit_info(pDev->m_address, pDev->con_handle);
+        app_host_avrc_unit_info(pDev->m_address, pDev->get_connection_handle());
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -241,7 +241,7 @@ void MainWindow::onCTSubUnitInfo()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_sub_unit_info(pDev->m_address, pDev->con_handle);
+        app_host_avrc_sub_unit_info(pDev->m_address, pDev->get_connection_handle());
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -260,7 +260,7 @@ void MainWindow::onCTNext()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_NEXT_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_NEXT_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -279,7 +279,7 @@ void MainWindow::onCTPrevious()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_PREVIOUS_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_PREVIOUS_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -298,7 +298,7 @@ void MainWindow::onCTVolumeUp()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_VOL_UP_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_VOL_UP_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -317,7 +317,7 @@ void MainWindow::onCTVolumeDown()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_VOL_DOWN_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_VOL_DOWN_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -336,7 +336,7 @@ void MainWindow::onCTMute()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_MUTE_CMD);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_MUTE_CMD);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -366,7 +366,7 @@ void MainWindow::onCTRepeatMode(int index)
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_repeat(pDev->m_address, pDev->con_handle, repeat_ct.curr_value);
+        app_host_avrc_ct_repeat(pDev->m_address, pDev->get_connection_handle(), repeat_ct.curr_value);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -391,7 +391,7 @@ void MainWindow::onCTShuffleMode(int index)
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_shuffle(pDev->m_address, pDev->con_handle, shuffle_ct.curr_value);
+        app_host_avrc_ct_shuffle(pDev->m_address, pDev->get_connection_handle(), shuffle_ct.curr_value);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -415,7 +415,7 @@ void MainWindow::cbCTVolumeChanged(int index)
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_volume_level(pDev->m_address, pDev->con_handle, m_current_volume_pct);
+        app_host_avrc_ct_volume_level(pDev->m_address, pDev->get_connection_handle(), m_current_volume_pct);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -434,7 +434,7 @@ void MainWindow::onCTSkipForwardPressed()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_FF_CMD_PRESS);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_FF_CMD_PRESS);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -453,7 +453,7 @@ void MainWindow::onCTSkipForwardReleased()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_FF_CMD_RELEASE);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_FF_CMD_RELEASE);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -472,7 +472,7 @@ void MainWindow::onCTSkipBackwardPressed()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_REV_CMD_PRESS);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_REV_CMD_PRESS);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -491,7 +491,7 @@ void MainWindow::onCTSkipBackwardReleased()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAmsConnected))
     {
-        app_host_avrc_ct_command(pDev->m_address, pDev->con_handle, WICED_AVRCP_CT_REV_CMD_RELEASE);
+        app_host_avrc_ct_command(pDev->m_address, pDev->get_connection_handle(), WICED_AVRCP_CT_REV_CMD_RELEASE);
     }
     else if ((pDev = GetSelectedDevice()))
     {
@@ -725,7 +725,7 @@ void MainWindow::OnBnClickedAncsPositive()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAncsConnected))
     {
-        handle = pDev->con_handle;
+        handle = pDev->get_connection_handle();
     }
     else
     {
@@ -753,7 +753,7 @@ void MainWindow::OnBnClickedAncsNegative()
 
     if ((pDev = GetSelectedLEDevice()) && (pDev->m_bIsAncsConnected))
     {
-        handle = pDev->con_handle;
+        handle = pDev->get_connection_handle();
     }
     else
     {

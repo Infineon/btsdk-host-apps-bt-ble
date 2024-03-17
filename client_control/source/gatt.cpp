@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -250,7 +250,7 @@ USHORT MainWindow::GetConHandle(QComboBox *pCombo)
 {
     int sel;
     if ((sel = pCombo->currentIndex()) >= 0)
-        return ((CBtDevice *)pCombo->itemData(sel).value<CBtDevice *>())->con_handle;
+        return ((CBtDevice *)pCombo->itemData(sel).value<CBtDevice *>())->get_connection_handle();
     return 0;
 }
 
@@ -413,6 +413,12 @@ void MainWindow::UpdateGattButtons(CBtDevice *pDevice)
     ui->btnBLEValueIndicate->setEnabled(enable);
 }
 
+void MainWindow::IssueConnect(CBtDevice *pDevice)
+{
+    pDevice->set_connection_in_progress(1);
+    app_host_gatt_connect(pDevice->address_type, pDevice->m_address);
+}
+
 // Event received for LE adv state
 void MainWindow::processHandleLeAdvState(BYTE val)
 {
@@ -534,14 +540,14 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
         // find device in the list with received address and save the connection handle
         device = AddDeviceToList(bda, ui->cbBLEDeviceList, NULL); // /* p_data[0], */ bda, p_data[7] + (p_data[8] << 8), CONNECTION_TYPE_LE);
 
-        device->con_handle = p_data[7] + (p_data[8] << 8);
+        device->set_connection_handle( p_data[7] + (p_data[8] << 8));
         device->m_conn_type |= CONNECTION_TYPE_LE;
         device->m_bIsLEDevice = true;
+        device->set_connection_in_progress(0);
 
         SetRole(device, p_data[9]);     // Save LE role
         SelectDevice(ui->cbBLEDeviceList, bda);
         UpdateGattButtons(device);
-        UpdateLEAudioDevice(TRUE, bda, device->con_handle);
         break;
 
     case HCI_CONTROL_LE_EVENT_DISCONNECTED:
@@ -556,16 +562,13 @@ void MainWindow::HandleLEEvents(DWORD identifier, LPBYTE p_data, DWORD len)
             Log("set m_bIsAncsConnected false");
             Log("set m_bIsAmsConnected false");
             Log("set con_handle 0");
-            device->m_bIsAncsConnected = false;
-            device->m_bIsAmsConnected = false;
-            device->con_handle = 0;
+            device->handle_le_disconnect();
         }
         ui->lblCTMessage->setText("Message");
         ui->lblCTTitle->setText("Tile");
         ui->btnCTANCSPositive->setText("ANCS Positive");
         ui->btnCTANCSNegative->setText("ANCS Negative");
         setHIDD_linkChange(nullptr, FALSE);
-        UpdateLEAudioDevice(FALSE, NULL, 0);
         break;
 
     case HCI_CONTROL_AMS_EVENT_CONNECTED:

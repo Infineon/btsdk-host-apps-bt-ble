@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -56,8 +56,8 @@ AudioFileWriter * pAudioFileWriter=NULL;
 // Initialize app
 void MainWindow::InitAudioSrc()
 {
-    m_audio_connected = false;
-    m_audio_started = false;
+    set_audio_connected_status(false);
+    set_audio_started_status(false);
     m_audio_i2s_input_enable = false;
     m_audio_mp3_format_enable = false;
     m_bPortOpen = false;
@@ -134,7 +134,7 @@ void MainWindow::onConnectAudioSrc()
 
     if (ui->rbAudioSrcFile->isChecked())
     {
-        if (!InitializeAudioFile())
+        if (!InitializeAudioFile(ui->edAudioFile->text()))
         {
             Log("InitializeAudioFile failed");
             return;
@@ -213,8 +213,8 @@ void MainWindow::HandleDeviceEventsAudioSrc(DWORD opcode, LPBYTE p_data, DWORD l
     switch (opcode)
     {
         case HCI_CONTROL_EVENT_DEVICE_STARTED:
-            m_audio_connected = false;
-            m_audio_started = false;
+            set_audio_connected_status(false);
+            set_audio_started_status(false);
             setAudioSrcUI();
             break;
     }
@@ -226,6 +226,11 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
     BYTE       bda[6];
     CBtDevice *device;
     UINT16     handle;
+
+    if(!ui->tabAVSRC->isEnabled())
+    {
+        return;
+    }
 
     app_host_audio_src_event(opcode, p_data, len);
     switch (opcode)
@@ -249,7 +254,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
         device->m_conn_type |= CONNECTION_TYPE_AUDIO;
 
         SelectDevice(ui->cbDeviceList, bda);
-        m_audio_connected = true;
+        set_audio_connected_status(true);
 
         Log("Audio Connected, Handle: 0x%04x", handle);
 
@@ -291,7 +296,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
     // AV Src disconnected
     case HCI_CONTROL_AUDIO_EVENT_DISCONNECTED:
     {
-        m_audio_connected = false;
+        set_audio_connected_status(false);
         handle = p_data[0] | (p_data[1] << 8);
         CBtDevice * pDev = FindInList(CONNECTION_TYPE_AUDIO, handle, ui->cbDeviceList);
         if (pDev && (pDev->m_audio_handle == handle))
@@ -299,7 +304,7 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
             pDev->m_audio_handle = NULL_HANDLE;
             pDev->m_conn_type &= ~CONNECTION_TYPE_AUDIO;
         }
-        m_audio_started = false;
+        set_audio_started_status(false);
         Log("Audio disconnected, Handle: 0x%04x", handle);
         setAudioSrcUI();
         if(m_hidh_audio_started == false)
@@ -308,19 +313,19 @@ void MainWindow::HandleA2DPEventsAudioSrc(DWORD opcode, BYTE *p_data, DWORD len)
         break;
 
     // Streaming started
-    case HCI_CONTROL_AUDIO_EVENT_STARTED:
+    case HCI_CONTROL_AUDIO_EVENT_STARTED: // might need a different event for LE Audio started.
         Log("Audio started");
-        m_audio_started = true;
+        set_audio_started_status(true);
         DisableAppTraces();
         if (ui->rbAudioSrcFile->isChecked() && (m_uAudio.m_pAudioData == NULL))
-            InitializeAudioFile();
+            InitializeAudioFile(ui->edAudioFile->text());
         setAudioSrcUI();
         break;
 
     // Streaming stopped
     case HCI_CONTROL_AUDIO_EVENT_STOPPED:
         Log("Audio stopped");
-        m_audio_started = false;
+        set_audio_started_status(false);
 
         setAudioSrcUI();
         break;
@@ -381,6 +386,11 @@ void MainWindow::HandleA2DPAudioRequestEvent(BYTE * pu8Data, DWORD len)
     if(len < 3)
     {
         Log("HandleA2DPAudioRequestEvent bad length");
+        return;
+    }
+
+    if(!m_audio_started ){
+        Log("[%s] audio stopped",__FUNCTION__);
         return;
     }
 
@@ -454,7 +464,7 @@ void MainWindow::onStartAudio()
     {
         if (ui->rbAudioSrcFile->isChecked())
         {
-            if (!InitializeAudioFile())
+            if (!InitializeAudioFile(ui->edAudioFile->text()))
             {
                 return;
             }
@@ -525,10 +535,10 @@ CBtDevice* MainWindow::GetConnectedAudioSrcDevice()
 
 // Initialize audio stream from audio file
 #define MAX_PATH          260
-bool MainWindow::InitializeAudioFile()
+bool MainWindow::InitializeAudioFile(QString file_name)
 {
     char audioFile[MAX_PATH] = { 0 };
-    strncpy(audioFile, ui->edAudioFile->text().toStdString().c_str(), MAX_PATH-1);
+    strncpy(audioFile, file_name.toStdString().c_str(), MAX_PATH-1);
 
     if (!ExecuteSetAudioFile(audioFile)){
         return false;
@@ -616,6 +626,18 @@ void MainWindow::setAudioSrcUI()
         ui->cbSineFreq->setEnabled(false);
         ui->rbAudioModeMono->setEnabled(false);
     }
+}
+
+void MainWindow::set_audio_started_status(bool started)
+{
+    Log("Set audio started to %s", started ? "started":"stopped");
+    m_audio_started = started;
+}
+
+void MainWindow::set_audio_connected_status(bool connected)
+{
+    Log("Set audio connected to %s", connected ? "connected":"disconnected");
+    m_audio_connected = connected;
 }
 
 void MainWindow::closeEventAudioSrc(QCloseEvent *event)
@@ -755,9 +777,7 @@ void AudioFileWriter::SendNextData(hci_audio_sample_t * puHci, int bytesPerPacke
 {
     int remaining = puHci->m_dwChunkLen - puHci->m_dwAudioSent;
 
-    BYTE au8Hdr[5];
     UINT16 hciCmd;
-
 
     if (m_pParent->m_audio_format == 1)
     {
@@ -768,12 +788,6 @@ void AudioFileWriter::SendNextData(hci_audio_sample_t * puHci, int bytesPerPacke
         hciCmd = HCI_CONTROL_AUDIO_DATA;
     }
 
-    au8Hdr[0] = HCI_WICED_PKT;
-    au8Hdr[1] = (BYTE)(hciCmd & 0xff);
-    au8Hdr[2] = (BYTE)((hciCmd >> 8) & 0xff);
-    au8Hdr[3] = (BYTE)(bytesPerPacket & 0xff);
-    au8Hdr[4] = (BYTE)((bytesPerPacket >> 8) & 0xff);
-
     int headerLen = 0;
     int written = 0;
 
@@ -782,12 +796,16 @@ void AudioFileWriter::SendNextData(hci_audio_sample_t * puHci, int bytesPerPacke
             free(gu8AudioBuffer);
             gu8AudioBuffer = NULL;
         }
-        gu8AudioBuffer = (uint8_t *)malloc(bytesPerPacket + sizeof(au8Hdr) + headerLen);
+        gu8AudioBuffer = (uint8_t *)malloc(bytesPerPacket + 5 + headerLen);
         gs32AudioBufferSize = bytesPerPacket;
     }
 
-    memcpy(gu8AudioBuffer + written, au8Hdr, sizeof(au8Hdr));
-    written += sizeof(au8Hdr);
+    gu8AudioBuffer[0] = HCI_WICED_PKT;
+    gu8AudioBuffer[1] = (BYTE)(hciCmd & 0xff);
+    gu8AudioBuffer[2] = (BYTE)((hciCmd >> 8) & 0xff);
+    gu8AudioBuffer[3] = (BYTE)(bytesPerPacket & 0xff);
+    gu8AudioBuffer[4] = (BYTE)((bytesPerPacket >> 8) & 0xff);
+    written += 5;
 
     if (remaining >= bytesPerPacket){
         memcpy(gu8AudioBuffer + written, puHci->m_pData + puHci->m_dwAudioSent, bytesPerPacket);
@@ -842,6 +860,7 @@ void AudioFileWriter::SendNextData(hci_audio_sample_t * puHci, int bytesPerPacke
     }
 }
 
+#define NUM_PACKETS_TO_WAIT 128
 // Loop till the embedded app asks for audio data
 void AudioFileWriter::run()
 {
@@ -849,7 +868,9 @@ void AudioFileWriter::run()
     QMutex mutex;
     while (1)
     {
+        hci_audio_sample_t * p_a = &m_pParent->m_uAudio;
         mutex.lock();
+
         // wait for Event requesting an audio buffer
         m_pParent->audio_tx_wait.wait(&mutex);
 
@@ -857,6 +878,9 @@ void AudioFileWriter::run()
 
         m_pParent->m_audio_packets.lock();
 
+        if(m_pParent->m_uAudio.m_PacketsSent == 0){
+            m_pParent->m_uAudio.m_timer_from_start.start();
+        }
         packetsToSend = m_pParent->m_uAudio.m_PacketsToSend;
 
         m_pParent->m_audio_packets.unlock();
@@ -867,6 +891,27 @@ void AudioFileWriter::run()
           {
               SendNextData(&m_pParent->m_uAudio, m_pParent->m_uAudio.m_BytesPerPacket);
           }
+
+          if(0 == (m_pParent->m_uAudio.m_PacketsSent & (NUM_PACKETS_TO_WAIT - 1)))
+          {
+              double rate_from_start, rate_current;
+                  rate_from_start = (p_a->m_PacketsSent * p_a->m_BytesPerPacket);
+              rate_from_start /= p_a->m_timer_from_start.elapsed();
+                  //rate_from_start /= 4;
+                  rate_current = (NUM_PACKETS_TO_WAIT * p_a->m_BytesPerPacket);
+                  rate_current /= p_a->m_timer_from_last.elapsed();
+                  //rate_current /= 4;
+
+              m_pParent->Log("[%s] to send %ld %ld %ld s %.2lf Bps c %.2lf Bps", __FUNCTION__,
+                             p_a->m_PacketsToSend,
+                             p_a->m_PacketsSent,
+                             p_a->m_dwAudioSent,
+                             rate_from_start,
+                             rate_current);
+              p_a->m_timer_from_last.restart();
+          }
+
+
           m_pParent->m_uAudio.m_PacketsSent++;
         }
 
