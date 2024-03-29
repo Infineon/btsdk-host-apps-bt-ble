@@ -338,7 +338,7 @@ void MainWindow::HandleA2DPEventsAudioSrc_DualA2DP(DWORD opcode, BYTE *p_data, D
     // Embedded app requested audio data
     case HCI_CONTROL_AUDIO_EVENT_REQUEST_DATA:
         if (m_uAudio.m_pAudioData != NULL)
-            HandleA2DPAudioRequestEvent(p_data, len);
+            HandleA2DPAudioRequestEvent_DualA2DP(p_data, len);
         break;
 
     case HCI_CONTROL_AUDIO_EVENT_COMMAND_COMPLETE:
@@ -391,6 +391,11 @@ void MainWindow::HandleA2DPAudioRequestEvent_DualA2DP(BYTE * pu8Data, DWORD len)
     if(len < 3)
     {
         Log("HandleA2DPAudioRequestEvent bad length");
+        return;
+    }
+
+    if(!m_audio_started_dual_a2dp ){
+        Log("[%s] audio stopped",__FUNCTION__);
         return;
     }
 
